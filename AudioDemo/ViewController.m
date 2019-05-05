@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AudioManager.h"
 
 @interface ViewController ()
 
@@ -19,5 +20,11 @@
     // Do any additional setup after loading the view.
 }
 
+- (IBAction)recordAction:(id)sender {
+    [[AudioManager sharedAudioManager] startRecoder];
+}
+- (IBAction)stopAction:(id)sender {
+    [[AudioManager sharedAudioManager] stopRecoder];
+}
 
 @end

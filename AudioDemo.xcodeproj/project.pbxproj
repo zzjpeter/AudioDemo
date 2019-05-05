@@ -13,7 +13,7 @@
 		47E94205227E7D9400D86EE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47E94204227E7D9400D86EE1 /* Assets.xcassets */; };
 		47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E94206227E7D9400D86EE1 /* LaunchScreen.storyboard */; };
 		47E9420B227E7D9400D86EE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9420A227E7D9400D86EE1 /* main.m */; };
-		47E94214227E7E4000D86EE1 /* AudioTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E94213227E7E4000D86EE1 /* AudioTool.m */; };
+		47E94217227E854D00D86EE1 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E94216227E854D00D86EE1 /* AudioManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +27,8 @@
 		47E94207227E7D9400D86EE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		47E94209227E7D9400D86EE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		47E9420A227E7D9400D86EE1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		47E94212227E7E4000D86EE1 /* AudioTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTool.h; sourceTree = "<group>"; };
-		47E94213227E7E4000D86EE1 /* AudioTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioTool.m; sourceTree = "<group>"; };
+		47E94215227E854D00D86EE1 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
+		47E94216227E854D00D86EE1 /* AudioManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +63,7 @@
 			children = (
 				47E941FB227E7D9200D86EE1 /* AppDelegate.h */,
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
-				47E94212227E7E4000D86EE1 /* AudioTool.h */,
-				47E94213227E7E4000D86EE1 /* AudioTool.m */,
+				47E94218227EC93C00D86EE1 /* Audio */,
 				47E941FE227E7D9200D86EE1 /* ViewController.h */,
 				47E941FF227E7D9200D86EE1 /* ViewController.m */,
 				47E94201227E7D9200D86EE1 /* Main.storyboard */,
@@ -74,6 +73,15 @@
 				47E9420A227E7D9400D86EE1 /* main.m */,
 			);
 			path = AudioDemo;
+			sourceTree = "<group>";
+		};
+		47E94218227EC93C00D86EE1 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				47E94215227E854D00D86EE1 /* AudioManager.h */,
+				47E94216227E854D00D86EE1 /* AudioManager.m */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,7 +156,7 @@
 			files = (
 				47E94200227E7D9200D86EE1 /* ViewController.m in Sources */,
 				47E9420B227E7D9400D86EE1 /* main.m in Sources */,
-				47E94214227E7E4000D86EE1 /* AudioTool.m in Sources */,
+				47E94217227E854D00D86EE1 /* AudioManager.m in Sources */,
 				47E941FD227E7D9200D86EE1 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

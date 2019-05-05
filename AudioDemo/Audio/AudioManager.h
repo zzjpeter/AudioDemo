@@ -1,5 +1,5 @@
 //
-//  AudioTool.h
+//  AudioManager.h
 //  AudioDemo
 //
 //  Created by 朱志佳 on 2019/5/5.
@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AudioTool : NSObject
+@interface AudioManager : NSObject
+
++(instancetype)sharedAudioManager;
+
+- (void)startRecoder;
+- (void)stopRecoder;
 
 @end
 
