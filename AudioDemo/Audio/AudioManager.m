@@ -53,7 +53,7 @@
 - (void)setupAudioUnit{
     
     NSError *error;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:&error];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
     [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.022 error:&error];
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
@@ -228,7 +228,7 @@ static OSStatus playbackCallback(void *inRefCon,
                                  UInt32 inBusNumber,
                                  UInt32 inNumberFrames,
                                  AudioBufferList *ioData) {
-    printf("playbackCallback");
+    printf("playbackCallback\n");
     // Notes: ioData contains buffers (may be more than one!)
     // Fill them up as much as you can. Remember to set the size value in each buffer to match how
     // much data is in the buffer.
