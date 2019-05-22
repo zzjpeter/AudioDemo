@@ -1,16 +1,16 @@
 //
-//  AudioEncodeH264Manager.m
+//  EncodeH264Manager.m
 //  AudioDemo
 //
 //  Created by 朱志佳 on 2019/5/22.
 //  Copyright © 2019 朱志佳. All rights reserved.
 //
 
-#import "AudioEncodeH264Manager.h"
+#import "EncodeH264Manager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 
-@interface AudioEncodeH264Manager ()<AVCaptureVideoDataOutputSampleBufferDelegate>
+@interface EncodeH264Manager ()<AVCaptureVideoDataOutputSampleBufferDelegate>
 {
     int frameID;
     dispatch_queue_t mCaptureQueue;
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation AudioEncodeH264Manager
+@implementation EncodeH264Manager
 
 SingleImplementation(manager)
 
@@ -186,7 +186,7 @@ void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStat
         NSLog(@"didCompressH264 data is not ready ");
         return;
     }
-    AudioEncodeH264Manager* encoder = (__bridge AudioEncodeH264Manager*)outputCallbackRefCon;
+    EncodeH264Manager* encoder = (__bridge EncodeH264Manager*)outputCallbackRefCon;
     
     bool keyframe = !CFDictionaryContainsKey( (CFArrayGetValueAtIndex(CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true), 0)), kCMSampleAttachmentKey_NotSync);
     // 判断当前帧是否为关键帧

@@ -8,11 +8,13 @@
 
 #import "ViewController.h"
 #import "AudioManager.h"
-#import "AudioEncodeH264Manager.h"
+#import "EncodeH264Manager.h"
+#import "DecoderH246Manager.h"
 
 @interface ViewController ()
 
 @property (nonatomic,strong) UIView *playView;
+@property (nonatomic,strong) LYOpenGLView *playOpenGLView;
 
 @end
 
@@ -21,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.view addSubview:self.playOpenGLView];
 }
 
 - (IBAction)recordAction:(id)sender {
@@ -31,12 +34,22 @@
 }
 - (IBAction)encodeH264Start:(id)sender {
     [self.view addSubview:self.playView];
-    [AudioEncodeH264Manager sharemanager].playView = self.playView;
-    [[AudioEncodeH264Manager sharemanager] play];
+    [EncodeH264Manager sharemanager].playView = self.playView;
+    [[EncodeH264Manager sharemanager] play];
 }
 - (IBAction)encodeH264Stop:(id)sender {
-    [[AudioEncodeH264Manager sharemanager] stop];
+    [[EncodeH264Manager sharemanager] stop];
 }
+
+- (IBAction)decodeH264Start:(id)sender {
+    [self.view addSubview:self.playOpenGLView];
+    [DecoderH246Manager sharemanager].playView = self.playOpenGLView;
+    [[DecoderH246Manager sharemanager] start];
+}
+- (IBAction)decodeH264Stop:(id)sender {
+    [[DecoderH246Manager sharemanager] stop];
+}
+
 
 - (UIView *)playView
 {
@@ -46,6 +59,17 @@
         _playView = playView;
     }
     return _playView;
+}
+
+- (LYOpenGLView *)playOpenGLView
+{
+    if (!_playOpenGLView) {
+        LYOpenGLView *playView = [[LYOpenGLView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        playView.bottom = self.view.bottom;
+        [playView setupGL];
+        _playOpenGLView = playView;
+    }
+    return _playOpenGLView;
 }
 
 @end
