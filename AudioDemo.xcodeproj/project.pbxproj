@@ -44,6 +44,7 @@
 		4709EB5E229506E800185D92 /* ZCommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB30229506E800185D92 /* ZCommonUtils.m */; };
 		4709EB5F229506E800185D92 /* JumpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB33229506E800185D92 /* JumpManager.m */; };
 		4709EB60229506E800185D92 /* SaveUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB3B229506E800185D92 /* SaveUtil.m */; };
+		47357DC1229535CC00A9010D /* AudioEncodeH264Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC0229535CC00A9010D /* AudioEncodeH264Manager.m */; };
 		47E941FD227E7D9200D86EE1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E941FC227E7D9200D86EE1 /* AppDelegate.m */; };
 		47E94200227E7D9200D86EE1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E941FF227E7D9200D86EE1 /* ViewController.m */; };
 		47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E94201227E7D9200D86EE1 /* Main.storyboard */; };
@@ -136,6 +137,8 @@
 		4709EB38229506E800185D92 /* ColorMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorMacro.h; sourceTree = "<group>"; };
 		4709EB3A229506E800185D92 /* SaveUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUtil.h; sourceTree = "<group>"; };
 		4709EB3B229506E800185D92 /* SaveUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUtil.m; sourceTree = "<group>"; };
+		47357DBF229535CC00A9010D /* AudioEncodeH264Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioEncodeH264Manager.h; sourceTree = "<group>"; };
+		47357DC0229535CC00A9010D /* AudioEncodeH264Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioEncodeH264Manager.m; sourceTree = "<group>"; };
 		47E941F8227E7D9200D86EE1 /* AudioDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E941FB227E7D9200D86EE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47E941FC227E7D9200D86EE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -436,6 +439,8 @@
 			children = (
 				47E94215227E854D00D86EE1 /* AudioManager.h */,
 				47E94216227E854D00D86EE1 /* AudioManager.m */,
+				47357DBF229535CC00A9010D /* AudioEncodeH264Manager.h */,
+				47357DC0229535CC00A9010D /* AudioEncodeH264Manager.m */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -581,6 +586,7 @@
 				4709EB54229506E800185D92 /* UILabel+TTAdd.m in Sources */,
 				4709EB55229506E800185D92 /* UIButton+EventInterval.m in Sources */,
 				4709EB59229506E800185D92 /* NSObject+RMArchivable.m in Sources */,
+				47357DC1229535CC00A9010D /* AudioEncodeH264Manager.m in Sources */,
 				4709EB5F229506E800185D92 /* JumpManager.m in Sources */,
 				4709EB51229506E800185D92 /* UIImage+TTAdd.m in Sources */,
 				4709EB42229506E800185D92 /* NSObject+Util.m in Sources */,
