@@ -9,18 +9,20 @@
 #import "AudioManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "ZHeader.h"
 
-#define kOutputBus 0
-#define kInputBus 1
-// Bus 0 is used for the output side, bus 1 is used to get audio input.
+//AudioUnitElement
+#define kOutputBus 0 //代表Element0 output数据  (Element1：数据 应用（application）到 输出设备（扬声器））【左边输入域 右边输出域】（0:output）
+#define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 
 @interface AudioManager ()
 {
-    AudioUnit audioUnit;//setupAudioUnit 中的AudioComponentInstanceNew 中初始化
-    AudioBufferList *bufferList;//setupAudioUnit 中初始化 设置缓冲区大小
-    
-    NSMutableData *pcmData;
+    AudioStreamBasicDescription audioFormat;//Describe format // 描述格式
 }
+@property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
+@property (nonatomic,assign) AudioBufferList *bufferList;//设置缓冲区大小
+@property (nonatomic,strong) NSMutableData *pcmData;
+
 
 @end
 
@@ -46,13 +48,26 @@
 
 #pragma mark 初始化数据
 -(void)initialze {
-    pcmData = [NSMutableData new];
+    self.pcmData = [NSMutableData new];
 }
 
 #pragma mark 初始化AudioUnit设置
+/**
+ 1.描述音频元件（kAudioUnitType_Output／kAudioUnitSubType_RemoteIO ／kAudioUnitManufacturerApple）。
+ 2.使用 AudioComponentFindNext(NULL, &descriptionOfAudioComponent) 获得 AudioComponent。AudioComponent有点像生产 Audio Unit 的工厂。
+ 3.使用 AudioComponentInstanceNew(ourComponent, &audioUnit) 获得 Audio Unit 实例。
+ 4.使用 AudioUnitSetProperty函数为录制和回放开启IO。
+ 5.使用 AudioStreamBasicDescription 结构体描述音频格式，并使用AudioUnitSetProperty进行设置。
+ 6.使用 AudioUnitSetProperty 设置音频录制与放播的回调函数。
+ 7.分配缓冲区。
+ 8.初始化 Audio Unit。
+ 9.启动 Audio Unit。
+ */
 - (void)setupAudioUnit{
     
-    NSError *error;
+    //注意:此处代码必须设置
+    //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
+    NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
     [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.022 error:&error];
     if (error) {
@@ -60,27 +75,30 @@
         return;
     }
     
+    //Audio Unit具体设置
+    //2.初始化AudioComponentDescription，然后再调用AudioComponentFindNext得到AudioComponent，
+    //最后调用AudioComponentInstanceNew初始化得到AudioUnit
     OSStatus status;
-    //AudioComponentInstance audioUnit;
     
     //Describe audio component // 描述音频元件
     AudioComponentDescription desc;
-    desc.componentType = kAudioUnitType_Output;
-    desc.componentSubType = kAudioUnitSubType_RemoteIO;
-    desc.componentFlags = 0;
-    desc.componentFlagsMask = 0;
-    desc.componentManufacturer = kAudioUnitManufacturer_Apple;
+    desc.componentType          = kAudioUnitType_Output;
+    desc.componentSubType       = kAudioUnitSubType_RemoteIO;
+    desc.componentFlags         = 0;
+    desc.componentFlagsMask     = 0;
+    desc.componentManufacturer  = kAudioUnitManufacturer_Apple;
     
     //Get component // 获得一个元件
     AudioComponent inputComponent = AudioComponentFindNext(NULL, &desc);
     
     //Get audio units // 获得 Audio Unit
-    status = AudioComponentInstanceNew(inputComponent, &audioUnit);
+    status = AudioComponentInstanceNew(inputComponent, &_audioUnit);
     checkStatus(status);
     
     //Enable IO for recording // 为录制打开 IO
+    //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
     UInt32 flag = 1;
-    status = AudioUnitSetProperty(audioUnit,
+    status = AudioUnitSetProperty(_audioUnit,
                                   kAudioOutputUnitProperty_EnableIO,
                                   kAudioUnitScope_Input,
                                   kInputBus,
@@ -89,7 +107,7 @@
     checkStatus(status);
     
     //Enable IO for playback // 为播放打开 IO
-    status = AudioUnitSetProperty(audioUnit,
+    status = AudioUnitSetProperty(_audioUnit,
                                   kAudioOutputUnitProperty_EnableIO,
                                   kAudioUnitScope_Output,
                                   kOutputBus,
@@ -98,18 +116,18 @@
     checkStatus(status);
     
     //Describe format // 描述格式
-    AudioStreamBasicDescription audioFormat;
-    audioFormat.mSampleRate = 44100.00;//44.1KHz
-    audioFormat.mFormatID = kAudioFormatLinearPCM;
-    audioFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger;
-    audioFormat.mFramesPerPacket = 1;
-    audioFormat.mChannelsPerFrame = 1;
-    audioFormat.mBitsPerChannel = 16;
-    audioFormat.mBytesPerPacket = 2;
-    audioFormat.mBytesPerFrame = 2;
+    audioFormat.mSampleRate         = 44100.00;//44.1KHz
+    audioFormat.mFormatID           = kAudioFormatLinearPCM;
+    audioFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;
+    audioFormat.mFramesPerPacket    = 1;
+    audioFormat.mChannelsPerFrame   = 1;
+    audioFormat.mBitsPerChannel     = 16;
+    audioFormat.mBytesPerPacket     = 2;
+    audioFormat.mBytesPerFrame      = 2;
     
-    //Apply format // 设置格式
-    status = AudioUnitSetProperty(audioUnit,
+    //Application format // 设置应用处理音频的格式
+    //2.I/O Unit输出数据到应用appliction 和
+    status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Output,
                                   kInputBus,
@@ -117,7 +135,7 @@
                                   sizeof(audioFormat));
     checkStatus(status);
     
-    status = AudioUnitSetProperty(audioUnit,
+    status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Input,
                                   kOutputBus,
@@ -129,8 +147,8 @@
     AURenderCallbackStruct callbackStruct;
     callbackStruct.inputProc = recordingCallback;
     callbackStruct.inputProcRefCon = (__bridge void * _Nullable)self;
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioOutputUnitProperty_SetInputCallback,
+    status = AudioUnitSetProperty(_audioUnit,
+                                  kAudioOutputUnitProperty_SetInputCallback,//用来设置回调
                                   kAudioUnitScope_Global,
                                   kInputBus,
                                   &callbackStruct,
@@ -140,8 +158,8 @@
     //set output callback // 设置声音输出回调函数。当speaker需要数据时就会调用回调函数去获取数据。它是 "拉" 数据的概念。
     callbackStruct.inputProc = playbackCallback;
     callbackStruct.inputProcRefCon = (__bridge void * _Nullable)self;
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioUnitProperty_SetRenderCallback,
+    status = AudioUnitSetProperty(_audioUnit,
+                                  kAudioUnitProperty_SetRenderCallback,//用来设置回调
                                   kAudioUnitScope_Global,
                                   kOutputBus,
                                   &callbackStruct,
@@ -150,16 +168,25 @@
     
     //Disable buffer allocation for the recorder (optional - do this if we want to pass in our own) // 关闭为录制分配的缓冲区（我们想使用我们自己分配的）
     flag = 0;
-    status = AudioUnitSetProperty(audioUnit,
+    status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_ShouldAllocateBuffer,
                                   kAudioUnitScope_Output,
                                   kInputBus,
                                   &flag,
                                   sizeof(flag));
     // TODO: Allocate our own buffers if we want
+    //创建并设置缓冲区大小（成功开启录制时，创建缓冲区。关闭录制时，销毁缓冲区）
+    uint32_t numberBuffers = 1;
+    UInt32 bufferSize = 2048;
+    _bufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+    _bufferList->mNumberBuffers = numberBuffers;
+    _bufferList->mBuffers[0].mData = malloc(bufferSize);
+    _bufferList->mBuffers[0].mDataByteSize = bufferSize;
+    _bufferList->mBuffers[0].mNumberChannels = 1;
     
     // Initialise // 初始化
-    status = AudioUnitInitialize(audioUnit);
+    //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
+    status = AudioUnitInitialize(_audioUnit);
     checkStatus(status);
     
     // Initialise也可以用以下代码
@@ -171,27 +198,52 @@
     //    checkStatus(status);
     //    status = AudioUnitInitialize(audioUnit);
     //    checkStatus(status);
-    
-    //创建并设置缓冲区大小（成功开启录制时，创建缓冲区。关闭录制时，销毁缓冲区）
-    uint32_t numberBuffers = 1;
-    UInt32 bufferSize = 2048;
-    bufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
-    bufferList->mNumberBuffers = numberBuffers;
-    bufferList->mBuffers[0].mData = malloc(bufferSize);
-    bufferList->mBuffers[0].mDataByteSize = bufferSize;
-    bufferList->mBuffers[0].mNumberChannels = 1;
 }
-
+// 检测状态
 void checkStatus(OSStatus status){
     if (status != noErr) {
-        printf("Error: %d\n",status);
+        printf("Error: %ld\n",(long)status);
     }
 }
 
+#pragma mark 开启 Audio Unit
+- (void)start {
+    //When you are ready to start:
+    [self setupAudioUnit];
+    OSStatus status = AudioOutputUnitStart(self.audioUnit);
+    checkStatus(status);
+}
+#pragma mark 关闭 Audio Unit
+- (void)stop {
+    //And to stop:
+    OSStatus status = AudioOutputUnitStop(self.audioUnit);
+    checkStatus(status);
+    AudioUnitUninitialize(self.audioUnit);
+    
+    if (self.bufferList != NULL) {
+        if (self.bufferList->mBuffers[0].mData) {
+            free(self.bufferList->mBuffers[0].mData);
+            self.bufferList->mBuffers[0].mData = NULL;
+        }
+        free(self.bufferList);
+        self.bufferList = NULL;
+    }
+    
+    [self finished];//销毁
+    
+    [self writeFile:self.pcmData];
+}
+
+#pragma mark 结束 Audio Unit
+- (void)finished {
+    AudioComponentInstanceDispose(self.audioUnit);
+}
+
+#pragma mark 录制和播放回调
 #pragma mark Recording Callback 录制回调
 static OSStatus recordingCallback(void *inRefCon,
                                   AudioUnitRenderActionFlags *ioActionFlags,
-                                  const AudioTimeStamp *inTimeStamp,  
+                                  const AudioTimeStamp *inTimeStamp,
                                   UInt32 inBusNumber,
                                   UInt32 inNumberFrames,
                                   AudioBufferList *ioData) {
@@ -203,19 +255,19 @@ static OSStatus recordingCallback(void *inRefCon,
     AudioManager *self = (__bridge AudioManager*) inRefCon;
     if (inNumberFrames > 0) {
         
-        self->bufferList->mNumberBuffers = 1;
+        self.bufferList->mNumberBuffers = 1;
         
         OSStatus status;
-        status = AudioUnitRender(self->audioUnit,
+        status = AudioUnitRender(self.audioUnit,
                                  ioActionFlags,
                                  inTimeStamp,
                                  inBusNumber,
                                  inNumberFrames,
-                                 self->bufferList);
+                                 self.bufferList);
         checkStatus(status);
         
-        [self->pcmData appendBytes:self->bufferList->mBuffers[0].mData
-                            length:self->bufferList->mBuffers[0].mDataByteSize];
+        [self.pcmData appendBytes:self.bufferList->mBuffers[0].mData
+                           length:self.bufferList->mBuffers[0].mDataByteSize];
     }
     
     return noErr;
@@ -239,54 +291,10 @@ static OSStatus playbackCallback(void *inRefCon,
     return noErr;
 }
 
-- (void)startRecoder {
-    //When you are ready to start:
-    [self setupAudioUnit];
-    OSStatus status = AudioOutputUnitStart(audioUnit);
-    checkStatus(status);
-}
-
-- (void)stopRecoder {
-    //And to stop:
-    OSStatus status = AudioOutputUnitStop(audioUnit);
-    checkStatus(status);
-    AudioUnitUninitialize(audioUnit);
-    
-    if (bufferList != NULL) {
-        if (bufferList->mBuffers[0].mData) {
-            free(bufferList->mBuffers[0].mData);
-            bufferList->mBuffers[0].mData = NULL;
-        }
-        free(bufferList);
-        bufferList = NULL;
-    }
-    
-    [self dispose];//销毁
-    
-    [self writeFile:self->pcmData];
-}
-
-- (void)dispose {
-    AudioComponentInstanceDispose(audioUnit);
-}
 
 #pragma mark 音频相关的辅助功能
-- (NSString *)createFilePath {
-    NSString *folderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"wav"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *error;
-    if (![fileManager fileExistsAtPath:folderPath]) {
-        [fileManager createDirectoryAtPath:folderPath withIntermediateDirectories:YES attributes:nil error:&error];
-    }
-    
-    NSString *filePath = [folderPath stringByAppendingPathComponent:@"recoder.pcm"];
-    [fileManager createFileAtPath:filePath contents:nil attributes:nil];
-    NSLog(@"filePath is %@",filePath);
-    return filePath;
-}
-
 - (void)writeFile:(NSData *)data {
-    NSString *path = [self createFilePath];
+    NSString *path = [CacheHelper pathForCommonFile:@"recoder.pcm" withType:0];
     [data writeToFile:path options:NSDataWritingAtomic error:nil];
 }
 
