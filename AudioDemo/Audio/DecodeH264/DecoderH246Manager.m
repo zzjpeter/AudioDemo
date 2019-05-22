@@ -66,7 +66,11 @@ SingleImplementation(manager)
 
 #pragma makr private
 - (void)onInputStart {
-    inputStream = [[NSInputStream alloc] initWithFileAtPath:[[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"]];
+    NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
+    if (IsEmpty(file)) {
+        file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
+    }
+    inputStream = [[NSInputStream alloc] initWithFileAtPath:file];
     [inputStream open];
     inputSize = 0;
     inputMaxSize = 640 * 480 * 3 * 4;
