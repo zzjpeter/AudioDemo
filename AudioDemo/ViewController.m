@@ -21,10 +21,10 @@
 }
 
 - (IBAction)recordAction:(id)sender {
-    [[AudioManager sharedAudioManager] startRecoder];
+    [[AudioManager sharedAudioManager] start];
 }
 - (IBAction)stopAction:(id)sender {
-    [[AudioManager sharedAudioManager] stopRecoder];
+    [[AudioManager sharedAudioManager] stop];
 }
 
 @end
