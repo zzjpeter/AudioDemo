@@ -31,7 +31,7 @@
 SingleImplementation(manager)
 
 #pragma mark public
-- (void)play
+- (void)start
 {
     if (self.mCaptureSession.running ) {
         [self stop];

@@ -35,7 +35,7 @@
 - (IBAction)encodeH264Start:(id)sender {
     [self.view addSubview:self.playView];
     [EncodeH264Manager sharemanager].playView = self.playView;
-    [[EncodeH264Manager sharemanager] play];
+    [[EncodeH264Manager sharemanager] start];
 }
 - (IBAction)encodeH264Stop:(id)sender {
     [[EncodeH264Manager sharemanager] stop];

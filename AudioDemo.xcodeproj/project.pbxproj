@@ -484,8 +484,16 @@
 				47E94216227E854D00D86EE1 /* AudioManager.m */,
 				47357DC222954F0900A9010D /* EncodeH264 */,
 				47357DC322954F1700A9010D /* DecodeH264 */,
+				47FDA9C122962DC30020A5F0 /* EncodeAAC */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		47FDA9C122962DC30020A5F0 /* EncodeAAC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = EncodeAAC;
 			sourceTree = "<group>";
 		};
 		9CD4744CD559C26D80ECD3AD /* Frameworks */ = {

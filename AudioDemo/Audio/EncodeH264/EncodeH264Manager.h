@@ -19,7 +19,7 @@ SingleInterface(manager)
 
 @property (nonatomic,strong) UIView *playView;//播放视频的view 必须提前在play之前设置
 
-- (void)play;
+- (void)start;
 - (void)stop;
 
 @end
