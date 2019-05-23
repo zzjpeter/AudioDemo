@@ -76,7 +76,7 @@
                                 <rect key="frame" x="43" y="336" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="EncodeAACstart"/>
+                                <state key="normal" title="EncodeAACStart"/>
                                 <connections>
                                     <action selector="encodeAACStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ftG-62-iPK"/>
                                 </connections>
@@ -88,6 +88,33 @@
                                 <state key="normal" title="EncodeAACStop"/>
                                 <connections>
                                     <action selector="encodeAACStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7UQ-kW-XTX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ7-Bl-bc4">
+                                <rect key="frame" x="226" y="406" width="127" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="DecodeAACStop"/>
+                                <connections>
+                                    <action selector="decodeAACStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tCR-mF-YhW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mVf-pe-aS8">
+                                <rect key="frame" x="38" y="464" width="138" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="系统音效播放短音乐"/>
+                                <connections>
+                                    <action selector="systemSoundPlay:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jGT-aM-seL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhv-OJ-xxx">
+                                <rect key="frame" x="43" y="406" width="127" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="DecodeAACStart"/>
+                                <connections>
+                                    <action selector="decodeAACStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bur-Uo-Wpa"/>
                                 </connections>
                             </button>
                         </subviews>

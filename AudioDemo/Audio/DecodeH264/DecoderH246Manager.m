@@ -67,7 +67,7 @@ SingleImplementation(manager)
 #pragma makr private
 - (void)onInputStart {
     NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
-    if (IsEmpty(file)) {
+    if (![CacheHelper checkfile:file]) {
         file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
     }
     inputStream = [[NSInputStream alloc] initWithFileAtPath:file];
