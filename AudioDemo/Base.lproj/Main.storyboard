@@ -19,25 +19,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yfi-rb-eun">
-                                <rect key="frame" x="43" y="92" width="127" height="29"/>
+                                <rect key="frame" x="52" y="461" width="136" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="音频RecordStart"/>
+                                <state key="normal" title="AUPCMRecordStart"/>
                                 <connections>
                                     <action selector="recordAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bws-uc-ROl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Xh-4n-MlE">
-                                <rect key="frame" x="226" y="91" width="127" height="30"/>
+                                <rect key="frame" x="220" y="461" width="134" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="音频RecordStop"/>
+                                <state key="normal" title="AUPCMRecordStop"/>
                                 <connections>
                                     <action selector="stopAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8WP-PP-9I3"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="klq-bh-xMD">
-                                <rect key="frame" x="43" y="173" width="127" height="29"/>
+                                <rect key="frame" x="49" y="91" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeH264Start"/>
@@ -46,7 +46,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCI-ng-755">
-                                <rect key="frame" x="226" y="173" width="127" height="29"/>
+                                <rect key="frame" x="219" y="91" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeH264Stop"/>
@@ -55,7 +55,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sv5-HO-YWx">
-                                <rect key="frame" x="43" y="257" width="127" height="29"/>
+                                <rect key="frame" x="49" y="173" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeH264Start"/>
@@ -64,7 +64,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ehy-wZ-cMD">
-                                <rect key="frame" x="226" y="257" width="127" height="29"/>
+                                <rect key="frame" x="219" y="173" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeH264Stop"/>
@@ -73,7 +73,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="33G-3N-qIR">
-                                <rect key="frame" x="43" y="336" width="127" height="30"/>
+                                <rect key="frame" x="49" y="236" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeAACStart"/>
@@ -82,7 +82,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="whw-W0-8wz">
-                                <rect key="frame" x="226" y="336" width="127" height="30"/>
+                                <rect key="frame" x="220" y="236" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeAACStop"/>
@@ -91,7 +91,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ7-Bl-bc4">
-                                <rect key="frame" x="226" y="406" width="127" height="30"/>
+                                <rect key="frame" x="219" y="319" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeAACStop"/>
@@ -100,7 +100,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mVf-pe-aS8">
-                                <rect key="frame" x="38" y="464" width="138" height="30"/>
+                                <rect key="frame" x="51" y="402" width="138" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="系统音效播放短音乐"/>
@@ -109,12 +109,30 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhv-OJ-xxx">
-                                <rect key="frame" x="43" y="406" width="127" height="30"/>
+                                <rect key="frame" x="49" y="319" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeAACStart"/>
                                 <connections>
                                     <action selector="decodeAACStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bur-Uo-Wpa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X20-Xj-Jhd">
+                                <rect key="frame" x="51" y="530" width="138" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="AUPCMPlayStart"/>
+                                <connections>
+                                    <action selector="AUPCMPlayStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7xf-bi-t7b"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibe-cD-JJ9">
+                                <rect key="frame" x="219" y="530" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="AUPCMPlayStop"/>
+                                <connections>
+                                    <action selector="AUPCMPlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pZz-AY-6Yp"/>
                                 </connections>
                             </button>
                         </subviews>

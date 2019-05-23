@@ -1,10 +1,10 @@
 // .h文件
-#define ZSingletonH(name) + (instancetype)shared##name;
+#define SingleInterface(name) + (instancetype)shared##name;
 
 // .m文件
 #if __has_feature(objc_arc)
 
-    #define ZSingletonM(name) \
+    #define SingleImplementation(name) \
     static id _instace; \
  \
     + (id)allocWithZone:(struct _NSZone *)zone \
@@ -32,7 +32,7 @@
 
 #else
 
-    #define ZSingletonM(name) \
+    #define SingleImplementation(name) \
     static id _instace; \
  \
     + (id)allocWithZone:(struct _NSZone *)zone \

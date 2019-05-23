@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "Single.h"
 #import "ZHeader.h"
 #import "LYOpenGLView.h"
 

@@ -25,47 +25,56 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.view addSubview:self.playOpenGLView];
 }
 
 - (IBAction)recordAction:(id)sender {
-    [[AudioManager sharedAudioManager] start];
+    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayAndRecord];
 }
 - (IBAction)stopAction:(id)sender {
-    [[AudioManager sharedAudioManager] stop];
+    [[AudioManager sharedmanager] stop];
 }
 - (IBAction)encodeH264Start:(id)sender {
     [self.view addSubview:self.playView];
-    [EncodeH264Manager sharemanager].playView = self.playView;
-    [[EncodeH264Manager sharemanager] start];
+    [self.view sendSubviewToBack:self.playView];
+    [EncodeH264Manager sharedmanager].playView = self.playView;
+    [[EncodeH264Manager sharedmanager] start];
 }
 - (IBAction)encodeH264Stop:(id)sender {
-    [[EncodeH264Manager sharemanager] stop];
+    [[EncodeH264Manager sharedmanager] stop];
 }
 
 - (IBAction)decodeH264Start:(id)sender {
     [self.view addSubview:self.playOpenGLView];
-    [DecoderH246Manager sharemanager].playView = self.playOpenGLView;
-    [[DecoderH246Manager sharemanager] start];
+    [self.view sendSubviewToBack:self.playOpenGLView];
+    [DecoderH246Manager sharedmanager].playView = self.playOpenGLView;
+    [[DecoderH246Manager sharedmanager] start];
 }
 - (IBAction)decodeH264Stop:(id)sender {
-    [[DecoderH246Manager sharemanager] stop];
+    [[DecoderH246Manager sharedmanager] stop];
 }
 
 - (IBAction)encodeAACStart:(id)sender {
-    [[EncodeAACManager sharemanager] start];
+    [[EncodeAACManager sharedmanager] start];
 }
 - (IBAction)encodeAACStop:(id)sender {
-    [[EncodeAACManager sharemanager] stop];
+    [[EncodeAACManager sharedmanager] stop];
 }
 - (IBAction)decodeAACStart:(id)sender {
-    [[DecodeAACManager sharemanager] start];
+    [[DecodeAACManager sharedmanager] start];
 }
 - (IBAction)decodeAACStop:(id)sender {
-    [[DecodeAACManager sharemanager] stop];
+    [[DecodeAACManager sharedmanager] stop];
 }
 - (IBAction)systemSoundPlay:(id)sender {
-     [[DecodeAACManager sharemanager] play];
+     [[DecodeAACManager sharedmanager] play];
+}
+
+- (IBAction)AUPCMPlayStart:(id)sender {
+    //[[AudioManager sharedmanager] start];
+    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+}
+- (IBAction)AUPCMPlayStop:(id)sender {
+    [[AudioManager sharedmanager] stop];
 }
 
 

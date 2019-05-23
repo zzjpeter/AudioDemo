@@ -15,27 +15,23 @@
 #define kOutputBus 0 //代表Element0 output数据  (Element1：数据 应用（application）到 输出设备（扬声器））【左边输入域 右边输出域】（0:output）
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 
+const uint32_t CONST_BUFFER_SIZES = 0x10000;
+
 @interface AudioManager ()
 {
+    NSInputStream *inputSteam;
     AudioStreamBasicDescription audioFormat;//Describe format // 描述格式
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
 @property (nonatomic,assign) AudioBufferList *bufferList;//设置缓冲区大小
 @property (nonatomic,strong) NSMutableData *pcmData;
-
+@property (nonatomic,strong) AVAudioSessionCategory audioSessionCategory;//模式1.播放 2.录制 3.播放并录制
 
 @end
 
 @implementation AudioManager
 
-+(instancetype)sharedAudioManager {
-    static AudioManager *shareAudioManager;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        shareAudioManager = [[AudioManager alloc] init];
-    });
-    return shareAudioManager;
-}
+SingleImplementation(manager)
 
 - (instancetype)init
 {
@@ -49,6 +45,7 @@
 #pragma mark 初始化数据
 -(void)initialze {
     self.pcmData = [NSMutableData new];
+    self.audioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
 }
 
 #pragma mark 初始化AudioUnit设置
@@ -68,7 +65,7 @@
     //注意:此处代码必须设置
     //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
     NSError *error = nil;
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
+    [[AVAudioSession sharedInstance] setCategory:self.audioSessionCategory error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
     [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.022 error:&error];
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
@@ -116,14 +113,16 @@
     checkStatus(status);
     
     //Describe format // 描述格式
-    audioFormat.mSampleRate         = 44100.00;//44.1KHz
-    audioFormat.mFormatID           = kAudioFormatLinearPCM;
-    audioFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;
-    audioFormat.mFramesPerPacket    = 1;
-    audioFormat.mChannelsPerFrame   = 1;
-    audioFormat.mBitsPerChannel     = 16;
-    audioFormat.mBytesPerPacket     = 2;
-    audioFormat.mBytesPerFrame      = 2;
+    memset(&audioFormat, 0, sizeof(audioFormat));
+    audioFormat.mSampleRate         = 44100.00;//44.1KHz // 采样率
+    audioFormat.mFormatID           = kAudioFormatLinearPCM;// PCM格式
+    audioFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;// 整形
+    audioFormat.mFramesPerPacket    = 1;// 每个packet只有1帧
+    audioFormat.mChannelsPerFrame   = 1;// 声道数
+    audioFormat.mBitsPerChannel     = 16;// 位深
+    audioFormat.mBytesPerFrame      = 2;// 每帧只有2个byte 声道*位深
+    audioFormat.mBytesPerPacket     = 2;// 每个Packet只有2个byte 声道*位深*帧数
+    [self printAudioStreamBasicDescription:audioFormat];
     
     //Application format // 设置应用处理音频的格式
     //2.I/O Unit输出数据到应用appliction 和
@@ -177,7 +176,7 @@
     // TODO: Allocate our own buffers if we want
     //创建并设置缓冲区大小（成功开启录制时，创建缓冲区。关闭录制时，销毁缓冲区）
     uint32_t numberBuffers = 1;
-    UInt32 bufferSize = 2048;
+    UInt32 bufferSize = CONST_BUFFER_SIZES;
     _bufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
     _bufferList->mNumberBuffers = numberBuffers;
     _bufferList->mBuffers[0].mData = malloc(bufferSize);
@@ -207,18 +206,37 @@ void checkStatus(OSStatus status){
 }
 
 #pragma mark 开启 Audio Unit
+- (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;
+{
+    self.audioSessionCategory = audioSessionCategory;
+    [self start];
+}
 - (void)start {
+    [self onStart];
     //When you are ready to start:
     [self setupAudioUnit];
     OSStatus status = AudioOutputUnitStart(self.audioUnit);
     checkStatus(status);
+}
+- (void)onStart
+{
+    NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
+    if (![CacheHelper checkfile:file]) {
+        file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"pcm"];
+    }
+    inputSteam = [[NSInputStream alloc] initWithFileAtPath:file];
+    if (!inputSteam) {
+        NSLog(@"打开文件失败 %@", file);
+    }
+    else {
+        [inputSteam open];
+    }
 }
 #pragma mark 关闭 Audio Unit
 - (void)stop {
     //And to stop:
     OSStatus status = AudioOutputUnitStop(self.audioUnit);
     checkStatus(status);
-    AudioUnitUninitialize(self.audioUnit);
     
     if (self.bufferList != NULL) {
         if (self.bufferList->mBuffers[0].mData) {
@@ -230,13 +248,27 @@ void checkStatus(OSStatus status){
     }
     
     [self finished];//销毁
-    
-    [self writeFile:self.pcmData];
-}
 
+    [self onStop];
+}
+- (void)onStop{
+    [inputSteam close];
+    inputSteam = nil;
+    
+    if ([self.delegate respondsToSelector:@selector(onPlayToEnd:)]) {
+        [self.delegate onPlayToEnd:self];
+    }
+    
+    if (!IsEmpty(_pcmData)) {
+        [self writeFile:_pcmData];
+        _pcmData = [NSMutableData new];
+    }
+}
 #pragma mark 结束 Audio Unit
 - (void)finished {
+    AudioUnitUninitialize(self.audioUnit);
     AudioComponentInstanceDispose(self.audioUnit);
+    self.audioUnit = nil;
 }
 
 #pragma mark 录制和播放回调
@@ -286,7 +318,14 @@ static OSStatus playbackCallback(void *inRefCon,
     // much data is in the buffer.
     // Notes: ioData 包括了一堆 buffers
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
-    //AudioManager *self = (__bridge AudioManager*) inRefCon;
+    AudioManager *audioManager = (__bridge AudioManager*) inRefCon;
+    ioData->mBuffers[0].mDataByteSize = (UInt32)[audioManager->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];
+    NSLog(@"out size: %d", ioData->mBuffers[0].mDataByteSize);
+    if (ioData->mBuffers[0].mDataByteSize <= 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [audioManager stop];
+        });
+    }
     
     return noErr;
 }
@@ -294,8 +333,30 @@ static OSStatus playbackCallback(void *inRefCon,
 
 #pragma mark 音频相关的辅助功能
 - (void)writeFile:(NSData *)data {
-    NSString *path = [CacheHelper pathForCommonFile:@"recoder.pcm" withType:0];
-    [data writeToFile:path options:NSDataWritingAtomic error:nil];
+    NSString *path = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
+    NSError *error = nil;
+    [data writeToFile:path options:NSDataWritingAtomic error:&error];
+    if (error) {
+        NSLog(@"error:%@",error);
+    }
+}
+
+#pragma mark 打印 printAudioStreamBasicDescription
+- (void)printAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
+    char formatID[5];
+    UInt32 mFormatID = CFSwapInt32HostToBig(asbd.mFormatID);
+    bcopy (&mFormatID, formatID, 4);
+    formatID[4] = '\0';
+    printf("Sample Rate:         %10.0f\n",  asbd.mSampleRate);
+    printf("Format ID:           %10s\n",    formatID);
+    printf("Format Flags:        %10X\n",    (unsigned int)asbd.mFormatFlags);
+    printf("Frames per Packet:   %10d\n",    (unsigned int)asbd.mFramesPerPacket);
+    printf("Channels per Frame:  %10d\n",    (unsigned int)asbd.mChannelsPerFrame);
+    printf("Bits per Channel:    %10d\n",    (unsigned int)asbd.mBitsPerChannel);
+    printf("Bytes per Frame:     %10d\n",    (unsigned int)asbd.mBytesPerFrame);
+    printf("Bytes per Packet:    %10d\n",    (unsigned int)asbd.mBytesPerPacket);
+
+    printf("\n");
 }
 
 @end

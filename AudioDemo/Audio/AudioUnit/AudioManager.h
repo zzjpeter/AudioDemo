@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "AVHeader.h"
 NS_ASSUME_NONNULL_BEGIN
 /**
  Audio Unit播放PCM文件 详解
@@ -78,12 +78,21 @@ AudioBufferList是音频的缓存数据结构，具体如下：
  
  6、调用AudioOutputUnitStart开始，AudioUnit会调用之前设置的PlayCallback，在回调函数中把音频数据赋值给AudioBufferList；
  */
+@class AudioManager;
+@protocol AudioManagerDelegate <NSObject>
+
+- (void)onPlayToEnd:(AudioManager *)audioManager;
+
+@end
 
 @interface AudioManager : NSObject
 
+@property (nonatomic, weak) id<AudioManagerDelegate> delegate;
 
-+(instancetype)sharedAudioManager;
+SingleInterface(manager)
 
+//录制和播放 通过audioSessionCategory 参数设置
+- (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;
 - (void)start;
 - (void)stop;
 - (void)finished;
