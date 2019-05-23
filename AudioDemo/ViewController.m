@@ -10,6 +10,7 @@
 #import "AudioManager.h"
 #import "EncodeH264Manager.h"
 #import "DecoderH246Manager.h"
+#import "EncodeAACManager.h"
 
 @interface ViewController ()
 
@@ -49,6 +50,14 @@
 - (IBAction)decodeH264Stop:(id)sender {
     [[DecoderH246Manager sharemanager] stop];
 }
+
+- (IBAction)encodeAACStart:(id)sender {
+    [[EncodeAACManager sharemanager] start];
+}
+- (IBAction)encodeAACStop:(id)sender {
+    [[EncodeAACManager sharemanager] stop];
+}
+
 
 
 - (UIView *)playView

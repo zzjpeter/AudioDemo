@@ -57,6 +57,8 @@
 		47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E94206227E7D9400D86EE1 /* LaunchScreen.storyboard */; };
 		47E9420B227E7D9400D86EE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9420A227E7D9400D86EE1 /* main.m */; };
 		47E94217227E854D00D86EE1 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E94216227E854D00D86EE1 /* AudioManager.m */; };
+		47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */; };
+		47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9CA229633570020A5F0 /* AACEncoder.m */; };
 		F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3E1196EBB56BD9D89AFF4 /* libPods-AudioDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -163,6 +165,11 @@
 		47E9420A227E7D9400D86EE1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		47E94215227E854D00D86EE1 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		47E94216227E854D00D86EE1 /* AudioManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
+		47FDA9C222962F6E0020A5F0 /* EncodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeAACManager.h; sourceTree = "<group>"; };
+		47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeAACManager.m; sourceTree = "<group>"; };
+		47FDA9C822962FE20020A5F0 /* AVHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHeader.h; sourceTree = "<group>"; };
+		47FDA9C9229633570020A5F0 /* AACEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AACEncoder.h; sourceTree = "<group>"; };
+		47FDA9CA229633570020A5F0 /* AACEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AACEncoder.m; sourceTree = "<group>"; };
 		4BD4E98CE0A924759C3C7DA8 /* Pods-AudioDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioDemo/Pods-AudioDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		64350976258E2F7BCA5B4CD1 /* Pods-AudioDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioDemo/Pods-AudioDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -480,6 +487,7 @@
 		47E94218227EC93C00D86EE1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
 				47E94215227E854D00D86EE1 /* AudioManager.h */,
 				47E94216227E854D00D86EE1 /* AudioManager.m */,
 				47357DC222954F0900A9010D /* EncodeH264 */,
@@ -492,6 +500,10 @@
 		47FDA9C122962DC30020A5F0 /* EncodeAAC */ = {
 			isa = PBXGroup;
 			children = (
+				47FDA9C222962F6E0020A5F0 /* EncodeAACManager.h */,
+				47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */,
+				47FDA9C9229633570020A5F0 /* AACEncoder.h */,
+				47FDA9CA229633570020A5F0 /* AACEncoder.m */,
 			);
 			path = EncodeAAC;
 			sourceTree = "<group>";
@@ -634,9 +646,11 @@
 				4709EB4C229506E800185D92 /* UIButton+TTAdd.m in Sources */,
 				4709EB52229506E800185D92 /* NSBundle+Language.m in Sources */,
 				4709EB46229506E800185D92 /* NSString+URL.m in Sources */,
+				47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */,
 				4709EB45229506E800185D92 /* CountCodePerformTime.m in Sources */,
 				47E94217227E854D00D86EE1 /* AudioManager.m in Sources */,
 				4709EB57229506E800185D92 /* RMMapper.m in Sources */,
+				47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */,
 				4709EB5A229506E800185D92 /* NSObject+RMCopyable.m in Sources */,
 				4709EB4B229506E800185D92 /* NSString+Empty.m in Sources */,
 				4709EB54229506E800185D92 /* UILabel+TTAdd.m in Sources */,
