@@ -28,7 +28,7 @@
 }
 
 - (IBAction)recordAction:(id)sender {
-    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayAndRecord];
+    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
 }
 - (IBAction)stopAction:(id)sender {
     [[AudioManager sharedmanager] stop];

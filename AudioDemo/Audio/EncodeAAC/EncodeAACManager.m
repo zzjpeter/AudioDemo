@@ -13,7 +13,7 @@
 {
     dispatch_queue_t mCaptureQueue;
     dispatch_queue_t mEncodeQueue;
-    NSFileHandle *audioFileHandle;
+    NSFileHandle *fileHandle;
 }
 @property (nonatomic , strong) AVCaptureSession *mCaptureSession; //负责输入和输出设备之间的数据传递
 @property (nonatomic , strong) AVCaptureDeviceInput *mCaptureAudioDeviceInput;//负责从AVCaptureDevice获得输入数据
@@ -59,18 +59,28 @@ SingleImplementation(manager)
     }
     [self.mCaptureAudioOutput setSampleBufferDelegate:self queue:mCaptureQueue];
     
-    NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
-    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    audioFileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    [self initWriteFileHandle];
     
     [self.mCaptureSession startRunning];
 }
 
+#pragma mark 处理 录制文件写入fileHandle
+- (void)initWriteFileHandle
+{
+    NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+}
+- (void)closeFileHandle
+{
+    [fileHandle closeFile];
+    fileHandle = NULL;
+}
+
 - (void)stopCapture {
     [self.mCaptureSession stopRunning];
-    [audioFileHandle closeFile];
-    audioFileHandle = NULL;
+    [self closeFileHandle];
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
@@ -78,7 +88,7 @@ SingleImplementation(manager)
     {
         dispatch_sync(mEncodeQueue, ^{
             [self.mAudioEncoder encodeSampleBuffer:sampleBuffer completionBlock:^(NSData *encodedData, NSError *error) {
-                [self->audioFileHandle writeData:encodedData];
+                [self->fileHandle writeData:encodedData];
             }];
         });
     }

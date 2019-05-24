@@ -84,20 +84,31 @@ SingleImplementation(manager)
     [self.mPreviewLayer setFrame:self.playView.bounds];
     [self.playView.layer addSublayer:self.mPreviewLayer];
 
+    [self initWriteFileHandle];
+    
+    [self initVideoToolBox];
+    [self.mCaptureSession startRunning];
+}
+
+#pragma mark 处理 录制文件写入fileHandle
+- (void)initWriteFileHandle
+{
     NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
     [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
     [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
     fileHandle = [NSFileHandle fileHandleForWritingAtPath:file];
-    [self initVideoToolBox];
-    [self.mCaptureSession startRunning];
+}
+- (void)closeFileHandle
+{
+    [fileHandle closeFile];
+    fileHandle = NULL;
 }
 
 - (void)stopCapture {
     [self.mCaptureSession stopRunning];
     [self.mPreviewLayer removeFromSuperlayer];
     [self EndVideoToolBox];
-    [fileHandle closeFile];
-    fileHandle = NULL;
+    [self closeFileHandle];
 }
 #pragma mark 设置编码器类型CMVideoCodecType kCMVideoCodecType_H264
 - (void)initVideoToolBox {

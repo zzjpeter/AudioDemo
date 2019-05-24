@@ -21,11 +21,13 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;
 {
     NSInputStream *inputSteam;
     AudioStreamBasicDescription audioFormat;//Describe format // 描述格式
+    NSFileHandle *fileHandle;
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
 @property (nonatomic,assign) AudioBufferList *bufferList;//设置缓冲区大小
-@property (nonatomic,strong) NSMutableData *pcmData;
 @property (nonatomic,strong) AVAudioSessionCategory audioSessionCategory;//模式1.播放 2.录制 3.播放并录制
+
+@property (nonatomic,strong) NSMutableData *pcmData;
 
 @end
 
@@ -70,6 +72,11 @@ SingleImplementation(manager)
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
         return;
+    }
+    
+    if (self.audioSessionCategory == AVAudioSessionCategoryPlayAndRecord ||
+        self.audioSessionCategory == AVAudioSessionCategoryRecord) {
+        [self initWriteFileHandle];
     }
     
     //Audio Unit具体设置
@@ -205,6 +212,20 @@ void checkStatus(OSStatus status){
     }
 }
 
+#pragma mark 处理 录制文件写入fileHandle
+- (void)initWriteFileHandle
+{
+    NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
+    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+}
+- (void)closeFileHandle
+{
+    [fileHandle closeFile];
+    fileHandle = NULL;
+}
+
 #pragma mark 开启 Audio Unit
 - (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;
 {
@@ -259,10 +280,9 @@ void checkStatus(OSStatus status){
         [self.delegate onPlayToEnd:self];
     }
     
-    if (!IsEmpty(_pcmData)) {
-        [self writeFile:_pcmData];
-        _pcmData = [NSMutableData new];
-    }
+    //[self writeFile:_pcmData];
+    _pcmData = [NSMutableData new];//reset
+    [self closeFileHandle];
 }
 #pragma mark 结束 Audio Unit
 - (void)finished {
@@ -279,12 +299,12 @@ static OSStatus recordingCallback(void *inRefCon,
                                   UInt32 inBusNumber,
                                   UInt32 inNumberFrames,
                                   AudioBufferList *ioData) {
-    printf("recordingCallback\n");
     // TODO:
     // 使用 inNumberFrames 计算有多少数据是有效的
     // 在 AudioBufferList 里存放着更多的有效空间
     
     AudioManager *self = (__bridge AudioManager*) inRefCon;
+    NSLog(@"recordingCallback:size:%ld",(long)self.bufferList->mBuffers[0].mDataByteSize);
     if (inNumberFrames > 0) {
         
         self.bufferList->mNumberBuffers = 1;
@@ -298,8 +318,11 @@ static OSStatus recordingCallback(void *inRefCon,
                                  self.bufferList);
         checkStatus(status);
         
+        //录制的pcmData数据处理 //将录制的pcm数据写入文件中
         [self.pcmData appendBytes:self.bufferList->mBuffers[0].mData
-                           length:self.bufferList->mBuffers[0].mDataByteSize];
+                           length:self.bufferList->mBuffers[0].mDataByteSize];//1.直接追加到pcmdata中
+        NSData *aPcmData = [NSData dataWithBytes:self.bufferList->mBuffers[0].mData length:self.bufferList->mBuffers[0].mDataByteSize];
+        [self writeData:aPcmData];//2.直接追加到fileHandle指定的文件中
     }
     
     return noErr;
@@ -312,18 +335,20 @@ static OSStatus playbackCallback(void *inRefCon,
                                  UInt32 inBusNumber,
                                  UInt32 inNumberFrames,
                                  AudioBufferList *ioData) {
-    printf("playbackCallback\n");
     // Notes: ioData contains buffers (may be more than one!)
     // Fill them up as much as you can. Remember to set the size value in each buffer to match how
     // much data is in the buffer.
     // Notes: ioData 包括了一堆 buffers
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
-    AudioManager *audioManager = (__bridge AudioManager*) inRefCon;
-    ioData->mBuffers[0].mDataByteSize = (UInt32)[audioManager->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];
-    NSLog(@"out size: %d", ioData->mBuffers[0].mDataByteSize);
+    AudioManager *self = (__bridge AudioManager*) inRefCon;
+    
+    ioData->mBuffers[0].mDataByteSize = (UInt32)[self->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];//从文件中读取pcm数据
+    
+    NSLog(@"playbackCallback:size:%ld",(long)ioData->mBuffers[0].mDataByteSize);
+    
     if (ioData->mBuffers[0].mDataByteSize <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [audioManager stop];
+            [self stop];
         });
     }
     
@@ -331,7 +356,7 @@ static OSStatus playbackCallback(void *inRefCon,
 }
 
 
-#pragma mark 音频相关的辅助功能
+#pragma mark 音频相关的辅助功能 data写入到文件
 - (void)writeFile:(NSData *)data {
     NSString *path = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
     NSError *error = nil;
@@ -339,6 +364,10 @@ static OSStatus playbackCallback(void *inRefCon,
     if (error) {
         NSLog(@"error:%@",error);
     }
+}
+- (void)writeData:(NSData *)aPcmData
+{
+    [fileHandle writeData:aPcmData];
 }
 
 #pragma mark 打印 printAudioStreamBasicDescription
