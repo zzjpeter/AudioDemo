@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 SingleInterface(manager)
 
+@property (nonatomic,copy) NSString *file;
+
 - (void)start;
 - (void)stop;
 

@@ -76,11 +76,7 @@ SingleImplementation(manager)
 #pragma mark 解码
 - (void)customAudioConfig {
     
-    NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
-    if (![CacheHelper checkfile:audioFile]) {
-        audioFile = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"aac"];
-    }
-    NSURL *url = [NSURL URLWithString:audioFile];
+    NSURL *url = [NSURL URLWithString:self.file];
     
     OSStatus status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID); //Open an existing audio file specified by a URL.
     if (status != noErr) {
@@ -126,6 +122,19 @@ SingleImplementation(manager)
         }
         NSLog(@"buffer%d full", i);
     }
+}
+
+#pragma mark fileUrl 文件路径
+- (NSString *)file
+{
+    if (!_file) {
+        NSString *file = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
+        if (![CacheHelper checkfile:file]) {
+            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"aac"];
+        }
+        _file = file;
+    }
+    return _file;
 }
 
 #pragma mark -解码回调

@@ -241,10 +241,7 @@ void checkStatus(OSStatus status){
 }
 - (void)onStart
 {
-    NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
-    if (![CacheHelper checkfile:file]) {
-        file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"pcm"];
-    }
+    NSString *file = self.file;
     inputSteam = [[NSInputStream alloc] initWithFileAtPath:file];
     if (!inputSteam) {
         NSLog(@"打开文件失败 %@", file);
@@ -252,6 +249,18 @@ void checkStatus(OSStatus status){
     else {
         [inputSteam open];
     }
+}
+#pragma mark fileUrl 文件路径
+- (NSString *)file
+{
+    if (!_file) {
+        NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
+        if (![CacheHelper checkfile:file]) {
+            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
+        }
+        _file = file;
+    }
+    return _file;
 }
 #pragma mark 关闭 Audio Unit
 - (void)stop {

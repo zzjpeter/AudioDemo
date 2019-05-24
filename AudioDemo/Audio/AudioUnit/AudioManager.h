@@ -90,7 +90,7 @@ AudioBufferList是音频的缓存数据结构，具体如下：
 @property (nonatomic, weak) id<AudioManagerDelegate> delegate;
 
 SingleInterface(manager)
-
+@property (nonatomic,copy)NSString *file;
 //录制和播放 通过audioSessionCategory 参数设置
 - (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;
 - (void)start;

@@ -66,10 +66,7 @@ SingleImplementation(manager)
 
 #pragma makr private
 - (void)onInputStart {
-    NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
-    if (![CacheHelper checkfile:file]) {
-        file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
-    }
+    NSString *file = self.file;
     inputStream = [[NSInputStream alloc] initWithFileAtPath:file];
     [inputStream open];
     inputSize = 0;
@@ -85,6 +82,19 @@ SingleImplementation(manager)
         inputBuffer = NULL;
     }
     [self.mDispalyLink setPaused:YES];
+}
+
+#pragma mark fileUrl 文件路径
+- (NSString *)file
+{
+    if (!_file) {
+        NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
+        if (![CacheHelper checkfile:file]) {
+            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
+        }
+        _file = file;
+    }
+    return _file;
 }
 
 -(void)updateFrame

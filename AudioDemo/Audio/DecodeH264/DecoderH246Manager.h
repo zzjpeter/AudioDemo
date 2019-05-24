@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 SingleInterface(manager)
 
+@property (nonatomic,copy)NSString *file;
+
 @property (nonatomic,strong)LYOpenGLView *playView;
 - (void)start;
 - (void)stop;
