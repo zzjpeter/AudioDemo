@@ -60,6 +60,13 @@
 		47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E94206227E7D9400D86EE1 /* LaunchScreen.storyboard */; };
 		47E9420B227E7D9400D86EE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9420A227E7D9400D86EE1 /* main.m */; };
 		47E94217227E854D00D86EE1 /* AudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E94216227E854D00D86EE1 /* AudioManager.m */; };
+		47EB4D1A2297EC36000801CE /* test.mov in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D132297EC36000801CE /* test.mov */; };
+		47EB4D1B2297EC36000801CE /* ab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D142297EC36000801CE /* ab.m4a */; };
+		47EB4D1C2297EC36000801CE /* ab.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D152297EC36000801CE /* ab.aac */; };
+		47EB4D1D2297EC36000801CE /* test.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D162297EC36000801CE /* test.pcm */; };
+		47EB4D1E2297EC36000801CE /* ab.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D172297EC36000801CE /* ab.pcm */; };
+		47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D182297EC36000801CE /* ab.mp3 */; };
+		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
 		47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */; };
 		47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9CA229633570020A5F0 /* AACEncoder.m */; };
 		F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3E1196EBB56BD9D89AFF4 /* libPods-AudioDemo.a */; };
@@ -171,6 +178,13 @@
 		47E9420A227E7D9400D86EE1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		47E94215227E854D00D86EE1 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		47E94216227E854D00D86EE1 /* AudioManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioManager.m; sourceTree = "<group>"; };
+		47EB4D132297EC36000801CE /* test.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test.mov; sourceTree = "<group>"; };
+		47EB4D142297EC36000801CE /* ab.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.m4a; sourceTree = "<group>"; };
+		47EB4D152297EC36000801CE /* ab.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.aac; sourceTree = "<group>"; };
+		47EB4D162297EC36000801CE /* test.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.pcm; sourceTree = "<group>"; };
+		47EB4D172297EC36000801CE /* ab.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.pcm; sourceTree = "<group>"; };
+		47EB4D182297EC36000801CE /* ab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ab.mp3; sourceTree = "<group>"; };
+		47EB4D192297EC36000801CE /* ab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.mp4; sourceTree = "<group>"; };
 		47FDA9C222962F6E0020A5F0 /* EncodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeAACManager.h; sourceTree = "<group>"; };
 		47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeAACManager.m; sourceTree = "<group>"; };
 		47FDA9C822962FE20020A5F0 /* AVHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHeader.h; sourceTree = "<group>"; };
@@ -512,6 +526,7 @@
 		47E94218227EC93C00D86EE1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				47EB4D122297EC36000801CE /* CommonResource */,
 				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
 				4778AF4422968F4C00CD72BC /* AudioUnit */,
 				47357DC222954F0900A9010D /* EncodeH264 */,
@@ -520,6 +535,20 @@
 				47B26A292296499100704B90 /* DecodeAAC */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		47EB4D122297EC36000801CE /* CommonResource */ = {
+			isa = PBXGroup;
+			children = (
+				47EB4D132297EC36000801CE /* test.mov */,
+				47EB4D142297EC36000801CE /* ab.m4a */,
+				47EB4D152297EC36000801CE /* ab.aac */,
+				47EB4D162297EC36000801CE /* test.pcm */,
+				47EB4D172297EC36000801CE /* ab.pcm */,
+				47EB4D182297EC36000801CE /* ab.mp3 */,
+				47EB4D192297EC36000801CE /* ab.mp4 */,
+			);
+			path = CommonResource;
 			sourceTree = "<group>";
 		};
 		47FDA9C122962DC30020A5F0 /* EncodeAAC */ = {
@@ -608,12 +637,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47EB4D1C2297EC36000801CE /* ab.aac in Resources */,
 				47357DD0229552B800A9010D /* abc.h264 in Resources */,
+				47EB4D1D2297EC36000801CE /* test.pcm in Resources */,
 				4709EB56229506E800185D92 /* LICENSE.md in Resources */,
 				47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */,
 				47B26A2E229649D000704B90 /* abc.aac in Resources */,
+				47EB4D1A2297EC36000801CE /* test.mov in Resources */,
+				47EB4D202297EC36000801CE /* ab.mp4 in Resources */,
+				47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */,
+				47EB4D1B2297EC36000801CE /* ab.m4a in Resources */,
 				47357DCA2295502200A9010D /* Shader.vsh in Resources */,
 				4709EB5B229506E800185D92 /* README.md in Resources */,
+				47EB4D1E2297EC36000801CE /* ab.pcm in Resources */,
 				47E94205227E7D9400D86EE1 /* Assets.xcassets in Resources */,
 				47357DCB2295502200A9010D /* Shader.fsh in Resources */,
 				47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */,
