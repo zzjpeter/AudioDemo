@@ -14,14 +14,25 @@
 //AudioUnitElement
 #define kOutputBus 0 //代表Element0 output数据  (Element1：数据 应用（application）到 输出设备（扬声器））【左边输入域 右边输出域】（0:output）
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
+#define NO_MORE_DATA (-12306)
 
 const uint32_t CONST_BUFFER_SIZES = 0x10000;
 
 @interface AudioManager ()
 {
     NSInputStream *inputSteam;
-    AudioStreamBasicDescription audioFormat;//Describe format // 描述格式
+    AudioStreamBasicDescription audioOutputFormat;//Describe format // 描述格式
     NSFileHandle *fileHandle;
+    
+    //auido decoder
+    AudioFileID audioFileID;
+    AudioStreamBasicDescription audioInputFormat;//从文件中获取
+    AudioStreamPacketDescription *audioInputPacketFormat;
+    SInt64 readedPacket; // 已读的packet数量
+    UInt64 packetNums; // 总的packet数量
+    UInt64 packetNumsInBuffer; // buffer中最多的buffer数量
+    Byte *convertBuffer;
+    AudioConverterRef audioConverter;
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
 @property (nonatomic,assign) AudioBufferList *bufferList;//设置缓冲区大小
@@ -51,6 +62,40 @@ SingleImplementation(manager)
 }
 
 #pragma mark 初始化AudioUnit设置
+- (void)setupAudioUnit{
+    
+    NSURL *url = [NSURL URLWithString:self.file];
+    
+    OSStatus status;
+    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
+    checkStatus(status);
+    
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
+    
+    size = sizeof(packetNums);
+    status = AudioFileGetProperty(audioFileID,
+                                  kAudioFilePropertyAudioDataPacketCount,
+                                  &size,
+                                  &packetNums); // 读取文件packets总数
+    readedPacket = 0;
+    
+    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
+    if (sizePerPacket == 0) {
+        size = sizeof(sizePerPacket);
+        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
+        checkStatus(status);
+    }
+    
+    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
+    checkStatus(status);
+    
+    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
+    
+    audioConverter = NULL;
+    
+    [self setupAudioUnitBase];
+}
 /**
  1.描述音频元件（kAudioUnitType_Output／kAudioUnitSubType_RemoteIO ／kAudioUnitManufacturerApple）。
  2.使用 AudioComponentFindNext(NULL, &descriptionOfAudioComponent) 获得 AudioComponent。AudioComponent有点像生产 Audio Unit 的工厂。
@@ -62,7 +107,7 @@ SingleImplementation(manager)
  8.初始化 Audio Unit。
  9.启动 Audio Unit。
  */
-- (void)setupAudioUnit{
+- (void)setupAudioUnitBase{
     
     //注意:此处代码必须设置
     //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
@@ -111,6 +156,7 @@ SingleImplementation(manager)
     checkStatus(status);
     
     //Enable IO for playback // 为播放打开 IO
+    //4.I/O Unit输出数据到设备（扬声器）的数据格式
     status = AudioUnitSetProperty(_audioUnit,
                                   kAudioOutputUnitProperty_EnableIO,
                                   kAudioUnitScope_Output,
@@ -120,33 +166,33 @@ SingleImplementation(manager)
     checkStatus(status);
     
     //Describe format // 描述格式
-    memset(&audioFormat, 0, sizeof(audioFormat));
-    audioFormat.mSampleRate         = 44100.00;//44.1KHz // 采样率
-    audioFormat.mFormatID           = kAudioFormatLinearPCM;// PCM格式
-    audioFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;// 整形
-    audioFormat.mFramesPerPacket    = 1;// 每个packet只有1帧
-    audioFormat.mChannelsPerFrame   = 1;// 声道数
-    audioFormat.mBitsPerChannel     = 16;// 位深
-    audioFormat.mBytesPerFrame      = 2;// 每帧只有2个byte 声道*位深
-    audioFormat.mBytesPerPacket     = 2;// 每个Packet只有2个byte 声道*位深*帧数
-    [self printAudioStreamBasicDescription:audioFormat];
+    memset(&audioOutputFormat, 0, sizeof(audioOutputFormat));
+    audioOutputFormat.mSampleRate         = 44100.00;//44.1KHz // 采样率
+    audioOutputFormat.mFormatID           = kAudioFormatLinearPCM;// PCM格式
+    audioOutputFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;// 整形
+    audioOutputFormat.mFramesPerPacket    = 1;// 每个packet只有1帧
+    audioOutputFormat.mChannelsPerFrame   = 1;// 声道数
+    audioOutputFormat.mBitsPerChannel     = 16;// 位深
+    audioOutputFormat.mBytesPerFrame      = 2;// 每帧只有2个byte 声道*位深
+    audioOutputFormat.mBytesPerPacket     = 2;// 每个Packet只有2个byte 声道*位深*帧数
+    [self printAudioStreamBasicDescription:audioOutputFormat isOutput:YES];
     
     //Application format // 设置应用处理音频的格式
-    //2.I/O Unit输出数据到应用appliction 和
+    //2.I/O Unit输出数据到应用appliction 和 3.应用application输出数据到I/O Unit
     status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Output,
                                   kInputBus,
-                                  &audioFormat,
-                                  sizeof(audioFormat));
+                                  &audioOutputFormat,
+                                  sizeof(audioOutputFormat));
     checkStatus(status);
-    
+    //3.应用application输出数据到I/O Unit
     status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Input,
                                   kOutputBus,
-                                  &audioFormat,
-                                  sizeof(audioFormat));
+                                  &audioOutputFormat,
+                                  sizeof(audioOutputFormat));
     checkStatus(status);
     
     //set input callback // 设置数据采集回调函数
@@ -189,6 +235,9 @@ SingleImplementation(manager)
     _bufferList->mBuffers[0].mData = malloc(bufferSize);
     _bufferList->mBuffers[0].mDataByteSize = bufferSize;
     _bufferList->mBuffers[0].mNumberChannels = 1;
+    convertBuffer = malloc(bufferSize);
+    
+    status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
     
     // Initialise // 初始化
     //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
@@ -254,9 +303,9 @@ void checkStatus(OSStatus status){
 - (NSString *)file
 {
     if (!_file) {
-        NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
+        NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
         if (![CacheHelper checkfile:file]) {
-            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
+            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"pcm"];
         }
         _file = file;
     }
@@ -351,6 +400,14 @@ static OSStatus playbackCallback(void *inRefCon,
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
     AudioManager *self = (__bridge AudioManager*) inRefCon;
     
+    OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, self.bufferList, NULL);
+    if (status) {
+        NSLog(@"转换格式失败 %d", status);
+    }
+    
+    memcpy(ioData->mBuffers[0].mData, self.bufferList->mBuffers[0].mData, self.bufferList->mBuffers[0].mDataByteSize);
+    ioData->mBuffers[0].mDataByteSize = self.bufferList->mBuffers[0].mDataByteSize;
+    
     ioData->mBuffers[0].mDataByteSize = (UInt32)[self->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];//从文件中读取pcm数据
     
     NSLog(@"playbackCallback:size:%ld",(long)ioData->mBuffers[0].mDataByteSize);
@@ -364,6 +421,33 @@ static OSStatus playbackCallback(void *inRefCon,
     return noErr;
 }
 
+OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
+{
+    AudioManager *self = (__bridge AudioManager *)(inUserData);
+    
+    UInt32 byteSize = CONST_BUFFER_SIZES;
+    OSStatus status = AudioFileReadPacketData(self->audioFileID, NO, &byteSize, self->audioInputPacketFormat, self->readedPacket, ioNumberDataPackets, self ->convertBuffer);
+    
+    if (outDataPacketDescription) { // 这里要设置好packetFormat，否则会转码失败
+        *outDataPacketDescription = self->audioInputPacketFormat;
+    }
+    
+    
+    if(status) {
+        NSLog(@"读取文件失败");
+    }
+    
+    if (!status && ioNumberDataPackets > 0) {
+        ioData->mBuffers[0].mDataByteSize = byteSize;
+        ioData->mBuffers[0].mData = self->convertBuffer;
+        self->readedPacket += *ioNumberDataPackets;
+        return noErr;
+    }
+    else {
+        return NO_MORE_DATA;
+    }
+    
+}
 
 #pragma mark 音频相关的辅助功能 data写入到文件
 - (void)writeFile:(NSData *)data {
@@ -380,11 +464,16 @@ static OSStatus playbackCallback(void *inRefCon,
 }
 
 #pragma mark 打印 printAudioStreamBasicDescription
-- (void)printAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
+- (void)printAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd isOutput:(BOOL)isOutput{
     char formatID[5];
     UInt32 mFormatID = CFSwapInt32HostToBig(asbd.mFormatID);
     bcopy (&mFormatID, formatID, 4);
     formatID[4] = '\0';
+    if (isOutput) {
+      printf("流输出格式\n");
+    }else{
+      printf("流输入格式\n");
+    }
     printf("Sample Rate:         %10.0f\n",  asbd.mSampleRate);
     printf("Format ID:           %10s\n",    formatID);
     printf("Format Flags:        %10X\n",    (unsigned int)asbd.mFormatFlags);
