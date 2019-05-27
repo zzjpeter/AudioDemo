@@ -27,12 +27,6 @@
     // Do any additional setup after loading the view.
 }
 
-- (IBAction)recordAction:(id)sender {
-    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
-}
-- (IBAction)stopAction:(id)sender {
-    [[AudioManager sharedmanager] stop];
-}
 - (IBAction)encodeH264Start:(id)sender {
     [self.view addSubview:self.playView];
     [self.view sendSubviewToBack:self.playView];
@@ -42,7 +36,6 @@
 - (IBAction)encodeH264Stop:(id)sender {
     [[EncodeH264Manager sharedmanager] stop];
 }
-
 - (IBAction)decodeH264Start:(id)sender {
     [self.view addSubview:self.playOpenGLView];
     [self.view sendSubviewToBack:self.playOpenGLView];
@@ -65,18 +58,34 @@
 - (IBAction)decodeAACStop:(id)sender {
     [[DecodeAACManager sharedmanager] stop];
 }
+
+- (IBAction)recordAction:(id)sender {
+    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
+}
+- (IBAction)stopAction:(id)sender {
+    [[AudioManager sharedmanager] stop];
+}
 - (IBAction)systemSoundPlay:(id)sender {
      [[DecodeAACManager sharedmanager] play];
 }
 
 - (IBAction)AUPCMPlayStart:(id)sender {
     //[[AudioManager sharedmanager] start];
+    [AudioManager sharedmanager].file = [CacheHelper pathForCommonFile:@"abcd.pcm" withType:0];
     [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
 }
 - (IBAction)AUPCMPlayStop:(id)sender {
     [[AudioManager sharedmanager] stop];
 }
 
+- (IBAction)AUCommonResourcePlayStart:(id)sender {
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];
+    [AudioManager sharedmanager].file = file;
+    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+}
+- (IBAction)AUCommonResourcePlayStop:(id)sender {
+    [[AudioManager sharedmanager] stop];
+}
 
 
 - (UIView *)playView

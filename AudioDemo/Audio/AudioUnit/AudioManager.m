@@ -20,9 +20,10 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;
 
 @interface AudioManager ()
 {
-    NSInputStream *inputSteam;
+    NSInputStream *inputSteam;//从文件中读取音频数据播放
     AudioStreamBasicDescription audioOutputFormat;//Describe format // 描述格式
-    NSFileHandle *fileHandle;
+    NSFileHandle *fileWriteHandle;//写入录制的音频数据
+    NSFileHandle *fileConverterWriteHandle;//写入读取的音频数据 转换格式后 文件句柄
     
     //auido decoder
     AudioFileID audioFileID;
@@ -65,6 +66,22 @@ SingleImplementation(manager)
 #pragma mark 初始化AudioUnit设置
 - (void)setupAudioUnit{
     
+    BOOL isPlay = NO;//是否播放
+    AVAudioSessionCategory audioSessionCategory = self.audioSessionCategory;//类型本质是字符串
+    if (audioSessionCategory == AVAudioSessionCategoryPlayAndRecord) {
+        isPlay = YES;
+        [self initReadFileHandle];
+        [self initWriteFileHandle];
+    }else if (audioSessionCategory == AVAudioSessionCategoryPlayback){
+        isPlay = YES;
+        [self initReadFileHandle];
+    }else if (audioSessionCategory == AVAudioSessionCategoryRecord){
+        [self initWriteFileHandle];
+    }
+    
+    NSLog(@"file:%@",self.file);
+    NSLog(@"ConvertFile:%@",self.convertFile);
+    
     NSURL *url = [NSURL URLWithString:self.file];
     
     OSStatus status;
@@ -95,6 +112,11 @@ SingleImplementation(manager)
     
     audioConverter = NULL;
     
+    if (audioInputFormat.mFormatID) {
+        self.isReadNeedConvert = YES;
+        NSLog(@"非pcm格式的音频数据，需要音频转码");
+    }
+    
     [self setupAudioUnitBase];
 }
 /**
@@ -118,11 +140,6 @@ SingleImplementation(manager)
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
         return;
-    }
-    
-    if (self.audioSessionCategory == AVAudioSessionCategoryPlayAndRecord ||
-        self.audioSessionCategory == AVAudioSessionCategoryRecord) {
-        [self initWriteFileHandle];
     }
     
     //Audio Unit具体设置
@@ -285,17 +302,43 @@ void checkStatus(OSStatus status){
 #pragma mark 处理 录制文件写入fileHandle
 - (void)initWriteFileHandle
 {
-    NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
-    [[NSFileManager defaultManager] removeItemAtPath:audioFile error:nil];
-    [[NSFileManager defaultManager] createFileAtPath:audioFile contents:nil attributes:nil];
-    fileHandle = [NSFileHandle fileHandleForWritingAtPath:audioFile];
+    NSString *file = self.file;
+    [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
+    [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
+    fileWriteHandle = [NSFileHandle fileHandleForWritingAtPath:file];
 }
-- (void)closeFileHandle
+- (void)closeWriteFileHandle
 {
-    [fileHandle closeFile];
-    fileHandle = NULL;
+    [fileWriteHandle closeFile];
+    fileWriteHandle = NULL;
 }
-
+#pragma mark 处理 播放文件的fileHandle
+- (void)initReadFileHandle
+{
+    NSString *file = self.file;
+    if (!_isReadNeedConvert) {//直接用inputstream读取 播放即可
+        inputSteam = [[NSInputStream alloc] initWithFileAtPath:file];
+        if (!inputSteam) {
+            NSLog(@"打开文件失败 %@", file);
+        }
+        else {
+            [inputSteam open];
+        }
+    }else {//需要读取后 进行转码后 才能播放
+        NSString *convertFile = self.convertFile;
+        [[NSFileManager defaultManager] removeItemAtPath:convertFile error:nil];
+        [[NSFileManager defaultManager] createFileAtPath:convertFile contents:nil attributes:nil];
+        fileConverterWriteHandle = [NSFileHandle fileHandleForWritingAtPath:convertFile];
+    }
+}
+- (void)closeReadFileHandle
+{
+    [inputSteam close];
+    inputSteam = nil;
+    
+    [fileConverterWriteHandle closeFile];
+    fileConverterWriteHandle = NULL;
+}
 #pragma mark 开启 Audio Unit
 - (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;
 {
@@ -311,26 +354,6 @@ void checkStatus(OSStatus status){
 }
 - (void)onStart
 {
-    NSString *file = self.file;
-    inputSteam = [[NSInputStream alloc] initWithFileAtPath:file];
-    if (!inputSteam) {
-        NSLog(@"打开文件失败 %@", file);
-    }
-    else {
-        [inputSteam open];
-    }
-}
-#pragma mark fileUrl 文件路径
-- (NSString *)file
-{
-    if (!_file) {
-        NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
-        if (![CacheHelper checkfile:file]) {
-            file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"pcm"];
-        }
-        _file = file;
-    }
-    return _file;
 }
 #pragma mark 关闭 Audio Unit
 - (void)stop {
@@ -338,6 +361,15 @@ void checkStatus(OSStatus status){
     OSStatus status = AudioOutputUnitStop(self.audioUnit);
     checkStatus(status);
     
+    [self closeBufferList];
+    
+    [self finished];//销毁
+
+    [self onStop];
+}
+//1.释放数据缓冲区
+- (void)closeBufferList
+{
     if (self.bufferList != NULL) {
         if (self.bufferList->mBuffers[0].mData) {
             free(self.bufferList->mBuffers[0].mData);
@@ -347,29 +379,57 @@ void checkStatus(OSStatus status){
         self.bufferList = NULL;
     }
     
-    [self finished];//销毁
-
-    [self onStop];
-}
-- (void)onStop{
-    [inputSteam close];
-    inputSteam = nil;
-    
-    if ([self.delegate respondsToSelector:@selector(onPlayToEnd:)]) {
-        [self.delegate onPlayToEnd:self];
+    if (self.playBufferList != NULL) {
+        if (self.playBufferList->mBuffers[0].mData) {
+            free(self.playBufferList->mBuffers[0].mData);
+            self.playBufferList->mBuffers[0].mData = NULL;
+        }
+        free(self.playBufferList);
+        self.playBufferList = NULL;
     }
-    
-    //[self writeFile:_pcmData];
-    _pcmData = [NSMutableData new];//reset
-    [self closeFileHandle];
 }
-#pragma mark 结束 Audio Unit
+//2.结束Audio Unit
 - (void)finished {
     AudioUnitUninitialize(self.audioUnit);
     AudioComponentInstanceDispose(self.audioUnit);
     self.audioUnit = nil;
 }
+//3.结束文件处理
+- (void)onStop{
 
+    if ([self.delegate respondsToSelector:@selector(onPlayToEnd:)]) {
+        [self.delegate onPlayToEnd:self];
+    }
+    
+    [self closeReadFileHandle];
+    
+    //[self writeFile:_pcmData];
+    _pcmData = [NSMutableData new];//reset
+    [self closeWriteFileHandle];
+}
+#pragma mark fileUrl 文件路径处理
+- (NSString *)file
+{
+    if (!_file) {
+        NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
+        if (![CacheHelper checkfile:file]) {
+            file = [[NSBundle mainBundle] pathForResource:@"abc.pcm" ofType:nil];
+        }
+        _file = file;
+    }
+    return _file;
+}
+- (NSString *)convertFile
+{
+    if (!_convertFile) {
+        NSString *file = [CacheHelper pathForCommonFile:@"abcd.pcm" withType:0];
+        if (![CacheHelper checkfile:file]) {
+            file = [[NSBundle mainBundle] pathForResource:@"abcd.pcm" ofType:nil];
+        }
+        _convertFile = file;
+    }
+    return _convertFile;
+}
 #pragma mark 录制和播放回调
 #pragma mark Recording Callback 录制回调
 static OSStatus recordingCallback(void *inRefCon,
@@ -394,7 +454,7 @@ static OSStatus recordingCallback(void *inRefCon,
                                  inTimeStamp,
                                  inBusNumber,
                                  inNumberFrames,
-                                 self.bufferList);
+                                 self.bufferList);//数据处理到缓冲区的数据结构中
         checkStatus(status);
         
         //录制的pcmData数据处理 //将录制的pcm数据写入文件中
@@ -421,16 +481,25 @@ static OSStatus playbackCallback(void *inRefCon,
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
     AudioManager *self = (__bridge AudioManager*) inRefCon;
     
-    OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, self.bufferList, NULL);
-    if (status) {
-        NSLog(@"转换格式失败 %d", status);
+    if (!self->_isReadNeedConvert)
+    {
+        //1.直接读取音频数据播放
+        ioData->mBuffers[0].mDataByteSize = (UInt32)[self->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];//从文件中读取pcm数据
+    }else
+    {
+        //2.读取音频数据转码后播放
+        AudioBufferList *bufferList = self.playBufferList;
+        OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, bufferList, NULL);
+        if (status) {
+            NSLog(@"转换格式失败:%ld", (long)status);
+        }
+        memcpy(ioData->mBuffers[0].mData, bufferList->mBuffers[0].mData, bufferList->mBuffers[0].mDataByteSize);
+        ioData->mBuffers[0].mDataByteSize = bufferList->mBuffers[0].mDataByteSize;
+        
+        NSData *aPcmData = [NSData dataWithBytes:bufferList->mBuffers[0].mData length:bufferList->mBuffers[0].mDataByteSize];
+        [self writeConvertData:aPcmData];//2.直接追加到fileHandle指定的文件中
     }
-    
-    memcpy(ioData->mBuffers[0].mData, self.bufferList->mBuffers[0].mData, self.bufferList->mBuffers[0].mDataByteSize);
-    ioData->mBuffers[0].mDataByteSize = self.bufferList->mBuffers[0].mDataByteSize;
-    
-    ioData->mBuffers[0].mDataByteSize = (UInt32)[self->inputSteam read:ioData->mBuffers[0].mData maxLength:(NSInteger)ioData->mBuffers[0].mDataByteSize];//从文件中读取pcm数据
-    
+
     NSLog(@"playbackCallback:size:%ld",(long)ioData->mBuffers[0].mDataByteSize);
     
     if (ioData->mBuffers[0].mDataByteSize <= 0) {
@@ -452,7 +521,6 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
     if (outDataPacketDescription) { // 这里要设置好packetFormat，否则会转码失败
         *outDataPacketDescription = self->audioInputPacketFormat;
     }
-    
     
     if(status) {
         NSLog(@"读取文件失败");
@@ -481,9 +549,12 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
 }
 - (void)writeData:(NSData *)aPcmData
 {
-    [fileHandle writeData:aPcmData];
+    [fileWriteHandle writeData:aPcmData];
 }
-
+- (void)writeConvertData:(NSData *)aPcmData
+{
+    [fileConverterWriteHandle writeData:aPcmData];
+}
 #pragma mark 打印 printAudioStreamBasicDescription
 - (void)printAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd isOutput:(BOOL)isOutput{
     char formatID[5];
