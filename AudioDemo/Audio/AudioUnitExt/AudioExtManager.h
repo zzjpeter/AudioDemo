@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  */
 @class AudioExtManager;
-@protocol AudioManagerDelegate <NSObject>
+@protocol AudioExtManagerDelegate <NSObject>
 
 - (void)onPlayToEnd:(AudioExtManager *)AudioExtManager;
 
@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AudioExtManager : NSObject
 
-@property (nonatomic, weak) id<AudioManagerDelegate> delegate;
+@property (nonatomic, weak) id<AudioExtManagerDelegate> delegate;
 
 SingleInterface(manager)
 @property (nonatomic,copy)NSString *file;//写入 或者 读取文件的路径

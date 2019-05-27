@@ -153,6 +153,24 @@
                                     <action selector="AUCommonResourcePlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JQc-FR-oIk"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NQu-kg-KbB">
+                                <rect key="frame" x="52" y="729" width="231" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="AUExtCommonResourcePlayStart"/>
+                                <connections>
+                                    <action selector="AUExtCommonResourcePlayStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A8N-iY-iqZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2vp-NL-dvT">
+                                <rect key="frame" x="51" y="791" width="232" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="AUExtCommonResourcePlayStop"/>
+                                <connections>
+                                    <action selector="AUExtCommonResourcePlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bVA-dj-2S8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

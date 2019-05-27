@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AudioManager.h"
+#import "AudioExtManager.h"
 #import "EncodeH264Manager.h"
 #import "DecoderH246Manager.h"
 #import "EncodeAACManager.h"
@@ -87,6 +88,14 @@
     [[AudioManager sharedmanager] stop];
 }
 
+- (IBAction)AUExtCommonResourcePlayStart:(id)sender {
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"abc.pcm" ofType:nil];//abc.pcm ab.mp4
+    [AudioExtManager sharedmanager].file = file;
+    [[AudioExtManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+}
+- (IBAction)AUExtCommonResourcePlayStop:(id)sender {
+    [[AudioExtManager sharedmanager] stop];
+}
 
 - (UIView *)playView
 {
