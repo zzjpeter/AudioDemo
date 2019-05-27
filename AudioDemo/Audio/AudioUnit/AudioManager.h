@@ -98,7 +98,7 @@ SingleInterface(manager)
 - (void)start;
 - (void)stop;
 - (void)finished;
-
+- (double)getCurrentTime;
 @end
 
 NS_ASSUME_NONNULL_END

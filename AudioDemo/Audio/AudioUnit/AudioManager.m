@@ -577,5 +577,9 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
 
     printf("\n");
 }
-
+#pragma mark getCurrentTime
+- (double)getCurrentTime {
+    Float64 timeInterval = (readedPacket * 1.0) / packetNums;
+    return timeInterval;
+}
 @end
