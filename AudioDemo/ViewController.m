@@ -89,7 +89,7 @@
 }
 
 - (IBAction)AUExtCommonResourcePlayStart:(id)sender {
-    NSString *file = [[NSBundle mainBundle] pathForResource:@"abc.pcm" ofType:nil];//abc.pcm ab.mp4
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];//abc.pcm ab.mp4 (abcd.pcm转换后存储的原始音频数据)
     [AudioExtManager sharedmanager].file = file;
     [[AudioExtManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
 }

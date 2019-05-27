@@ -310,7 +310,8 @@ void checkStatuss(OSStatus status, const char *operation){
 - (void)initReadFileHandle
 {
     NSString *file = self.file;
-    {//直接用inputstream读取 播放即可
+    
+    if ([file.pathExtension isEqualToString:@"pcm"]) {//直接用inputstream读取 播放即可
         inputSteam = [[NSInputStream alloc] initWithFileAtPath:file];
         if (!inputSteam) {
             NSLog(@"打开文件失败 %@", file);
@@ -318,7 +319,7 @@ void checkStatuss(OSStatus status, const char *operation){
         else {
             [inputSteam open];
         }
-    }
+    }else
     {//需要读取后 进行转码后 才能播放
         NSString *convertFile = self.convertFile;
         [[NSFileManager defaultManager] removeItemAtPath:convertFile error:nil];
