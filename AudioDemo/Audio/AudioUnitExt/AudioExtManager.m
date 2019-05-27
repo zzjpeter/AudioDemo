@@ -1,12 +1,12 @@
 //
-//  AudioManager.m
+//  AudioExtManager.m
 //  AudioDemo
 //
 //  Created by 朱志佳 on 2019/5/5.
 //  Copyright © 2019 朱志佳. All rights reserved.
 //
 
-#import "AudioManager.h"
+#import "AudioExtManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "ZHeader.h"
@@ -16,9 +16,9 @@
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 #define NO_MORE_DATA (-12306)
 
-const uint32_t CONST_BUFFER_SIZES = 0x10000;
+const uint32_t CONST_BUFFER_SIZESS = 0x10000;
 
-@interface AudioManager ()
+@interface AudioExtManager ()
 {
     NSInputStream *inputSteam;//从文件中读取音频数据播放
     AudioStreamBasicDescription audioOutputFormat;//Describe format // 描述格式
@@ -26,14 +26,11 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;
     NSFileHandle *fileConverterWriteHandle;//写入读取的音频数据 转换格式后 文件句柄
     
     //auido decoder
+    ExtAudioFileRef exAudioFile;
     AudioFileID audioFileID;
     AudioStreamBasicDescription audioInputFormat;//从文件中获取
-    AudioStreamPacketDescription *audioInputPacketFormat;
-    SInt64 readedPacket; // 已读的packet数量
-    UInt64 packetNums; // 总的packet数量
-    UInt64 packetNumsInBuffer; // buffer中最多的buffer数量
-    Byte *convertBuffer;
-    AudioConverterRef audioConverter;
+    SInt64 readedFrame; // 已读的frame数量
+    UInt64 totalFrame; // 总的Frame数量
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
 @property (nonatomic,assign) AudioBufferList *bufferList;//设置录制缓冲区大小
@@ -44,7 +41,7 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;
 
 @end
 
-@implementation AudioManager
+@implementation AudioExtManager
 
 SingleImplementation(manager)
 
@@ -83,33 +80,10 @@ SingleImplementation(manager)
     NSLog(@"ConvertFile:%@",self.convertFile);
     
     NSURL *url = [NSURL URLWithString:self.file];
+    // Extend Audio File
+    OSStatus status = ExtAudioFileOpenURL((__bridge CFURLRef)url, &exAudioFile);
+    checkStatuss(status, "ExtAudioFileOpenURL");
     
-    OSStatus status;
-    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
-    checkStatus(status,"AudioFileOpenURL");
-    
-    UInt32 size = sizeof(AudioStreamBasicDescription);
-    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
-    
-    size = sizeof(packetNums);
-    status = AudioFileGetProperty(audioFileID,
-                                  kAudioFilePropertyAudioDataPacketCount,
-                                  &size,
-                                  &packetNums); // 读取文件packets总数
-    readedPacket = 0;
-    
-    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
-    if (sizePerPacket == 0) {
-        size = sizeof(sizePerPacket);
-        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
-        checkStatus(status, "AudioFileGetProperty sizePerPacket");
-    }
-    
-    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
-    checkStatus(status, "malloc AudioStreamPacketDescription");
-    
-    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
-
     [self setupAudioUnitBase];
 }
 /**
@@ -153,7 +127,7 @@ SingleImplementation(manager)
     
     //Get audio units // 获得 Audio Unit
     status = AudioComponentInstanceNew(inputComponent, &_audioUnit);
-    checkStatus(status, "AudioComponentInstanceNew");
+    checkStatuss(status, "AudioComponentInstanceNew");
     
     //Enable IO for recording // 为录制打开 IO
     //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
@@ -164,7 +138,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &flag,
                                   sizeof(flag));
-    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Input kInputBus");
+    checkStatuss(status, "AudioUnitSetProperty kAudioUnitScope_Input kInputBus");
     
     //Enable IO for playback // 为播放打开 IO
     //4.I/O Unit输出数据到设备（扬声器）的数据格式
@@ -174,7 +148,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &flag,
                                   sizeof(flag));
-    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kOutputBus");
+    checkStatuss(status, "AudioUnitSetProperty kAudioUnitScope_Output kOutputBus");
     
     //Describe format // 描述格式
     [self initAudioOutputFormat];
@@ -187,7 +161,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &audioOutputFormat,
                                   sizeof(audioOutputFormat));
-    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kInputBus");
+    checkStatuss(status, "AudioUnitSetProperty kAudioUnitScope_Output kInputBus");
     //3.应用application输出数据到I/O Unit
     status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
@@ -195,7 +169,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &audioOutputFormat,
                                   sizeof(audioOutputFormat));
-    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Input kOutputBus");
+    checkStatuss(status, "AudioUnitSetProperty kAudioUnitScope_Input kOutputBus");
     
     //set input callback // 设置数据采集回调函数
     AURenderCallbackStruct callbackStruct;
@@ -207,7 +181,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &callbackStruct,
                                   sizeof(callbackStruct));
-    checkStatus(status, "AudioUnitSetProperty recordingCallback");
+    checkStatuss(status, "AudioUnitSetProperty recordingCallback");
     
     //set output callback // 设置声音输出回调函数。当speaker需要数据时就会调用回调函数去获取数据。它是 "拉" 数据的概念。
     callbackStruct.inputProc = playbackCallback;
@@ -218,7 +192,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &callbackStruct,
                                   sizeof(callbackStruct));
-    checkStatus(status, "AudioUnitSetProperty playbackCallback");
+    checkStatuss(status, "AudioUnitSetProperty playbackCallback");
     
     //Disable buffer allocation for the recorder (optional - do this if we want to pass in our own) // 关闭为录制分配的缓冲区（我们想使用我们自己分配的）
     flag = 0;
@@ -231,34 +205,47 @@ SingleImplementation(manager)
     // TODO: Allocate our own buffers if we want
     //创建并设置缓冲区大小（成功开启录制时，创建缓冲区。关闭录制时，销毁缓冲区）
     uint32_t numberBuffers = 1;
-    UInt32 bufferSize = CONST_BUFFER_SIZES;
+    UInt32 bufferSize = CONST_BUFFER_SIZESS;
     [self initBufferList:bufferSize numberBuffers:numberBuffers];
-    
+ 
     [self createAudioConverter:audioInputFormat audioOutputFormat:audioOutputFormat];
     
     // Initialise // 初始化
     //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
     status = AudioUnitInitialize(_audioUnit);
-    checkStatus(status, "AudioUnitInitialize");
+    checkStatuss(status, "AudioUnitInitialize");
     
     // Initialise也可以用以下代码
     //    UInt32 category = kAudioSessionCategory_PlayAndRecord;
     //    status = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), category);
-    //    checkStatus(status);
+    //    checkStatuss(status);
     //    status = 0;
     //    status = AudioSessionSetActive(YES);
-    //    checkStatus(status);
+    //    checkStatuss(status);
     //    status = AudioUnitInitialize(audioUnit);
-    //    checkStatus(status);
+    //    checkStatuss(status);
 }
 
 #pragma mark 通过设置输入输出格式创建音频转码器
 - (void)createAudioConverter:(AudioStreamBasicDescription)audioInputFormat audioOutputFormat:(AudioStreamBasicDescription)audioOutputFormat
 {
-    audioConverter = NULL;
-    convertBuffer = malloc(CONST_BUFFER_SIZES);
-    OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
-    checkStatus(status, "AudioConverterNew 通过设置输入输出格式创建音频转码器");
+    OSStatus status;
+    uint32_t size = sizeof(AudioStreamBasicDescription);
+    status = ExtAudioFileGetProperty(exAudioFile, kExtAudioFileProperty_FileDataFormat, &size, &audioInputFormat);// 读取文件格式
+    checkStatuss(status, "ExtAudioFileGetProperty audioInputFormat");
+    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
+    
+    status = ExtAudioFileSetProperty(exAudioFile, kExtAudioFileProperty_ClientDataFormat, size, &audioOutputFormat);
+    checkStatuss(status, "ExtAudioFileSetProperty outputFormat");
+    
+    // 初始化不能太前，如果未设置好输入输出格式，获取的总frame数不准确
+    size = sizeof(totalFrame);
+    status = ExtAudioFileGetProperty(exAudioFile,
+                                     kExtAudioFileProperty_FileLengthFrames,
+                                     &size,
+                                     &totalFrame);
+    checkStatuss(status, "ExtAudioFileGetProperty totalFrame");
+    readedFrame = 0;
     
     if (audioInputFormat.mFormatID) {
         _isReadNeedConvert = YES;
@@ -299,7 +286,7 @@ SingleImplementation(manager)
     _playBufferList = playBufferList;
 }
 // 检测状态
-void checkStatus(OSStatus status, const char *operation){
+void checkStatuss(OSStatus status, const char *operation){
     if (status != noErr) {
         printf("Error: %ld: %s\n",(long)status, operation);
         //exit(1);
@@ -358,7 +345,7 @@ void checkStatus(OSStatus status, const char *operation){
     //When you are ready to start:
     [self setupAudioUnit];
     OSStatus status = AudioOutputUnitStart(self.audioUnit);
-    checkStatus(status, "AudioOutputUnitStart");
+    checkStatuss(status, "AudioOutputUnitStart");
 }
 - (void)onStart
 {
@@ -367,7 +354,7 @@ void checkStatus(OSStatus status, const char *operation){
 - (void)stop {
     //And to stop:
     OSStatus status = AudioOutputUnitStop(self.audioUnit);
-    checkStatus(status, "AudioOutputUnitStop");
+    checkStatuss(status, "AudioOutputUnitStop");
     
     [self closeBufferList];
     
@@ -450,7 +437,7 @@ static OSStatus recordingCallback(void *inRefCon,
     // 使用 inNumberFrames 计算有多少数据是有效的
     // 在 AudioBufferList 里存放着更多的有效空间
     
-    AudioManager *self = (__bridge AudioManager*) inRefCon;
+    AudioExtManager *self = (__bridge AudioExtManager*) inRefCon;
     NSLog(@"recordingCallback:size:%ld",(long)self.bufferList->mBuffers[0].mDataByteSize);
     if (inNumberFrames > 0) {
         
@@ -463,7 +450,7 @@ static OSStatus recordingCallback(void *inRefCon,
                                  inBusNumber,
                                  inNumberFrames,
                                  self.bufferList);//数据处理到缓冲区的数据结构中
-        checkStatus(status, "AudioUnitRender");
+        checkStatuss(status, "AudioUnitRender");
         
         //录制的pcmData数据处理 //将录制的pcm数据写入文件中
         [self.pcmData appendBytes:self.bufferList->mBuffers[0].mData
@@ -487,7 +474,7 @@ static OSStatus playbackCallback(void *inRefCon,
     // much data is in the buffer.
     // Notes: ioData 包括了一堆 buffers
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
-    AudioManager *self = (__bridge AudioManager*) inRefCon;
+    AudioExtManager *self = (__bridge AudioExtManager*) inRefCon;
     
     if (!self->_isReadNeedConvert)
     {
@@ -497,12 +484,18 @@ static OSStatus playbackCallback(void *inRefCon,
     {
         //2.读取音频数据转码后播放
         AudioBufferList *bufferList = self.playBufferList;
-        OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, bufferList, NULL);
+        bufferList->mBuffers[0].mDataByteSize = CONST_BUFFER_SIZESS;
+        OSStatus status = ExtAudioFileRead(self->exAudioFile, &inNumberFrames, bufferList);
         if (status) {
             NSLog(@"转换格式失败:%ld", (long)status);
         }
+        
         memcpy(ioData->mBuffers[0].mData, bufferList->mBuffers[0].mData, bufferList->mBuffers[0].mDataByteSize);
         ioData->mBuffers[0].mDataByteSize = bufferList->mBuffers[0].mDataByteSize;
+        
+        if (self->audioOutputFormat.mBytesPerFrame != 0) {
+           self->readedFrame += bufferList->mBuffers[0].mDataByteSize / self->audioOutputFormat.mBytesPerFrame;//Bytes per Frame = 2，所以是每2bytes一帧
+        }
         
         NSData *aPcmData = [NSData dataWithBytes:bufferList->mBuffers[0].mData length:bufferList->mBuffers[0].mDataByteSize];
         [self writeConvertData:aPcmData];//2.直接追加到fileHandle指定的文件中
@@ -517,33 +510,6 @@ static OSStatus playbackCallback(void *inRefCon,
     }
     
     return noErr;
-}
-
-OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
-{
-    AudioManager *self = (__bridge AudioManager *)(inUserData);
-    
-    UInt32 byteSize = CONST_BUFFER_SIZES;
-    OSStatus status = AudioFileReadPacketData(self->audioFileID, NO, &byteSize, self->audioInputPacketFormat, self->readedPacket, ioNumberDataPackets, self ->convertBuffer);
-    
-    if (outDataPacketDescription) { // 这里要设置好packetFormat，否则会转码失败
-        *outDataPacketDescription = self->audioInputPacketFormat;
-    }
-    
-    if(status) {
-        NSLog(@"读取文件失败");
-    }
-    
-    if (!status && ioNumberDataPackets > 0) {
-        ioData->mBuffers[0].mDataByteSize = byteSize;
-        ioData->mBuffers[0].mData = self->convertBuffer;
-        self->readedPacket += *ioNumberDataPackets;
-        return noErr;
-    }
-    else {
-        return NO_MORE_DATA;
-    }
-    
 }
 
 #pragma mark 音频相关的辅助功能 data写入到文件
@@ -587,7 +553,7 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
 }
 #pragma mark getCurrentTime
 - (double)getCurrentTime {
-    Float64 timeInterval = (readedPacket * 1.0) / packetNums;
+    Float64 timeInterval = (readedFrame * 1.0) / totalFrame;
     return timeInterval;
 }
 @end
