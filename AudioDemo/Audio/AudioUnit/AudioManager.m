@@ -35,8 +35,9 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;
     AudioConverterRef audioConverter;
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
-@property (nonatomic,assign) AudioBufferList *bufferList;//设置缓冲区大小
+@property (nonatomic,assign) AudioBufferList *bufferList;//设置录制缓冲区大小
 @property (nonatomic,strong) AVAudioSessionCategory audioSessionCategory;//模式1.播放 2.录制 3.播放并录制
+@property (nonatomic,assign) AudioBufferList *playBufferList;//设置播放缓冲区大小
 
 @property (nonatomic,strong) NSMutableData *pcmData;
 
@@ -166,16 +167,7 @@ SingleImplementation(manager)
     checkStatus(status);
     
     //Describe format // 描述格式
-    memset(&audioOutputFormat, 0, sizeof(audioOutputFormat));
-    audioOutputFormat.mSampleRate         = 44100.00;//44.1KHz // 采样率
-    audioOutputFormat.mFormatID           = kAudioFormatLinearPCM;// PCM格式
-    audioOutputFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;// 整形
-    audioOutputFormat.mFramesPerPacket    = 1;// 每个packet只有1帧
-    audioOutputFormat.mChannelsPerFrame   = 1;// 声道数
-    audioOutputFormat.mBitsPerChannel     = 16;// 位深
-    audioOutputFormat.mBytesPerFrame      = 2;// 每帧只有2个byte 声道*位深
-    audioOutputFormat.mBytesPerPacket     = 2;// 每个Packet只有2个byte 声道*位深*帧数
-    [self printAudioStreamBasicDescription:audioOutputFormat isOutput:YES];
+    [self initAudioOutputFormat];
     
     //Application format // 设置应用处理音频的格式
     //2.I/O Unit输出数据到应用appliction 和 3.应用application输出数据到I/O Unit
@@ -230,11 +222,7 @@ SingleImplementation(manager)
     //创建并设置缓冲区大小（成功开启录制时，创建缓冲区。关闭录制时，销毁缓冲区）
     uint32_t numberBuffers = 1;
     UInt32 bufferSize = CONST_BUFFER_SIZES;
-    _bufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
-    _bufferList->mNumberBuffers = numberBuffers;
-    _bufferList->mBuffers[0].mData = malloc(bufferSize);
-    _bufferList->mBuffers[0].mDataByteSize = bufferSize;
-    _bufferList->mBuffers[0].mNumberChannels = 1;
+    [self initBufferList:bufferSize numberBuffers:numberBuffers];
     convertBuffer = malloc(bufferSize);
     
     status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
@@ -253,6 +241,39 @@ SingleImplementation(manager)
     //    checkStatus(status);
     //    status = AudioUnitInitialize(audioUnit);
     //    checkStatus(status);
+}
+
+//初始化音频文件数据输出格式
+- (void)initAudioOutputFormat
+{
+    memset(&audioOutputFormat, 0, sizeof(audioOutputFormat));
+    audioOutputFormat.mSampleRate         = 44100.00;//44.1KHz // 采样率
+    audioOutputFormat.mFormatID           = kAudioFormatLinearPCM;// PCM格式
+    audioOutputFormat.mFormatFlags        = kAudioFormatFlagIsSignedInteger;// 整形
+    audioOutputFormat.mFramesPerPacket    = 1;// 每个packet只有1帧
+    audioOutputFormat.mChannelsPerFrame   = 1;// 声道数
+    audioOutputFormat.mBitsPerChannel     = 16;// 位深
+    audioOutputFormat.mBytesPerFrame      = 2;// 每帧只有2个byte 声道*位深
+    audioOutputFormat.mBytesPerPacket     = 2;// 每个Packet只有2个byte 声道*位深*帧数
+    [self printAudioStreamBasicDescription:audioOutputFormat isOutput:YES];
+}
+
+//设置录制 和 播放数据缓冲区
+- (void)initBufferList:(UInt32)bufferSize numberBuffers:(uint32_t)numberBuffers
+{
+    AudioBufferList *bufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+    bufferList->mNumberBuffers = numberBuffers;
+    bufferList->mBuffers[0].mData = malloc(bufferSize);
+    bufferList->mBuffers[0].mDataByteSize = bufferSize;
+    bufferList->mBuffers[0].mNumberChannels = 1;
+    _bufferList = bufferList;
+    
+    AudioBufferList *playBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
+    playBufferList->mNumberBuffers = numberBuffers;
+    playBufferList->mBuffers[0].mData = malloc(bufferSize);
+    playBufferList->mBuffers[0].mDataByteSize = bufferSize;
+    playBufferList->mBuffers[0].mNumberChannels = 1;
+    _playBufferList = playBufferList;
 }
 // 检测状态
 void checkStatus(OSStatus status){
