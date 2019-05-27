@@ -79,7 +79,7 @@
 }
 
 - (IBAction)AUCommonResourcePlayStart:(id)sender {
-    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];//abc.pcm ab.mp4
     [AudioManager sharedmanager].file = file;
     [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
 }

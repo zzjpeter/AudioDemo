@@ -50,6 +50,7 @@
 		47357DCB2295502200A9010D /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47357DC92295502200A9010D /* Shader.fsh */; };
 		47357DCE2295503000A9010D /* LYOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DCD2295503000A9010D /* LYOpenGLView.m */; };
 		47357DD0229552B800A9010D /* abc.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 47357DCF229552B800A9010D /* abc.h264 */; };
+		47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47612C36229BC8CF0006854D /* AudioExtManager.m */; };
 		4778AF4622968F5D00CD72BC /* abc.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4778AF4522968F5D00CD72BC /* abc.pcm */; };
 		47B26A2C229649C800704B90 /* DecodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B26A2B229649C800704B90 /* DecodeAACManager.m */; };
 		47B26A2E229649D000704B90 /* abc.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47B26A2D229649D000704B90 /* abc.aac */; };
@@ -162,6 +163,8 @@
 		47357DCC2295503000A9010D /* LYOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYOpenGLView.h; sourceTree = "<group>"; };
 		47357DCD2295503000A9010D /* LYOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYOpenGLView.m; sourceTree = "<group>"; };
 		47357DCF229552B800A9010D /* abc.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.h264; sourceTree = "<group>"; };
+		47612C35229BC8CF0006854D /* AudioExtManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioExtManager.h; sourceTree = "<group>"; };
+		47612C36229BC8CF0006854D /* AudioExtManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioExtManager.m; sourceTree = "<group>"; };
 		4778AF4522968F5D00CD72BC /* abc.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.pcm; sourceTree = "<group>"; };
 		47B26A2A229649C800704B90 /* DecodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecodeAACManager.h; sourceTree = "<group>"; };
 		47B26A2B229649C800704B90 /* DecodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DecodeAACManager.m; sourceTree = "<group>"; };
@@ -467,6 +470,15 @@
 			path = draw;
 			sourceTree = "<group>";
 		};
+		47612C34229BC8620006854D /* AudioUnitExt */ = {
+			isa = PBXGroup;
+			children = (
+				47612C35229BC8CF0006854D /* AudioExtManager.h */,
+				47612C36229BC8CF0006854D /* AudioExtManager.m */,
+			);
+			path = AudioUnitExt;
+			sourceTree = "<group>";
+		};
 		4778AF4422968F4C00CD72BC /* AudioUnit */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,6 +538,7 @@
 		47E94218227EC93C00D86EE1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				47612C34229BC8620006854D /* AudioUnitExt */,
 				47EB4D122297EC36000801CE /* CommonResource */,
 				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
 				4778AF4422968F4C00CD72BC /* AudioUnit */,
@@ -719,6 +732,7 @@
 				4709EB4B229506E800185D92 /* NSString+Empty.m in Sources */,
 				4709EB54229506E800185D92 /* UILabel+TTAdd.m in Sources */,
 				4709EB55229506E800185D92 /* UIButton+EventInterval.m in Sources */,
+				47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */,
 				4709EB59229506E800185D92 /* NSObject+RMArchivable.m in Sources */,
 				47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */,
 				4709EB5F229506E800185D92 /* JumpManager.m in Sources */,

@@ -110,8 +110,6 @@ SingleImplementation(manager)
     
     [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
     
-    audioConverter = NULL;
-    
     if (audioInputFormat.mFormatID) {
         self.isReadNeedConvert = YES;
         NSLog(@"非pcm格式的音频数据，需要音频转码");
@@ -240,9 +238,8 @@ SingleImplementation(manager)
     uint32_t numberBuffers = 1;
     UInt32 bufferSize = CONST_BUFFER_SIZES;
     [self initBufferList:bufferSize numberBuffers:numberBuffers];
-    convertBuffer = malloc(bufferSize);
     
-    status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
+    [self createAudioConverter:audioInputFormat audioOutputFormat:audioOutputFormat];
     
     // Initialise // 初始化
     //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
@@ -258,6 +255,15 @@ SingleImplementation(manager)
     //    checkStatus(status);
     //    status = AudioUnitInitialize(audioUnit);
     //    checkStatus(status);
+}
+
+#pragma mark 通过设置输入输出格式创建音频转码器
+- (void)createAudioConverter:(AudioStreamBasicDescription)audioInputFormat audioOutputFormat:(AudioStreamBasicDescription)audioOutputFormat
+{
+    audioConverter = NULL;
+    convertBuffer = malloc(CONST_BUFFER_SIZES);
+    OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
+    checkStatus(status, "AudioConverterNew 通过设置输入输出格式创建音频转码器");
 }
 
 //初始化音频文件数据输出格式
