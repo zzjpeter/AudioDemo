@@ -86,7 +86,7 @@ SingleImplementation(manager)
     
     OSStatus status;
     status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
-    checkStatus(status);
+    checkStatus(status,"AudioFileOpenURL");
     
     UInt32 size = sizeof(AudioStreamBasicDescription);
     status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
@@ -102,11 +102,11 @@ SingleImplementation(manager)
     if (sizePerPacket == 0) {
         size = sizeof(sizePerPacket);
         status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
-        checkStatus(status);
+        checkStatus(status, "AudioFileGetProperty sizePerPacket");
     }
     
     audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
-    checkStatus(status);
+    checkStatus(status, "malloc AudioStreamPacketDescription");
     
     [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
     
@@ -160,7 +160,7 @@ SingleImplementation(manager)
     
     //Get audio units // 获得 Audio Unit
     status = AudioComponentInstanceNew(inputComponent, &_audioUnit);
-    checkStatus(status);
+    checkStatus(status, "AudioComponentInstanceNew");
     
     //Enable IO for recording // 为录制打开 IO
     //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
@@ -171,7 +171,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &flag,
                                   sizeof(flag));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Input kInputBus");
     
     //Enable IO for playback // 为播放打开 IO
     //4.I/O Unit输出数据到设备（扬声器）的数据格式
@@ -181,7 +181,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &flag,
                                   sizeof(flag));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kOutputBus");
     
     //Describe format // 描述格式
     [self initAudioOutputFormat];
@@ -194,7 +194,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &audioOutputFormat,
                                   sizeof(audioOutputFormat));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kInputBus");
     //3.应用application输出数据到I/O Unit
     status = AudioUnitSetProperty(_audioUnit,
                                   kAudioUnitProperty_StreamFormat,
@@ -202,7 +202,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &audioOutputFormat,
                                   sizeof(audioOutputFormat));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Input kOutputBus");
     
     //set input callback // 设置数据采集回调函数
     AURenderCallbackStruct callbackStruct;
@@ -214,7 +214,7 @@ SingleImplementation(manager)
                                   kInputBus,
                                   &callbackStruct,
                                   sizeof(callbackStruct));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty recordingCallback");
     
     //set output callback // 设置声音输出回调函数。当speaker需要数据时就会调用回调函数去获取数据。它是 "拉" 数据的概念。
     callbackStruct.inputProc = playbackCallback;
@@ -225,7 +225,7 @@ SingleImplementation(manager)
                                   kOutputBus,
                                   &callbackStruct,
                                   sizeof(callbackStruct));
-    checkStatus(status);
+    checkStatus(status, "AudioUnitSetProperty playbackCallback");
     
     //Disable buffer allocation for the recorder (optional - do this if we want to pass in our own) // 关闭为录制分配的缓冲区（我们想使用我们自己分配的）
     flag = 0;
@@ -247,7 +247,7 @@ SingleImplementation(manager)
     // Initialise // 初始化
     //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
     status = AudioUnitInitialize(_audioUnit);
-    checkStatus(status);
+    checkStatus(status, "AudioUnitInitialize");
     
     // Initialise也可以用以下代码
     //    UInt32 category = kAudioSessionCategory_PlayAndRecord;
@@ -293,9 +293,10 @@ SingleImplementation(manager)
     _playBufferList = playBufferList;
 }
 // 检测状态
-void checkStatus(OSStatus status){
+void checkStatus(OSStatus status, const char *operation){
     if (status != noErr) {
-        printf("Error: %ld\n",(long)status);
+        printf("Error: %ld: %s\n",(long)status, operation);
+        //exit(1);
     }
 }
 
@@ -350,7 +351,7 @@ void checkStatus(OSStatus status){
     //When you are ready to start:
     [self setupAudioUnit];
     OSStatus status = AudioOutputUnitStart(self.audioUnit);
-    checkStatus(status);
+    checkStatus(status, "AudioOutputUnitStart");
 }
 - (void)onStart
 {
@@ -359,7 +360,7 @@ void checkStatus(OSStatus status){
 - (void)stop {
     //And to stop:
     OSStatus status = AudioOutputUnitStop(self.audioUnit);
-    checkStatus(status);
+    checkStatus(status, "AudioOutputUnitStop");
     
     [self closeBufferList];
     
@@ -455,7 +456,7 @@ static OSStatus recordingCallback(void *inRefCon,
                                  inBusNumber,
                                  inNumberFrames,
                                  self.bufferList);//数据处理到缓冲区的数据结构中
-        checkStatus(status);
+        checkStatus(status, "AudioUnitRender");
         
         //录制的pcmData数据处理 //将录制的pcm数据写入文件中
         [self.pcmData appendBytes:self.bufferList->mBuffers[0].mData
