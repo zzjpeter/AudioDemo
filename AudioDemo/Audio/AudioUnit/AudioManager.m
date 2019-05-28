@@ -85,35 +85,9 @@ SingleImplementation(manager)
     NSLog(@"file:%@",self.file);
     NSLog(@"ConvertFile:%@",self.convertFile);
     
-    NSURL *url = [NSURL URLWithString:self.file];
-    
-    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
-    checkStatus(status,"AudioFileOpenURL");
-    
-    UInt32 size = sizeof(AudioStreamBasicDescription);
-    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
-    
-    size = sizeof(packetNums);
-    status = AudioFileGetProperty(audioFileID,
-                                  kAudioFilePropertyAudioDataPacketCount,
-                                  &size,
-                                  &packetNums); // 读取文件packets总数
-    readedPacket = 0;
-    
-    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
-    if (sizePerPacket == 0) {
-        size = sizeof(sizePerPacket);
-        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
-        checkStatus(status, "AudioFileGetProperty sizePerPacket");
-    }
-    
-    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
-    checkStatus(status, "malloc AudioStreamPacketDescription");
-    
-    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
-
     [self setupAudioUnitBase];
 }
+
 /**
  1.描述音频元件（kAudioUnitType_Output／kAudioUnitSubType_RemoteIO ／kAudioUnitManufacturerApple）。
  2.使用 AudioComponentFindNext(NULL, &descriptionOfAudioComponent) 获得 AudioComponent。AudioComponent有点像生产 Audio Unit 的工厂。
@@ -141,7 +115,10 @@ SingleImplementation(manager)
     //3.数据 设备输入 和 输出到设备
     [self enableIOForRecordingAndPlay];
     
-    //4.Describe format // 描述格式
+    //4 Describe format //获取 或者 设置输入描述格式
+    [self initOrGetAudioInputFormat];
+    
+    //4.1 Describe format // 描述格式
     [self initAudioOutputFormat];
     
     //5.数据 I/OUnit输出到应用application 和 应用application输入到I/OUnit
@@ -233,8 +210,42 @@ SingleImplementation(manager)
                                   sizeof(flag));
     checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kOutputBus");
 }
+#pragma mark 4.初始化音频文件数据的输入格式（一般是解码获取或者指定）
+- (void)initOrGetAudioInputFormat
+{
+    NSURL *url = [NSURL URLWithString:self.file];
+    
+    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
+    checkStatus(status,"AudioFileOpenURL");
+    
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
+    
+    size = sizeof(packetNums);
+    status = AudioFileGetProperty(audioFileID,
+                                  kAudioFilePropertyAudioDataPacketCount,
+                                  &size,
+                                  &packetNums); // 读取文件packets总数
+    readedPacket = 0;
+    
+    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
+    if (sizePerPacket == 0) {
+        size = sizeof(sizePerPacket);
+        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
+        checkStatus(status, "AudioFileGetProperty sizePerPacket");
+    }
+    
+    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
+    checkStatus(status, "malloc AudioStreamPacketDescription");
+    
+    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
+    if (audioInputFormat.mFormatID) {
+        _isReadNeedConvert = YES;
+        NSLog(@"非pcm格式的音频数据，需要音频转码");
+    }
+}
 
-#pragma mark 4.初始化音频文件数据输出格式
+#pragma mark 4.1初始化音频文件数据输出格式
 - (void)initAudioOutputFormat
 {
     memset(&audioOutputFormat, 0, sizeof(audioOutputFormat));
@@ -339,11 +350,6 @@ SingleImplementation(manager)
     convertBuffer = malloc(CONST_BUFFER_SIZES);
     OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
     checkStatus(status, "AudioConverterNew 通过设置输入输出格式创建音频转码器");
-    
-    if (audioInputFormat.mFormatID) {
-        _isReadNeedConvert = YES;
-        NSLog(@"非pcm格式的音频数据，需要音频转码");
-    }
 }
 // 检测状态
 static void checkStatus(OSStatus status, const char *operation){
