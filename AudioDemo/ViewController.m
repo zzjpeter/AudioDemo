@@ -13,6 +13,7 @@
 #import "DecoderH246Manager.h"
 #import "EncodeAACManager.h"
 #import "DecodeAACManager.h"
+#import "AudioAUGraphManager.h"
 
 @interface ViewController ()
 
@@ -95,6 +96,14 @@
 }
 - (IBAction)AUExtCommonResourcePlayStop:(id)sender {
     [[AudioExtManager sharedmanager] stop];
+}
+- (IBAction)AUGraphStart:(id)sender {
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.pcm" ofType:nil];
+    [AudioAUGraphManager sharedmanager].file = file;
+    [[AudioAUGraphManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+}
+- (IBAction)AUGraphStop:(id)sender {
+    [[AudioAUGraphManager sharedmanager] stop];
 }
 
 - (UIView *)playView
