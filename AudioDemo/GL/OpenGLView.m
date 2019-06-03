@@ -6,7 +6,7 @@
 //  Copyright © 2019 朱志佳. All rights reserved.
 //
 
-#import "LYOpenGLView.h"
+#import "OpenGLView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVUtilities.h>
 #import <mach/mach_time.h>
@@ -20,7 +20,7 @@ enum
     UNIFORM_COLOR_CONVERSION_MATRIX,
     NUM_UNIFORMS
 };
-GLint uniforms[NUM_UNIFORMS];
+static GLint uniforms[NUM_UNIFORMS];
 
 // Attribute index.
 enum
@@ -47,14 +47,14 @@ static const GLfloat kColorConversion709[] = {
 };
 
 // BT.601 full range (ref: http://www.equasys.de/colorconversion.html)
-const GLfloat kColorConversion601FullRange[] = {
+static const GLfloat kColorConversion601FullRange[] = {
     1.0,    1.0,    1.0,
     0.0,    -0.343, 1.765,
     1.4,    -0.711, 0.0,
 };
 
 
-@interface LYOpenGLView ()
+@interface OpenGLView ()
 {
     // The pixel dimensions of the CAEAGLLayer.
     GLint _backingWidth;
@@ -83,7 +83,7 @@ const GLfloat kColorConversion601FullRange[] = {
 
 @end
 
-@implementation LYOpenGLView
+@implementation OpenGLView
 
 + (Class)layerClass
 {
