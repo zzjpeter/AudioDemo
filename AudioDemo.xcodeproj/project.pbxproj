@@ -69,6 +69,9 @@
 		47EB4D1E2297EC36000801CE /* ab.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D172297EC36000801CE /* ab.pcm */; };
 		47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D182297EC36000801CE /* ab.mp3 */; };
 		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
+		47F53B3122A0C1D300F1017E /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F53B3022A0C1D300F1017E /* OpenGLView.m */; };
+		47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3322A0C6BD00F1017E /* Shaderr.fsh */; };
+		47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3522A0C6CD00F1017E /* Shaderr.vsh */; };
 		47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */; };
 		47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9CA229633570020A5F0 /* AACEncoder.m */; };
 		F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3E1196EBB56BD9D89AFF4 /* libPods-AudioDemo.a */; };
@@ -191,6 +194,10 @@
 		47EB4D172297EC36000801CE /* ab.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.pcm; sourceTree = "<group>"; };
 		47EB4D182297EC36000801CE /* ab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ab.mp3; sourceTree = "<group>"; };
 		47EB4D192297EC36000801CE /* ab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.mp4; sourceTree = "<group>"; };
+		47F53B2F22A0C1D300F1017E /* OpenGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
+		47F53B3022A0C1D300F1017E /* OpenGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
+		47F53B3322A0C6BD00F1017E /* Shaderr.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.fsh; sourceTree = "<group>"; };
+		47F53B3522A0C6CD00F1017E /* Shaderr.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.vsh; sourceTree = "<group>"; };
 		47FDA9C222962F6E0020A5F0 /* EncodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeAACManager.h; sourceTree = "<group>"; };
 		47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeAACManager.m; sourceTree = "<group>"; };
 		47FDA9C822962FE20020A5F0 /* AVHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHeader.h; sourceTree = "<group>"; };
@@ -532,6 +539,7 @@
 		47E941FA227E7D9200D86EE1 /* AudioDemo */ = {
 			isa = PBXGroup;
 			children = (
+				47F53B2E22A0C1AE00F1017E /* GL */,
 				4709EAD9229506E800185D92 /* Util2019 */,
 				47E941FB227E7D9200D86EE1 /* AppDelegate.h */,
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
@@ -575,6 +583,25 @@
 				47EB4D192297EC36000801CE /* ab.mp4 */,
 			);
 			path = CommonResource;
+			sourceTree = "<group>";
+		};
+		47F53B2E22A0C1AE00F1017E /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				47F53B2F22A0C1D300F1017E /* OpenGLView.h */,
+				47F53B3022A0C1D300F1017E /* OpenGLView.m */,
+				47F53B3222A0C68000F1017E /* Shader */,
+			);
+			path = GL;
+			sourceTree = "<group>";
+		};
+		47F53B3222A0C68000F1017E /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				47F53B3322A0C6BD00F1017E /* Shaderr.fsh */,
+				47F53B3522A0C6CD00F1017E /* Shaderr.vsh */,
+			);
+			path = Shader;
 			sourceTree = "<group>";
 		};
 		47FDA9C122962DC30020A5F0 /* EncodeAAC */ = {
@@ -672,12 +699,14 @@
 				47EB4D1A2297EC36000801CE /* test.mov in Resources */,
 				47EB4D202297EC36000801CE /* ab.mp4 in Resources */,
 				47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */,
+				47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */,
 				47EB4D1B2297EC36000801CE /* ab.m4a in Resources */,
 				47357DCA2295502200A9010D /* Shader.vsh in Resources */,
 				4709EB5B229506E800185D92 /* README.md in Resources */,
 				47EB4D1E2297EC36000801CE /* ab.pcm in Resources */,
 				47E94205227E7D9400D86EE1 /* Assets.xcassets in Resources */,
 				47357DCB2295502200A9010D /* Shader.fsh in Resources */,
+				47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */,
 				47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */,
 				4778AF4622968F5D00CD72BC /* abc.pcm in Resources */,
 			);
@@ -722,6 +751,7 @@
 				47612C3B229BEF060006854D /* AudioAUGraphManager.m in Sources */,
 				47E94200227E7D9200D86EE1 /* ViewController.m in Sources */,
 				4709EB5C229506E800185D92 /* LXFileManager.m in Sources */,
+				47F53B3122A0C1D300F1017E /* OpenGLView.m in Sources */,
 				4709EB5D229506E800185D92 /* HelperUtil.m in Sources */,
 				47E9420B227E7D9400D86EE1 /* main.m in Sources */,
 				47357DCE2295503000A9010D /* LYOpenGLView.m in Sources */,
