@@ -192,36 +192,36 @@ SingleImplementation(manager)
 #pragma mark 4.初始化音频文件数据的输入格式（一般是解码获取或者指定）
 - (void)initOrGetAudioInputFormat
 {
-    NSURL *url = [NSURL URLWithString:self.file];
-    
-    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
-    checkStatus(status,"AudioFileOpenURL");
-    
-    UInt32 size = sizeof(AudioStreamBasicDescription);
-    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
-    
-    size = sizeof(packetNums);
-    status = AudioFileGetProperty(audioFileID,
-                                  kAudioFilePropertyAudioDataPacketCount,
-                                  &size,
-                                  &packetNums); // 读取文件packets总数
-    readedPacket = 0;
-    
-    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
-    if (sizePerPacket == 0) {
-        size = sizeof(sizePerPacket);
-        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
-        checkStatus(status, "AudioFileGetProperty sizePerPacket");
-    }
-    
-    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
-    checkStatus(status, "malloc AudioStreamPacketDescription");
-    
-    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
-    if (audioInputFormat.mFormatID) {
-        _isReadNeedConvert = YES;
-        NSLog(@"非pcm格式的音频数据，需要音频转码");
-    }
+//    NSURL *url = [NSURL URLWithString:self.file];
+//
+//    status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
+//    checkStatus(status,"AudioFileOpenURL");
+//
+//    UInt32 size = sizeof(AudioStreamBasicDescription);
+//    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &audioInputFormat);// 读取文件格式
+//
+//    size = sizeof(packetNums);
+//    status = AudioFileGetProperty(audioFileID,
+//                                  kAudioFilePropertyAudioDataPacketCount,
+//                                  &size,
+//                                  &packetNums); // 读取文件packets总数
+//    readedPacket = 0;
+//
+//    UInt32 sizePerPacket = audioInputFormat.mFramesPerPacket;
+//    if (sizePerPacket == 0) {
+//        size = sizeof(sizePerPacket);
+//        status = AudioFileGetProperty(audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &sizePerPacket); // 读取单个packet的最大数量
+//        checkStatus(status, "AudioFileGetProperty sizePerPacket");
+//    }
+//
+//    audioInputPacketFormat = malloc(sizeof(AudioStreamPacketDescription) * (CONST_BUFFER_SIZES / sizePerPacket + 1));
+//    checkStatus(status, "malloc AudioStreamPacketDescription");
+//
+//    [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
+//    if (audioInputFormat.mFormatID) {
+//        _isReadNeedConvert = YES;
+//        NSLog(@"非pcm格式的音频数据，需要音频转码");
+//    }
 }
 
 #pragma mark 4.1初始化音频文件数据输出格式
@@ -326,10 +326,10 @@ SingleImplementation(manager)
 #pragma mark 8.通过设置输入输出格式创建音频转码器
 - (void)createAudioConverter:(AudioStreamBasicDescription)audioInputFormat audioOutputFormat:(AudioStreamBasicDescription)audioOutputFormat
 {
-    audioConverter = NULL;
-    convertBuffer = malloc(CONST_BUFFER_SIZES);
-    OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
-    checkStatus(status, "AudioConverterNew 通过设置输入输出格式创建音频转码器");
+//    audioConverter = NULL;
+//    convertBuffer = malloc(CONST_BUFFER_SIZES);
+//    OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
+//    checkStatus(status, "AudioConverterNew 通过设置输入输出格式创建音频转码器");
 }
 // 检测状态
 static void checkStatus(OSStatus status, const char *operation){
@@ -522,12 +522,12 @@ static OSStatus playbackCallback(void *inRefCon,
     // Notes: ioData 包括了一堆 buffers
     // 尽可能多的向ioData中填充数据，记得设置每个buffer的大小要与buffer匹配好。
     AudioSampleManager *self = (__bridge AudioSampleManager*) inRefCon;
-    
+
     if (self.isPlayBackDataFromDelegate) {
         OSStatus status = inputDataProc(inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
         return status;
     }
-    
+
     if (!self->_isReadNeedConvert)
     {
         //1.直接读取音频数据播放
@@ -542,37 +542,37 @@ static OSStatus playbackCallback(void *inRefCon,
         }
         memcpy(ioData->mBuffers[0].mData, bufferList->mBuffers[0].mData, bufferList->mBuffers[0].mDataByteSize);
         ioData->mBuffers[0].mDataByteSize = bufferList->mBuffers[0].mDataByteSize;
-        
+
         NSData *aPcmData = [NSData dataWithBytes:bufferList->mBuffers[0].mData length:bufferList->mBuffers[0].mDataByteSize];
         [self writeConvertData:aPcmData];//2.直接追加到fileHandle指定的文件中
     }
 
     NSLog(@"playbackCallback:size:%ld",(long)ioData->mBuffers[0].mDataByteSize);
-    
+
     if (ioData->mBuffers[0].mDataByteSize <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self stop];
         });
     }
-    
+
     return noErr;
 }
 
 static OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
 {
     AudioSampleManager *self = (__bridge AudioSampleManager *)(inUserData);
-    
+
     UInt32 byteSize = CONST_BUFFER_SIZES;
     OSStatus status = AudioFileReadPacketData(self->audioFileID, NO, &byteSize, self->audioInputPacketFormat, self->readedPacket, ioNumberDataPackets, self ->convertBuffer);
-    
+
     if (outDataPacketDescription) { // 这里要设置好packetFormat，否则会转码失败
         *outDataPacketDescription = self->audioInputPacketFormat;
     }
-    
+
     if(status) {
         NSLog(@"读取文件失败");
     }
-    
+
     if (!status && ioNumberDataPackets > 0) {
         ioData->mBuffers[0].mDataByteSize = byteSize;
         ioData->mBuffers[0].mData = self->convertBuffer;
@@ -582,7 +582,7 @@ static OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *io
     else {
         return NO_MORE_DATA;
     }
-    
+
 }
 
 static OSStatus inputDataProc(void *inRefCon,
@@ -593,7 +593,7 @@ static OSStatus inputDataProc(void *inRefCon,
                                  AudioBufferList *ioData)
 {
     AudioSampleManager *self = (__bridge AudioSampleManager *)(inRefCon);
-    
+
     AudioBufferList *bufferList = self.playBufferList;
     if (!bufferList ||
         self->readedSize + ioData->mBuffers[0].mDataByteSize > bufferList->mBuffers[0].mDataByteSize)
@@ -601,10 +601,11 @@ static OSStatus inputDataProc(void *inRefCon,
         if ([self.delegate respondsToSelector:@selector(onRequestAudioData)])
         {
             bufferList = [self.delegate onRequestAudioData];
+            self.playBufferList = bufferList;//!!! 此处重新获取bufferList 需要重新赋值
             self->readedSize = 0;
         }
     }
-    
+
     if (!bufferList || bufferList->mNumberBuffers <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self stop];
@@ -616,7 +617,7 @@ static OSStatus inputDataProc(void *inRefCon,
             self->readedSize += ioData->mBuffers[i].mDataByteSize;
         }
     }
-    
+
     return noErr;
 }
 
