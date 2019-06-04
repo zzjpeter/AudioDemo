@@ -14,11 +14,15 @@
 #import "EncodeAACManager.h"
 #import "DecodeAACManager.h"
 #import "AudioAUGraphManager.h"
+#import "AVAssetManager.h"
 
 @interface ViewController ()
 
 @property (nonatomic,strong) UIView *playView;
+
 @property (nonatomic,strong) LYOpenGLView *playOpenGLView;
+
+@property (nonatomic,strong) OpenGLView *mOpenGLView;
 
 @end
 
@@ -106,6 +110,26 @@
     [[AudioAUGraphManager sharedmanager] stop];
 }
 
+
+- (IBAction)AVAssetStart:(id)sender {
+    [self.view addSubview:self.mOpenGLView];
+    [self.view sendSubviewToBack:self.mOpenGLView];
+    [AVAssetManager sharedmanager].mGLView = self.mOpenGLView;
+    [AVAssetManager sharedmanager].loadAssetSuccess = ^(BOOL isSuccess) {
+        if (isSuccess) {
+            [[AVAssetManager sharedmanager] start];
+        }
+    };
+    if([AVAssetManager sharedmanager].hasLoadAssetSuccess)
+    {
+        [[AVAssetManager sharedmanager] start];
+    }
+}
+
+- (IBAction)AVAssetStop:(id)sender {
+     [[AVAssetManager sharedmanager] stop];
+}
+
 - (UIView *)playView
 {
     if (!_playView) {
@@ -126,5 +150,17 @@
     }
     return _playOpenGLView;
 }
+
+- (OpenGLView *)mOpenGLView
+{
+    if (!_mOpenGLView) {
+        OpenGLView *playView = [[OpenGLView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+        playView.bottom = self.view.bottom;
+        [playView setupGL];
+        _mOpenGLView = playView;
+    }
+    return _mOpenGLView;
+}
+
 
 @end

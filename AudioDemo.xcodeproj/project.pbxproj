@@ -69,6 +69,8 @@
 		47EB4D1E2297EC36000801CE /* ab.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D172297EC36000801CE /* ab.pcm */; };
 		47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D182297EC36000801CE /* ab.mp3 */; };
 		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
+		47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FD22A608C8008519D3 /* AVAssetManager.m */; };
+		47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FF22A60D35008519D3 /* AudioSampleManager.m */; };
 		47F53B3122A0C1D300F1017E /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F53B3022A0C1D300F1017E /* OpenGLView.m */; };
 		47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3322A0C6BD00F1017E /* Shaderr.fsh */; };
 		47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3522A0C6CD00F1017E /* Shaderr.vsh */; };
@@ -194,6 +196,10 @@
 		47EB4D172297EC36000801CE /* ab.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.pcm; sourceTree = "<group>"; };
 		47EB4D182297EC36000801CE /* ab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ab.mp3; sourceTree = "<group>"; };
 		47EB4D192297EC36000801CE /* ab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.mp4; sourceTree = "<group>"; };
+		47F319FC22A608C8008519D3 /* AVAssetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVAssetManager.h; sourceTree = "<group>"; };
+		47F319FD22A608C8008519D3 /* AVAssetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVAssetManager.m; sourceTree = "<group>"; };
+		47F319FF22A60D35008519D3 /* AudioSampleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSampleManager.m; sourceTree = "<group>"; };
+		47F31A0022A60D35008519D3 /* AudioSampleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSampleManager.h; sourceTree = "<group>"; };
 		47F53B2F22A0C1D300F1017E /* OpenGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		47F53B3022A0C1D300F1017E /* OpenGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		47F53B3322A0C6BD00F1017E /* Shaderr.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.fsh; sourceTree = "<group>"; };
@@ -539,7 +545,6 @@
 		47E941FA227E7D9200D86EE1 /* AudioDemo */ = {
 			isa = PBXGroup;
 			children = (
-				47F53B2E22A0C1AE00F1017E /* GL */,
 				4709EAD9229506E800185D92 /* Util2019 */,
 				47E941FB227E7D9200D86EE1 /* AppDelegate.h */,
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
@@ -558,6 +563,7 @@
 		47E94218227EC93C00D86EE1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				47F319FB22A608A0008519D3 /* AVAssetPlay */,
 				47612C38229BEE9C0006854D /* AUGraph */,
 				47EB4D122297EC36000801CE /* CommonResource */,
 				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
@@ -583,6 +589,18 @@
 				47EB4D192297EC36000801CE /* ab.mp4 */,
 			);
 			path = CommonResource;
+			sourceTree = "<group>";
+		};
+		47F319FB22A608A0008519D3 /* AVAssetPlay */ = {
+			isa = PBXGroup;
+			children = (
+				47F53B2E22A0C1AE00F1017E /* GL */,
+				47F319FC22A608C8008519D3 /* AVAssetManager.h */,
+				47F319FD22A608C8008519D3 /* AVAssetManager.m */,
+				47F31A0022A60D35008519D3 /* AudioSampleManager.h */,
+				47F319FF22A60D35008519D3 /* AudioSampleManager.m */,
+			);
+			path = AVAssetPlay;
 			sourceTree = "<group>";
 		};
 		47F53B2E22A0C1AE00F1017E /* GL */ = {
@@ -760,6 +778,7 @@
 				4709EB3E229506E800185D92 /* CacheManager.m in Sources */,
 				4709EB40229506E800185D92 /* UIImage+Cut.m in Sources */,
 				4709EB44229506E800185D92 /* NSArray+Safe.m in Sources */,
+				47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */,
 				4709EB58229506E800185D92 /* NSUserDefaults+RMSaveCustomObject.m in Sources */,
 				47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */,
 				4709EB3D229506E800185D92 /* CacheHelper.m in Sources */,
@@ -778,6 +797,7 @@
 				4709EB55229506E800185D92 /* UIButton+EventInterval.m in Sources */,
 				47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */,
 				4709EB59229506E800185D92 /* NSObject+RMArchivable.m in Sources */,
+				47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */,
 				47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */,
 				4709EB5F229506E800185D92 /* JumpManager.m in Sources */,
 				4709EB51229506E800185D92 /* UIImage+TTAdd.m in Sources */,
