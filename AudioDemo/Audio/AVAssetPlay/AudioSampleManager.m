@@ -421,14 +421,20 @@ static void checkStatus(OSStatus status, const char *operation){
         self.bufferList = NULL;
     }
     
-    if (self.playBufferList != NULL) {
-        if (self.playBufferList->mBuffers[0].mData) {
-            free(self.playBufferList->mBuffers[0].mData);
-            self.playBufferList->mBuffers[0].mData = NULL;
+    if (self.isPlayBackDataFromDelegate) {
+        //playBufferList 被重新赋值过了，外面传进来的
+    }else
+    {
+        if (self.playBufferList != NULL) {
+            if (self.playBufferList->mBuffers[0].mData) {
+                free(self.playBufferList->mBuffers[0].mData);
+                self.playBufferList->mBuffers[0].mData = NULL;
+            }
+            free(self.playBufferList);
+            self.playBufferList = NULL;
         }
-        free(self.playBufferList);
-        self.playBufferList = NULL;
     }
+
 }
 //2.结束Audio Unit
 - (void)finished {
@@ -601,7 +607,8 @@ static OSStatus inputDataProc(void *inRefCon,
         if ([self.delegate respondsToSelector:@selector(onRequestAudioData)])
         {
             bufferList = [self.delegate onRequestAudioData];
-            self.playBufferList = bufferList;//!!! 此处重新获取bufferList 需要重新赋值
+            //!!! 此处重新获取bufferList 需要重新赋值
+            self.playBufferList = bufferList;
             self->readedSize = 0;
         }
     }
