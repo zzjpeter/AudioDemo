@@ -34,6 +34,9 @@ SingleInterface(manager)
 - (void)stop;
 - (void)finished;
 - (double)getCurrentTime;
+
+- (AudioStreamBasicDescription)initAudioOutputFormat;
+
 @end
 
 NS_ASSUME_NONNULL_END

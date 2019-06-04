@@ -11,7 +11,9 @@
 #import "AudioSampleManager.h"
 #import "NSArray+Safe.h"
 
-@interface AVAssetManager ()<AudioManagerDelegate>
+#import "LYPlayer.h"
+
+@interface AVAssetManager ()<LYPlayerDelegate, AudioManagerDelegate>
 
 // avfoudation
 @property (nonatomic , strong) AVAsset *mAsset;
@@ -27,6 +29,9 @@
 // 时间戳
 @property (nonatomic, assign) long mAudioTimeStamp;
 @property (nonatomic, assign) long mVideoTimeStamp;
+
+@property (nonatomic, strong) LYPlayer *mLYPlayer;
+@property (nonatomic , assign) AudioStreamBasicDescription fileFormat;
 
 @end
 
@@ -90,9 +95,16 @@ SingleImplementation(manager)
         return;
     }
     NSLog(@"Start reading success.");
-    [AudioSampleManager sharedmanager].delegate = self;
-    [AudioSampleManager sharedmanager].isPlayBackDataFromDelegate = YES;
-    [[AudioSampleManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    
+//    [AudioSampleManager sharedmanager].delegate = self;
+//    [AudioSampleManager sharedmanager].isPlayBackDataFromDelegate = YES;
+//    [[AudioSampleManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    
+    self.mLYPlayer = [LYPlayer new];
+    self.mLYPlayer.delegate = self;
+    [self.mLYPlayer prepareForPlayWithOutputASBD:[[AudioSampleManager sharedmanager] initAudioOutputFormat]];
+    [self.mLYPlayer play];
+    
     [self.mDisplayLink setPaused:NO];
     self.mAudioTimeStamp = self.mVideoTimeStamp = 0;
 }

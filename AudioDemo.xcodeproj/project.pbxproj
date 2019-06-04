@@ -71,6 +71,7 @@
 		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
 		47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FD22A608C8008519D3 /* AVAssetManager.m */; };
 		47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FF22A60D35008519D3 /* AudioSampleManager.m */; };
+		47F31A0422A64874008519D3 /* LYPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F31A0322A64874008519D3 /* LYPlayer.m */; };
 		47F53B3122A0C1D300F1017E /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F53B3022A0C1D300F1017E /* OpenGLView.m */; };
 		47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3322A0C6BD00F1017E /* Shaderr.fsh */; };
 		47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3522A0C6CD00F1017E /* Shaderr.vsh */; };
@@ -200,6 +201,8 @@
 		47F319FD22A608C8008519D3 /* AVAssetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVAssetManager.m; sourceTree = "<group>"; };
 		47F319FF22A60D35008519D3 /* AudioSampleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSampleManager.m; sourceTree = "<group>"; };
 		47F31A0022A60D35008519D3 /* AudioSampleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSampleManager.h; sourceTree = "<group>"; };
+		47F31A0222A64874008519D3 /* LYPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYPlayer.h; sourceTree = "<group>"; };
+		47F31A0322A64874008519D3 /* LYPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYPlayer.m; sourceTree = "<group>"; };
 		47F53B2F22A0C1D300F1017E /* OpenGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		47F53B3022A0C1D300F1017E /* OpenGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		47F53B3322A0C6BD00F1017E /* Shaderr.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.fsh; sourceTree = "<group>"; };
@@ -594,6 +597,7 @@
 		47F319FB22A608A0008519D3 /* AVAssetPlay */ = {
 			isa = PBXGroup;
 			children = (
+				47F31A0522A6487C008519D3 /* Test */,
 				47F53B2E22A0C1AE00F1017E /* GL */,
 				47F319FC22A608C8008519D3 /* AVAssetManager.h */,
 				47F319FD22A608C8008519D3 /* AVAssetManager.m */,
@@ -601,6 +605,15 @@
 				47F319FF22A60D35008519D3 /* AudioSampleManager.m */,
 			);
 			path = AVAssetPlay;
+			sourceTree = "<group>";
+		};
+		47F31A0522A6487C008519D3 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				47F31A0222A64874008519D3 /* LYPlayer.h */,
+				47F31A0322A64874008519D3 /* LYPlayer.m */,
+			);
+			path = Test;
 			sourceTree = "<group>";
 		};
 		47F53B2E22A0C1AE00F1017E /* GL */ = {
@@ -802,6 +815,7 @@
 				4709EB5F229506E800185D92 /* JumpManager.m in Sources */,
 				4709EB51229506E800185D92 /* UIImage+TTAdd.m in Sources */,
 				4709EB42229506E800185D92 /* NSObject+Util.m in Sources */,
+				47F31A0422A64874008519D3 /* LYPlayer.m in Sources */,
 				4709EB3F229506E800185D92 /* UIImage+LXExtension.m in Sources */,
 				4709EB4E229506E800185D92 /* UITableView+iOS11.m in Sources */,
 				4709EB4F229506E800185D92 /* TTLabelExtend.m in Sources */,
