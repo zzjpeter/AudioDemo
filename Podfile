@@ -8,4 +8,5 @@ target 'AudioDemo' do
   # Pods for AudioDemo
   #pod 'RMMapper', '~> 1.1.5'
   pod 'YYKit', '~> 1.0.9'
+  pod 'LFLiveKit', '~> 2.6'
 end
