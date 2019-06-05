@@ -10,6 +10,9 @@
 #import <AssetsLibrary/ALAssetsLibrary.h>
 #import "AudioSampleManager.h"
 #import "NSArray+Safe.h"
+#import "FFmpegMovieManager.h"
+
+#define EnableFFmpeg (1)
 
 @interface AVAssetManager ()<AudioManagerDelegate>
 
@@ -52,6 +55,7 @@ SingleImplementation(manager)
     [mDisplayLink setPaused:YES];
     
     [self loadAsset];
+    [self loadFFmpeg];
 }
 
 - (void)loadAsset {
@@ -82,6 +86,11 @@ SingleImplementation(manager)
     
 }
 
+- (void)loadFFmpeg
+{
+    [[FFmpegMovieManager sharedmanager] start];
+}
+
 - (void)start
 {
     self.mReader = [self createAssetReader];
@@ -96,6 +105,8 @@ SingleImplementation(manager)
     [AudioSampleManager sharedmanager].isPlayBackDataFromDelegate = YES;
     [[AudioSampleManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
     
+    [[FFmpegMovieManager sharedmanager] restart];
+    
     [self.mDisplayLink setPaused:NO];
     self.mAudioTimeStamp = self.mVideoTimeStamp = 0;
 }
@@ -104,6 +115,7 @@ SingleImplementation(manager)
 {
     self.mDisplayLink.paused = YES;
     [[AudioSampleManager sharedmanager] stop];
+    [[FFmpegMovieManager sharedmanager] stop];
 }
 
 #pragma mark assetReader
@@ -207,9 +219,13 @@ SingleImplementation(manager)
 
 #pragma mark actions
 - (void)displayLinkCallback:(CADisplayLink *)sender {
-    //    if (self.mVideoTimeStamp < self.mAudioTimeStamp) {
-    [self renderVideo];
-    //    }
+    if (!EnableFFmpeg) {
+        //    if (self.mVideoTimeStamp < self.mAudioTimeStamp) {
+        [self renderVideo];
+        //    }
+    }else{
+        [self readVideoFrame];
+    }
 }
 
 #pragma mark video CMSampleBufferRef to CVPixelBufferRef
@@ -232,6 +248,22 @@ SingleImplementation(manager)
     CFRelease(videoSampleBuffer);
 }
 
+#pragma mark video ffmpeg CVPixelBufferRef
+- (void)readVideoFrame {
+    if (![[FFmpegMovieManager sharedmanager] stepFrame]) {
+        [self.mDisplayLink setPaused:YES];
+        return;
+    }
+    
+    CVPixelBufferRef pixelBuffer = [[FFmpegMovieManager sharedmanager] getCurrentCVPixelBuffer];
+    if (pixelBuffer) {
+        self.mGLView.isFullYUVRange = YES;
+        [self.mGLView displayPixelBuffer:pixelBuffer];
+    }
+
+    CFRelease(pixelBuffer);
+    
+}
 
 #pragma mark other
 - (void)printAudioStreamBasicDescription:(AudioStreamBasicDescription)asbd {
