@@ -46,6 +46,7 @@
 		4709EB60229506E800185D92 /* SaveUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB3B229506E800185D92 /* SaveUtil.m */; };
 		471C51CF22A7A81E00154424 /* LiveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51CE22A7A81E00154424 /* LiveManager.m */; };
 		471C51D222A7AF2500154424 /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D122A7AF2500154424 /* LiveViewController.m */; };
+		471C51D822A7B47700154424 /* StreamClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D722A7B47700154424 /* StreamClientManager.m */; };
 		47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC0229535CC00A9010D /* EncodeH264Manager.m */; };
 		47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC522954F7D00A9010D /* DecoderH246Manager.m */; };
 		47357DCA2295502200A9010D /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47357DC82295502200A9010D /* Shader.vsh */; };
@@ -177,6 +178,8 @@
 		471C51CE22A7A81E00154424 /* LiveManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveManager.m; sourceTree = "<group>"; };
 		471C51D022A7AF2500154424 /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
 		471C51D122A7AF2500154424 /* LiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
+		471C51D622A7B47700154424 /* StreamClientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamClientManager.h; sourceTree = "<group>"; };
+		471C51D722A7B47700154424 /* StreamClientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamClientManager.m; sourceTree = "<group>"; };
 		47357DBF229535CC00A9010D /* EncodeH264Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeH264Manager.h; sourceTree = "<group>"; };
 		47357DC0229535CC00A9010D /* EncodeH264Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeH264Manager.m; sourceTree = "<group>"; };
 		47357DC422954F7D00A9010D /* DecoderH246Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecoderH246Manager.h; sourceTree = "<group>"; };
@@ -617,6 +620,31 @@
 			path = LFLive;
 			sourceTree = "<group>";
 		};
+		471C51D322A7B43400154424 /* Stream */ = {
+			isa = PBXGroup;
+			children = (
+				471C51D522A7B44600154424 /* Server */,
+				471C51D422A7B43E00154424 /* Client */,
+			);
+			path = Stream;
+			sourceTree = "<group>";
+		};
+		471C51D422A7B43E00154424 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				471C51D622A7B47700154424 /* StreamClientManager.h */,
+				471C51D722A7B47700154424 /* StreamClientManager.m */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		471C51D522A7B44600154424 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Server;
+			sourceTree = "<group>";
+		};
 		47357DC222954F0900A9010D /* EncodeH264 */ = {
 			isa = PBXGroup;
 			children = (
@@ -648,32 +676,32 @@
 			path = draw;
 			sourceTree = "<group>";
 		};
-		47612C34229BC8620006854D /* AudioUnitExt */ = {
+		47612C34229BC8620006854D /* AudioUnitExtPcm */ = {
 			isa = PBXGroup;
 			children = (
 				47612C35229BC8CF0006854D /* AudioExtManager.h */,
 				47612C36229BC8CF0006854D /* AudioExtManager.m */,
 			);
-			path = AudioUnitExt;
+			path = AudioUnitExtPcm;
 			sourceTree = "<group>";
 		};
-		47612C38229BEE9C0006854D /* AUGraph */ = {
+		47612C38229BEE9C0006854D /* AUGraphPcm */ = {
 			isa = PBXGroup;
 			children = (
 				47612C3A229BEF060006854D /* AudioAUGraphManager.h */,
 				47612C39229BEF060006854D /* AudioAUGraphManager.m */,
 			);
-			path = AUGraph;
+			path = AUGraphPcm;
 			sourceTree = "<group>";
 		};
-		4778AF4422968F4C00CD72BC /* AudioUnit */ = {
+		4778AF4422968F4C00CD72BC /* AudioUnitPcm */ = {
 			isa = PBXGroup;
 			children = (
 				4778AF4522968F5D00CD72BC /* abc.pcm */,
 				47E94215227E854D00D86EE1 /* AudioManager.h */,
 				47E94216227E854D00D86EE1 /* AudioManager.m */,
 			);
-			path = AudioUnit;
+			path = AudioUnitPcm;
 			sourceTree = "<group>";
 		};
 		47B26A292296499100704B90 /* DecodeAAC */ = {
@@ -707,9 +735,9 @@
 		47E941FA227E7D9200D86EE1 /* AudioDemo */ = {
 			isa = PBXGroup;
 			children = (
-				4709EAD9229506E800185D92 /* Util2019 */,
 				47E941FB227E7D9200D86EE1 /* AppDelegate.h */,
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
+				4709EAD9229506E800185D92 /* Util2019 */,
 				47E94218227EC93C00D86EE1 /* Audio */,
 				47E941FE227E7D9200D86EE1 /* ViewController.h */,
 				47E941FF227E7D9200D86EE1 /* ViewController.m */,
@@ -727,13 +755,14 @@
 		47E94218227EC93C00D86EE1 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
+				47EB4D122297EC36000801CE /* CommonResource */,
+				471C51D322A7B43400154424 /* Stream */,
 				471C51CC22A7A64700154424 /* LFLive */,
 				47F319FB22A608A0008519D3 /* AVAssetPlay */,
-				47612C38229BEE9C0006854D /* AUGraph */,
-				47EB4D122297EC36000801CE /* CommonResource */,
-				47FDA9C822962FE20020A5F0 /* AVHeader.h */,
-				47612C34229BC8620006854D /* AudioUnitExt */,
-				4778AF4422968F4C00CD72BC /* AudioUnit */,
+				47612C38229BEE9C0006854D /* AUGraphPcm */,
+				47612C34229BC8620006854D /* AudioUnitExtPcm */,
+				4778AF4422968F4C00CD72BC /* AudioUnitPcm */,
 				47357DC222954F0900A9010D /* EncodeH264 */,
 				47357DC322954F1700A9010D /* DecodeH264 */,
 				47FDA9C122962DC30020A5F0 /* EncodeAAC */,
@@ -1199,6 +1228,7 @@
 			files = (
 				4709EB49229506E800185D92 /* NSString+Money.m in Sources */,
 				4709EB41229506E800185D92 /* VerticalLabel.m in Sources */,
+				471C51D822A7B47700154424 /* StreamClientManager.m in Sources */,
 				4709EB60229506E800185D92 /* SaveUtil.m in Sources */,
 				4709EB48229506E800185D92 /* NSString+Find.m in Sources */,
 				47612C3B229BEF060006854D /* AudioAUGraphManager.m in Sources */,
