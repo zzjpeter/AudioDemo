@@ -10,6 +10,21 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Audio Convert And Play Controller-->
+        <scene sceneID="47b-oU-EN2">
+            <objects>
+                <viewController id="xxV-x5-ZQp" customClass="AudioConvertAndPlayController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="K5d-C0-Qiy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="ihl-B4-Xbe"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N8p-mO-UDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1677" y="761"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -214,6 +229,15 @@
                                 <state key="normal" title="进入直播页"/>
                                 <connections>
                                     <segue destination="xIG-cA-N46" kind="show" id="Niy-ie-r1D"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d1f-gb-YsF">
+                                <rect key="frame" x="62" y="738" width="184" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="进入音频转码和简单播放页"/>
+                                <connections>
+                                    <segue destination="xxV-x5-ZQp" kind="show" id="LuI-xb-sW5"/>
                                 </connections>
                             </button>
                         </subviews>
