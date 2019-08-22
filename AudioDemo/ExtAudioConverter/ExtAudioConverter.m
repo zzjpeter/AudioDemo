@@ -115,6 +115,7 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
         if (framesCount==0) {
             printf("Done reading from input file\n");
             //TODO:Add lame_encode_flush for end of file
+            fclose(outputFile);
             return;
         }
         
@@ -442,7 +443,7 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     [self convertWithInputFile:inputFile
                            outputFile:outputFile
                      outputSampleRate:8000
-                 outputNumberChannels:1
+                 outputNumberChannels:2
                        outputBitDepth:BitDepth_16
                        outputFormatID:kAudioFormatMPEGLayer3
                        outputFileType:kAudioFileMP3Type
