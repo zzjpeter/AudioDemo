@@ -7,6 +7,8 @@
 //
 
 #import "AudioConvertAndPlayController.h"
+#import "LPMusicManager.h"
+#import "LPMusicTool.h"
 
 @interface AudioConvertAndPlayController ()
 
@@ -21,6 +23,27 @@
     self.title = @"音频转码和简单播放demo";
 }
 
+- (IBAction)convertToCaf:(id)sender {
+    NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
+    LPMusicMsgModel *musicMsgModel = musicMsgModels.firstObject;
+    NSString *filePath = musicMsgModel.musicPath;
+    [[LPMusicManager sharedManager] convertToCaf:filePath completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        if (data) {
+            [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
+        }
+    }];
+}
+
+- (IBAction)convertToM4a:(id)sender {
+    NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
+    LPMusicMsgModel *musicMsgModel = musicMsgModels.firstObject;
+    NSString *filePath = musicMsgModel.musicPath;
+    [[LPMusicManager sharedManager] convertToM4a:filePath completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        if (data) {
+            [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
+        }
+    }];
+}
 
 
 @end

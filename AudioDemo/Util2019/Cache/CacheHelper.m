@@ -105,6 +105,7 @@
 {
     if (!newFileName) {
         newFileName = [originFilePath lastPathComponent];
+        newFileName = [newFileName stringByDeletingPathExtension];
     }
     if (![newFileName hasSuffix:pathExtension]) {
         newFileName = [newFileName stringByAppendingPathExtension:pathExtension];

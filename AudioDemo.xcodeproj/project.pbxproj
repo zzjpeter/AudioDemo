@@ -47,6 +47,7 @@
 		471C51CF22A7A81E00154424 /* LiveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51CE22A7A81E00154424 /* LiveManager.m */; };
 		471C51D222A7AF2500154424 /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D122A7AF2500154424 /* LiveViewController.m */; };
 		471C51D822A7B47700154424 /* StreamClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D722A7B47700154424 /* StreamClientManager.m */; };
+		4729DE9C230E9A5300F7427C /* test123.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4729DE9B230E9A5300F7427C /* test123.mp3 */; };
 		47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC0229535CC00A9010D /* EncodeH264Manager.m */; };
 		47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC522954F7D00A9010D /* DecoderH246Manager.m */; };
 		47357DCA2295502200A9010D /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47357DC82295502200A9010D /* Shader.vsh */; };
@@ -184,6 +185,7 @@
 		471C51D122A7AF2500154424 /* LiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
 		471C51D622A7B47700154424 /* StreamClientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamClientManager.h; sourceTree = "<group>"; };
 		471C51D722A7B47700154424 /* StreamClientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamClientManager.m; sourceTree = "<group>"; };
+		4729DE9B230E9A5300F7427C /* test123.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test123.mp3; sourceTree = "<group>"; };
 		47357DBF229535CC00A9010D /* EncodeH264Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeH264Manager.h; sourceTree = "<group>"; };
 		47357DC0229535CC00A9010D /* EncodeH264Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeH264Manager.m; sourceTree = "<group>"; };
 		47357DC422954F7D00A9010D /* DecoderH246Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecoderH246Manager.h; sourceTree = "<group>"; };
@@ -809,6 +811,7 @@
 		47EBF2D7230CF16F00E0DE7B /* AudioConvert */ = {
 			isa = PBXGroup;
 			children = (
+				4729DE9B230E9A5300F7427C /* test123.mp3 */,
 				47EBF2D9230CF2A100E0DE7B /* MusicTools */,
 				47EBF2D8230CF17F00E0DE7B /* Controller */,
 			);
@@ -1235,6 +1238,7 @@
 				47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */,
 				47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */,
 				47EB4D1B2297EC36000801CE /* ab.m4a in Resources */,
+				4729DE9C230E9A5300F7427C /* test123.mp3 in Resources */,
 				47357DCA2295502200A9010D /* Shader.vsh in Resources */,
 				4709EB5B229506E800185D92 /* README.md in Resources */,
 				47EB4D1E2297EC36000801CE /* ab.pcm in Resources */,

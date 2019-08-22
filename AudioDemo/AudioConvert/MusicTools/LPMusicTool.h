@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import "AVHeader.h"
+#import "LPMusicMsgModel.h"
 @class LPMusicMsgModel;
 
 @interface LPMusicTool : NSObject

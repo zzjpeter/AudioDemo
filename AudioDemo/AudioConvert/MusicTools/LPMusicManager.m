@@ -16,7 +16,7 @@
 
 @implementation LPMusicManager
 
-SingleImplementation(manager)
+SingleImplementation(Manager)
 
 - (instancetype)init
 {
@@ -89,14 +89,18 @@ SingleImplementation(manager)
         self.audioPlayer = nil;
     }
 }
-
-- (void)convertToCAF:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
+/*
+ 音频文件格式转换 通过AVURLAsset、AVAssetReader、AVAssetWriterInput、AVAssetTrack
+ Available file types are: public.aiff-audio, public.3gpp, public.aifc-audio, com.apple.m4v-video, com.apple.m4a-audio, com.apple.coreaudio-format, public.mpeg-4, com.microsoft.waveform-audio, com.apple.quicktime-movie, org.3gpp.adaptive-multi-rate-audio'
+ ！！不支持mp3格式
+ */
+- (void)convertToCaf:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
 {
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
         NSLog(@"assetURL音频文件路径不存在");
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         return;
     }
     
@@ -105,7 +109,7 @@ SingleImplementation(manager)
     NSError *error = nil;
     AVAssetReader *assetReader = [AVAssetReader assetReaderWithAsset:asset error:&error];
     if (error) {
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         NSLog (@"AVAssetReader init error: %@", error);
         return;
     }
@@ -115,19 +119,21 @@ SingleImplementation(manager)
                                               audioSettings:nil];
     if (![assetReader canAddOutput: assetReaderOutput]) {
         NSLog (@"assetReader can't add assetReaderOutput ... die!");
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         return;
     }
     [assetReader addOutput: assetReaderOutput];
     
     NSString *exportPath = [CacheHelper getNewFilePathWithOriginFilePath:filePath newFolderPath:CachePath newFileName:nil pathExtension:@"caf"];
-
+    if ([CacheHelper checkFileExist:exportPath]) {
+        [CacheHelper deleteFileAtFilePath:exportPath];
+    }
     NSURL *exportURL = [NSURL fileURLWithPath:exportPath];
     AVAssetWriter *assetWriter = [AVAssetWriter assetWriterWithURL:exportURL
                                                           fileType:AVFileTypeCoreAudioFormat
                                                              error:&error];
     if (error) {
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         NSLog (@"AVAssetWriter init error: %@", error);
         return;
     }
@@ -150,7 +156,7 @@ SingleImplementation(manager)
         [assetWriter addInput:assetWriterInput];
     } else {
         NSLog (@"assetWriter can't add assetWriterInput ... die!");
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         return;
     }
     
@@ -188,6 +194,8 @@ SingleImplementation(manager)
                                                        error:nil];
                  NSLog (@"done. file size is %lld",
                         [outputFileAttributes fileSize]);
+                 NSData *data = [CacheHelper getDataByFilePath:exportPath];
+                 !completionHandler ? : completionHandler(data, exportPath);
                  // release a lot of stuff
                  break;
              }
@@ -195,14 +203,17 @@ SingleImplementation(manager)
          
      }];
 }
-
-- (void)convertToMp3:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
+/*
+ 音频文件格式转换 通过 AVAssetExportSession 实现
+ AVAssetExportSession 支持多种视频格式，但是音频格式的只支持.m4a(AVAssetExportPresetAppleM4A)
+ */
+- (void)convertToM4a:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
 {
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
         NSLog(@"assetURL音频文件路径不存在");
-        !completionHandler ? : completionHandler(nil);
+        !completionHandler ? : completionHandler(nil, nil);
         return;
     }
     
@@ -218,6 +229,9 @@ SingleImplementation(manager)
     
     exporter.outputFileType = AVFileTypeAppleM4A;
     NSString *exportPath = [CacheHelper getNewFilePathWithOriginFilePath:filePath newFolderPath:CachePath newFileName:nil pathExtension:@"m4a"];
+    if ([CacheHelper checkFileExist:exportPath]) {
+        [CacheHelper deleteFileAtFilePath:exportPath];
+    }
     NSURL* exportURL = [NSURL fileURLWithPath:exportPath];
     exporter.outputURL = exportURL;
     // do the export
@@ -233,7 +247,7 @@ SingleImplementation(manager)
              }
              case AVAssetExportSessionStatusCompleted: {
                  NSLog (@"AVAssetExportSessionStatusCompleted");
-                 completionHandler(data);
+                 completionHandler(data, exportPath);
                  break;
              }
              case AVAssetExportSessionStatusUnknown: {
