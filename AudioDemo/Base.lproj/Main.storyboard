@@ -19,24 +19,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VEa-CL-ftg">
-                                <rect key="frame" x="171" y="194" width="95" height="30"/>
+                                <rect key="frame" x="165" y="189" width="95" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="ConvertToCaf"/>
                                 <connections>
                                     <action selector="convertToCaf:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="tSP-JX-gRV"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2I-36-GdE">
-                                <rect key="frame" x="168" y="258" width="102" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="ConvertToMp3"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tuy-9D-MDF">
-                                <rect key="frame" x="171" y="540" width="101" height="30"/>
+                                <rect key="frame" x="165" y="227" width="101" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="ConvertToM4a"/>
                                 <connections>
                                     <action selector="convertToM4a:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="Fv0-NV-1Rz"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cw2-qj-I9I">
+                                <rect key="frame" x="157" y="532" width="102" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="ConvertToMp3"/>
+                                <connections>
+                                    <action selector="convertToMp3:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="1Uf-LL-bhx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkl-Yv-pP8">
+                                <rect key="frame" x="141" y="592" width="130" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="PlayConvertToMp3"/>
+                                <connections>
+                                    <action selector="playOriginMusic:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="mtT-rr-u5f"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -46,7 +57,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N8p-mO-UDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1677" y="761"/>
+            <point key="canvasLocation" x="1676.8115942028987" y="760.71428571428567"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">

@@ -9,6 +9,7 @@
 #import "AudioConvertAndPlayController.h"
 #import "LPMusicManager.h"
 #import "LPMusicTool.h"
+#import "ExtAudioConverter.h"
 
 @interface AudioConvertAndPlayController ()
 
@@ -45,5 +46,23 @@
     }];
 }
 
+- (IBAction)convertToMp3:(id)sender {
+    [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
+        if (success) {
+            NSLog(@"当前线程:%@###文件转换格式后路径:%@",[NSThread currentThread],outputPath);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
+            });
+        }
+    } inputFile:nil];
+}
+
+- (IBAction)playOriginMusic:(id)sender {
+    NSString *outputPath = [[NSBundle mainBundle] pathForResource:kAudioName ofType:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
+    });
+}
 
 @end
+

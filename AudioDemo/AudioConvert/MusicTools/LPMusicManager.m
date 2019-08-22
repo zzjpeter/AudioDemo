@@ -246,6 +246,11 @@ SingleImplementation(Manager)
                  break;
              }
              case AVAssetExportSessionStatusCompleted: {
+                 NSDictionary *outputFileAttributes = [[NSFileManager defaultManager]
+                                                       attributesOfItemAtPath:exportPath
+                                                       error:nil];
+                 NSLog (@"done. file size is %lld",
+                        [outputFileAttributes fileSize]);
                  NSLog (@"AVAssetExportSessionStatusCompleted");
                  completionHandler(data, exportPath);
                  break;
