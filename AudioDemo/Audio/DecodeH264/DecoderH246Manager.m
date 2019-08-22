@@ -89,7 +89,7 @@ SingleImplementation(manager)
 {
     if (!_file) {
         NSString *file = [CacheHelper pathForCommonFile:@"abc.h264" withType:0];
-        if (![CacheHelper checkfile:file]) {
+        if (![CacheHelper checkFileExist:file]) {
             file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"h264"];
         }
         _file = file;

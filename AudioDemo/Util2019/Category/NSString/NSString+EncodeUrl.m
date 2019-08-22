@@ -136,6 +136,19 @@
     }
 }
 
+/*
+ Returns a character set containing the characters allowed in an URL's query component.
+ URLFragmentAllowedCharacterSet == @"#%<>[\]^`{|}"的反向集合
+ [NSCharacterSet URLFragmentAllowedCharacterSet] 等价于 [NSCharacterSet characterSetWithCharactersInString:@"#%<>[\\]^`{|}"].invertedSet
+ */
+- (NSString *)stringByURLEncodeWithAllowedCharacterSet
+{
+    NSCharacterSet *encodeUrlSet = [NSCharacterSet characterSetWithCharactersInString:@"%<>[\\]^`{|}"].invertedSet;
+    NSString *encodeUrl = [self stringByAddingPercentEncodingWithAllowedCharacters:encodeUrlSet];
+    //NSLog(@"%@", encodeUrl);
+    return encodeUrl;
+}
+
 - (NSString *)stringByURLDecode {
     if ([self respondsToSelector:@selector(stringByRemovingPercentEncoding)]) {
         return [self stringByRemovingPercentEncoding];

@@ -18,7 +18,7 @@
 #import "ZSingleton.h"//单例
 #import "UIView+FrameExtension.h"
 
-//宏
+//宏 定义 ...
 #import "MethodMacro.h"
 #import "PhoneMacro.h"
 #import "ColorMacro.h"

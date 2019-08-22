@@ -2,8 +2,8 @@
 //  JumpManager.m
 //  TooToo
 //
-//  Created by liuning on 15/12/25.
-//  Copyright © 2015年 MoHao. All rights reserved.
+//  Created by zhuzj on 15/12/25.
+//  Copyright © 2015年 zhuzj. All rights reserved.
 //
 
 #import "JumpManager.h"

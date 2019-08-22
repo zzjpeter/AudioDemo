@@ -482,7 +482,7 @@ static void checkStatus(OSStatus status, const char *operation){
 {
     if (!_file) {
         NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
-        if (![CacheHelper checkfile:file]) {
+        if (![CacheHelper checkFileExist:file]) {
             file = [[NSBundle mainBundle] pathForResource:@"abc.pcm" ofType:nil];
         }
         _file = file;
@@ -493,7 +493,7 @@ static void checkStatus(OSStatus status, const char *operation){
 {
     if (!_convertFile) {
         NSString *file = [CacheHelper pathForCommonFile:@"abcd.pcm" withType:0];
-        if (![CacheHelper checkfile:file]) {
+        if (![CacheHelper checkFileExist:file]) {
             file = [[NSBundle mainBundle] pathForResource:@"abcd.pcm" ofType:nil];
         }
         _convertFile = file;

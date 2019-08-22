@@ -72,6 +72,10 @@
 		47EB4D1E2297EC36000801CE /* ab.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D172297EC36000801CE /* ab.pcm */; };
 		47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D182297EC36000801CE /* ab.mp3 */; };
 		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
+		47EBF2D5230CEFBB00E0DE7B /* AudioConvertAndPlayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2D4230CEFBB00E0DE7B /* AudioConvertAndPlayController.m */; };
+		47EBF2DE230CF2A100E0DE7B /* LPMusicTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2DB230CF2A100E0DE7B /* LPMusicTool.m */; };
+		47EBF2DF230CF2A100E0DE7B /* LPMusicMsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2DC230CF2A100E0DE7B /* LPMusicMsgModel.m */; };
+		47EBF2E2230CF3D300E0DE7B /* LPMusicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */; };
 		47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FD22A608C8008519D3 /* AVAssetManager.m */; };
 		47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FF22A60D35008519D3 /* AudioSampleManager.m */; };
 		47F31B3222A663C0008519D3 /* libbz2.1.0.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 47F31B3122A663C0008519D3 /* libbz2.1.0.5.tbd */; };
@@ -216,6 +220,14 @@
 		47EB4D172297EC36000801CE /* ab.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.pcm; sourceTree = "<group>"; };
 		47EB4D182297EC36000801CE /* ab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ab.mp3; sourceTree = "<group>"; };
 		47EB4D192297EC36000801CE /* ab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.mp4; sourceTree = "<group>"; };
+		47EBF2D3230CEFBB00E0DE7B /* AudioConvertAndPlayController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioConvertAndPlayController.h; sourceTree = "<group>"; };
+		47EBF2D4230CEFBB00E0DE7B /* AudioConvertAndPlayController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioConvertAndPlayController.m; sourceTree = "<group>"; };
+		47EBF2DA230CF2A100E0DE7B /* LPMusicMsgModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPMusicMsgModel.h; sourceTree = "<group>"; };
+		47EBF2DB230CF2A100E0DE7B /* LPMusicTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPMusicTool.m; sourceTree = "<group>"; };
+		47EBF2DC230CF2A100E0DE7B /* LPMusicMsgModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPMusicMsgModel.m; sourceTree = "<group>"; };
+		47EBF2DD230CF2A100E0DE7B /* LPMusicTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPMusicTool.h; sourceTree = "<group>"; };
+		47EBF2E0230CF3D300E0DE7B /* LPMusicManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPMusicManager.h; sourceTree = "<group>"; };
+		47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LPMusicManager.m; sourceTree = "<group>"; };
 		47F319FC22A608C8008519D3 /* AVAssetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVAssetManager.h; sourceTree = "<group>"; };
 		47F319FD22A608C8008519D3 /* AVAssetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AVAssetManager.m; sourceTree = "<group>"; };
 		47F319FF22A60D35008519D3 /* AudioSampleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSampleManager.m; sourceTree = "<group>"; };
@@ -616,6 +628,7 @@
 			children = (
 				471C51CD22A7A81E00154424 /* LiveManager.h */,
 				471C51CE22A7A81E00154424 /* LiveManager.m */,
+				47EBF2D6230CF14D00E0DE7B /* Controller */,
 			);
 			path = LFLive;
 			sourceTree = "<group>";
@@ -739,10 +752,9 @@
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
 				4709EAD9229506E800185D92 /* Util2019 */,
 				47E94218227EC93C00D86EE1 /* Audio */,
+				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
 				47E941FE227E7D9200D86EE1 /* ViewController.h */,
 				47E941FF227E7D9200D86EE1 /* ViewController.m */,
-				471C51D022A7AF2500154424 /* LiveViewController.h */,
-				471C51D122A7AF2500154424 /* LiveViewController.m */,
 				47E94201227E7D9200D86EE1 /* Main.storyboard */,
 				47E94204227E7D9400D86EE1 /* Assets.xcassets */,
 				47E94206227E7D9400D86EE1 /* LaunchScreen.storyboard */,
@@ -783,6 +795,46 @@
 				47EB4D192297EC36000801CE /* ab.mp4 */,
 			);
 			path = CommonResource;
+			sourceTree = "<group>";
+		};
+		47EBF2D6230CF14D00E0DE7B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				471C51D022A7AF2500154424 /* LiveViewController.h */,
+				471C51D122A7AF2500154424 /* LiveViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		47EBF2D7230CF16F00E0DE7B /* AudioConvert */ = {
+			isa = PBXGroup;
+			children = (
+				47EBF2D9230CF2A100E0DE7B /* MusicTools */,
+				47EBF2D8230CF17F00E0DE7B /* Controller */,
+			);
+			path = AudioConvert;
+			sourceTree = "<group>";
+		};
+		47EBF2D8230CF17F00E0DE7B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				47EBF2D3230CEFBB00E0DE7B /* AudioConvertAndPlayController.h */,
+				47EBF2D4230CEFBB00E0DE7B /* AudioConvertAndPlayController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		47EBF2D9230CF2A100E0DE7B /* MusicTools */ = {
+			isa = PBXGroup;
+			children = (
+				47EBF2DA230CF2A100E0DE7B /* LPMusicMsgModel.h */,
+				47EBF2DC230CF2A100E0DE7B /* LPMusicMsgModel.m */,
+				47EBF2DD230CF2A100E0DE7B /* LPMusicTool.h */,
+				47EBF2DB230CF2A100E0DE7B /* LPMusicTool.m */,
+				47EBF2E0230CF3D300E0DE7B /* LPMusicManager.h */,
+				47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */,
+			);
+			path = MusicTools;
 			sourceTree = "<group>";
 		};
 		47F319FB22A608A0008519D3 /* AVAssetPlay */ = {
@@ -1245,6 +1297,7 @@
 				4709EB44229506E800185D92 /* NSArray+Safe.m in Sources */,
 				47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */,
 				4709EB58229506E800185D92 /* NSUserDefaults+RMSaveCustomObject.m in Sources */,
+				47EBF2DF230CF2A100E0DE7B /* LPMusicMsgModel.m in Sources */,
 				47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */,
 				4709EB3D229506E800185D92 /* CacheHelper.m in Sources */,
 				4709EB4C229506E800185D92 /* UIButton+TTAdd.m in Sources */,
@@ -1265,10 +1318,12 @@
 				4709EB59229506E800185D92 /* NSObject+RMArchivable.m in Sources */,
 				47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */,
 				47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */,
+				47EBF2D5230CEFBB00E0DE7B /* AudioConvertAndPlayController.m in Sources */,
 				4709EB5F229506E800185D92 /* JumpManager.m in Sources */,
 				4709EB51229506E800185D92 /* UIImage+TTAdd.m in Sources */,
 				471C51D222A7AF2500154424 /* LiveViewController.m in Sources */,
 				4709EB42229506E800185D92 /* NSObject+Util.m in Sources */,
+				47EBF2E2230CF3D300E0DE7B /* LPMusicManager.m in Sources */,
 				4709EB3F229506E800185D92 /* UIImage+LXExtension.m in Sources */,
 				4709EB4E229506E800185D92 /* UITableView+iOS11.m in Sources */,
 				4709EB4F229506E800185D92 /* TTLabelExtend.m in Sources */,
@@ -1277,6 +1332,7 @@
 				4709EB4A229506E800185D92 /* NSString+STRegex.m in Sources */,
 				4709EB43229506E800185D92 /* UIView+FrameExtension.m in Sources */,
 				4709EB3C229506E800185D92 /* UrlLabel.m in Sources */,
+				47EBF2DE230CF2A100E0DE7B /* LPMusicTool.m in Sources */,
 				4709EB4D229506E800185D92 /* UIScrollView+iOS11.m in Sources */,
 				4709EB50229506E800185D92 /* NSString+TTAdd.m in Sources */,
 				4709EB53229506E800185D92 /* TTButtonExtend.m in Sources */,

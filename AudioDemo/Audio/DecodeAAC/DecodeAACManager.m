@@ -129,7 +129,7 @@ SingleImplementation(manager)
 {
     if (!_file) {
         NSString *file = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
-        if (![CacheHelper checkfile:file]) {
+        if (![CacheHelper checkFileExist:file]) {
             file = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"aac"];
         }
         _file = file;
@@ -234,7 +234,7 @@ void bufferReady(void *inUserData,AudioQueueRef inAQ,
  */
 - (void)play{
     NSString *audioFile = [CacheHelper pathForCommonFile:@"abc.aac" withType:0];
-    if (![CacheHelper checkfile:audioFile]) {
+    if (![CacheHelper checkFileExist:audioFile]) {
         audioFile = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"aac"];
     }
     audioFile = [[NSBundle mainBundle] pathForResource:@"abc" ofType:@"aac"];

@@ -164,7 +164,7 @@ initError:
 {
     if (!_file) {
         NSString *file = [CacheHelper pathForCommonFile:@"test.mov" withType:0];
-        if (![CacheHelper checkfile:file]) {
+        if (![CacheHelper checkFileExist:file]) {
             file = [[NSBundle mainBundle] pathForResource:@"test.mov" ofType:nil];
         }
         _file = file;
