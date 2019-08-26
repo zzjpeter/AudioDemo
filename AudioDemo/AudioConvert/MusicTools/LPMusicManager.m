@@ -248,7 +248,6 @@ SingleImplementation(Manager)
                  NSLog (@"done. file size is %lld",
                         [outputFileAttributes fileSize]);
                  NSLog (@"AVAssetExportSessionStatusCompleted");
-                 completionHandler(data, exportPath);
                  break;
              }
              case AVAssetExportSessionStatusUnknown: {
@@ -273,6 +272,7 @@ SingleImplementation(Manager)
                  break;
              }
          }
+         !completionHandler ? : completionHandler(data, exportPath);
      }];
 }
 #pragma mark 支持多种音频格式转mp3格式，通过lame这个mp3音频转换库实现
