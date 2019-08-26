@@ -89,9 +89,9 @@ typedef NS_ENUM(NSUInteger, SourceType) {
 +(NSArray*)getSubDirectories:(NSString*)path;
 
 #pragma mark 获取指定路径下的所有文件(剔除文件夹)
--(NSMutableArray *)getAllFilesAtDirPath:(NSString *)dirPath;
++ (NSMutableArray *)getAllFilesAtDirPath:(NSString *)dirPath;
 #pragma mark 获取指定路径下的所有文件(包括文件夹)（递归获取）
-- (NSMutableArray *)getAllFilesWithRecursiveAtDirPath:(NSString *)dirPath;
++ (NSMutableArray *)getAllFilesWithRecursiveAtDirPath:(NSString *)dirPath;
 
 #pragma mark - -z再封装
 #pragma mark -存本地数据
