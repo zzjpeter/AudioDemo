@@ -111,9 +111,9 @@
 {
     if (!newFileName) {
         newFileName = [originFilePath lastPathComponent];
-        newFileName = [newFileName stringByDeletingPathExtension];
     }
     if (![newFileName hasSuffix:pathExtension]) {
+        newFileName = [newFileName stringByDeletingPathExtension];
         newFileName = [newFileName stringByAppendingPathExtension:pathExtension];
     }
     return newFileName;
@@ -297,6 +297,47 @@
         NSLog(@"Error: %@",dataError);
     return muArray;
 }
+
+#pragma mark 获取指定路径下的所有文件(剔除文件夹)
+-(NSMutableArray *)getAllFilesAtDirPath:(NSString *)dirPath
+{
+    NSMutableArray *allArrayM = [self getAllFilesWithRecursiveAtDirPath:dirPath];
+    NSMutableArray *fileArrayM = [NSMutableArray new];
+    for (FileModel *fileModel in allArrayM) {
+        if (!fileModel.isDir) {
+            [fileArrayM addObject:fileModel];
+        }
+    }
+    return fileArrayM;
+}
+#pragma mark 获取指定路径下的所有文件(包括文件夹)（递归获取）
+- (NSMutableArray *)getAllFilesWithRecursiveAtDirPath:(NSString *)dirPath
+{
+    NSError *error = nil;
+    NSMutableArray *arrayM = [NSMutableArray new];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *array = [fm contentsOfDirectoryAtPath:dirPath error:&error];//返回NSStrings的NSArray，表示目录中项目的文件名。 如果此方法返回'nil'，则会在'error'参数中通过引用返回NSError。 如果目录不包含任何项，则此方法将返回空数组。
+    __block BOOL isDir = YES;
+    [array enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        FileModel *model = [FileModel new];;
+        NSString *path = [dirPath stringByAppendingPathComponent:obj];
+        if ([fm fileExistsAtPath:path isDirectory:&isDir]){
+            model = [FileModel new];
+            model.isDir = isDir;
+            if (isDir) {
+                model.subPaths = [self getAllFilesWithRecursiveAtDirPath:path];
+            }
+        }
+        if (model) {
+            model.fileName = obj;
+            model.path = path;
+            [arrayM addObject:model];
+        }
+    }];
+    return arrayM;
+}
+
+
 
 +(long long)fileSizeAtPath:(NSString *)filePath
 {

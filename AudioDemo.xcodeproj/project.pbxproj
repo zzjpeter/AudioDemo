@@ -97,6 +97,7 @@
 		47F53B3122A0C1D300F1017E /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F53B3022A0C1D300F1017E /* OpenGLView.m */; };
 		47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3322A0C6BD00F1017E /* Shaderr.fsh */; };
 		47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47F53B3522A0C6CD00F1017E /* Shaderr.vsh */; };
+		47F997F92313C15F00F07309 /* FileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F997F72313C15F00F07309 /* FileModel.m */; };
 		47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */; };
 		47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9CA229633570020A5F0 /* AACEncoder.m */; };
 		F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3E1196EBB56BD9D89AFF4 /* libPods-AudioDemo.a */; };
@@ -375,6 +376,8 @@
 		47F53B3022A0C1D300F1017E /* OpenGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		47F53B3322A0C6BD00F1017E /* Shaderr.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.fsh; sourceTree = "<group>"; };
 		47F53B3522A0C6CD00F1017E /* Shaderr.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shaderr.vsh; sourceTree = "<group>"; };
+		47F997F72313C15F00F07309 /* FileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileModel.m; sourceTree = "<group>"; };
+		47F997F82313C15F00F07309 /* FileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileModel.h; sourceTree = "<group>"; };
 		47FDA9C222962F6E0020A5F0 /* EncodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeAACManager.h; sourceTree = "<group>"; };
 		47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeAACManager.m; sourceTree = "<group>"; };
 		47FDA9C822962FE20020A5F0 /* AVHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVHeader.h; sourceTree = "<group>"; };
@@ -437,6 +440,8 @@
 			children = (
 				4709EADE229506E800185D92 /* CacheHelper.m */,
 				4709EADF229506E800185D92 /* CacheHelper.h */,
+				47F997F82313C15F00F07309 /* FileModel.h */,
+				47F997F72313C15F00F07309 /* FileModel.m */,
 				4709EAE0229506E800185D92 /* manager */,
 			);
 			path = Cache;
@@ -1350,6 +1355,7 @@
 				47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */,
 				4709EB3D229506E800185D92 /* CacheHelper.m in Sources */,
 				4709EB4C229506E800185D92 /* UIButton+TTAdd.m in Sources */,
+				47F997F92313C15F00F07309 /* FileModel.m in Sources */,
 				4709EB52229506E800185D92 /* NSBundle+Language.m in Sources */,
 				4709EB46229506E800185D92 /* NSString+URL.m in Sources */,
 				471C51CF22A7A81E00154424 /* LiveManager.m in Sources */,

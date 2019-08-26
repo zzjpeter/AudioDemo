@@ -69,34 +69,24 @@
 #pragma mark -封装的存取的基本工具方法
 //第一组针对数组
 - (void)saveList:(NSArray *)data folderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
-    //数据存储一般不关注存储结果（成功或失败），可以放在分线程中执行
-    //dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [CacheHelper saveCacheData:data folderPath:folderPath fileName:fileName];
-    //});
-    
+    //数据存储一般不关注存储结果（成功或失败），所以一般放在分线程中执行
+    [CacheHelper saveCacheData:data folderPath:folderPath fileName:fileName];
 }
 - (NSArray *)getListFolderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
-    //数据取，需要同步获取数据来刷新UI，所以数据的获取并赋值需要同步执行，因而不能在此处进行分线程处理
+    //数据获取，一般获取数据需要是用来刷新UI。（这时需要分情况来处理。1.如果数据很小，可以放在主线程中执行，立即刷新UI 2.如果数据很大，放在主线程中执行会导致程序卡顿，所以建议在分现场中执行，获取到数据后在主线程中执行刷新）
     NSArray *dataArray = [CacheHelper getCacheDataByFolderPath:folderPath fileName:fileName];
     return dataArray;
 }
 ////第二组针对NSData，NSArray，NSDictionary都可以
 - (void)saveData:(id )data folderPath:(NSString *)folderPath fileName:(NSString *)fileName{
     //数据存储一般不关注存储结果（成功或失败），可以放在分线程中执行
-    //dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [CacheHelper saveCacheData:data folderPath:folderPath fileName:fileName];
-    //});
+    [CacheHelper saveCacheData:data folderPath:folderPath fileName:fileName];
 }
 - (BOOL)saveCacheDataOnCurThread:(id )data folderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-
     return [CacheHelper saveCacheDataOnCurThread:data folderPath:folderPath fileName:fileName];
-
 }
 - (id )getDataFolderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
-    //数据取，需要同步获取数据来刷新UI，所以数据的获取并赋值需要同步执行，因而不能在此处进行分线程处理
+    //数据获取，一般获取数据需要是用来刷新UI。（这时需要分情况来处理。1.如果数据很小，可以放在主线程中执行，立即刷新UI 2.如果数据很大，放在主线程中执行会导致程序卡顿，所以建议在分现场中执行，获取到数据后在主线程中执行刷新）
     id data = [CacheHelper getCacheDataByFolderPath:folderPath fileName:fileName];
     return data;
 }
