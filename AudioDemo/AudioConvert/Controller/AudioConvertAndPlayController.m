@@ -41,7 +41,15 @@
     NSString *filePath = musicMsgModel.musicPath;
     [[LPMusicManager sharedManager] convertToM4a:filePath completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
         if (data) {
-            [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
+            //[[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
+            [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
+                if (success) {
+                    NSLog(@"当前线程:%@###文件转换格式后路径:%@",[NSThread currentThread],outputPath);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
+                    });
+                }
+            } inputFile:filePath];
         }
     }];
 }
