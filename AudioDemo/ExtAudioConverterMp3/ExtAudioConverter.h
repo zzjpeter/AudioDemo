@@ -19,7 +19,7 @@ enum BitDepth{
 
 //TODO:Add delegate
 
-typedef void(^ConvertSuccess)(BOOL success, NSString *outputPath);
+typedef void(^ConvertSuccess)(BOOL success, NSString *filePath);
 
 @interface ExtAudioConverter : NSObject
 
@@ -38,7 +38,7 @@ typedef void(^ConvertSuccess)(BOOL success, NSString *outputPath);
 -(BOOL)convert:(ConvertSuccess)convertSuccess;
 
 #pragma mark API
-+ (void)convertDefault:(ConvertSuccess)convertSuccess inputFile:(NSString *)inputFile;
++ (void)convertDefault:(ConvertSuccess)convertSuccess inputFile:(NSString *)inputFile outputFile:(NSString *)outputFile;
 
 + (void)convertWithInputFile:(NSString *)inputFile
                   outputFile:(NSString *)outputFile

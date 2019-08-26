@@ -18,21 +18,38 @@ NS_ASSUME_NONNULL_BEGIN
 SingleInterface(Manager)
 
 //AVAudioPlayer play (音频播放)
-- (void)playByAVAudioPlayerWithPath:(NSString *)filePath;
+- (void)playByAVAudioPlayerWithPath:(NSString *_Nullable)filePath;
 
 /*
  音频文件格式转换 通过AVURLAsset、AVAssetReader、AVAssetWriterInput、AVAssetTrack
  Available file types are: public.aiff-audio, public.3gpp, public.aifc-audio, com.apple.m4v-video, com.apple.m4a-audio, com.apple.coreaudio-format, public.mpeg-4, com.microsoft.waveform-audio, com.apple.quicktime-movie, org.3gpp.adaptive-multi-rate-audio'
  ！！不支持mp3格式
  */
-- (void)convertToCaf:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler;
+#pragma mark 通过AVURLAsset、reader、writer转音频格式支持多种，但是不支持直接转mp3格式
+- (void)convertToCaf:(NSString *_Nullable)filePath
+       newFolderName:(NSString *_Nullable)newFolderName
+         newFileName:(NSString *_Nullable)newFileName
+   completionHandler:(CompletionHandler)completionHandler;
 /*
  音频文件格式转换 通过 AVAssetExportSession 实现
  AVAssetExportSession 支持多种视频格式，但是音频格式的只支持.m4a(AVAssetExportPresetAppleM4A)
   ！！不支持mp3格式
  */
-- (void)convertToM4a:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler;
-
+#pragma mark 通过AVAssetExportSession支持多种视频格式但转音频格式只支持.m4a，不支持直接转mp3格式
+ - (void)convertToM4a:(NSString *_Nullable)filePath
+        newFolderName:(NSString *_Nullable)newFolderName
+          newFileName:(NSString *_Nullable)newFileName
+    completionHandler:(CompletionHandler)completionHandler;
+#pragma mark 支持多种音频格式转mp3格式，通过lame这个mp3音频转换库实现
+- (void)convertToMP3:(NSString *_Nullable)filePath
+       newFolderName:(NSString *_Nullable)newFolderName
+         newFileName:(NSString *_Nullable)newFileName
+   completionHandler:(CompletionHandler)completionHandler;
+//先转.mp4再转.mp3
+- (void)convertToM4aThanToMP3:(NSString *_Nullable)filePath
+                newFolderName:(NSString *_Nullable)newFolderName
+                  newFileName:(NSString *_Nullable)newFileName
+            completionHandler:(CompletionHandler)completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END

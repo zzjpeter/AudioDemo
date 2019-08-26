@@ -7,6 +7,7 @@
 //
 
 #import "LPMusicManager.h"
+#import "ExtAudioConverter.h"
 
 @interface LPMusicManager ()<AVAudioPlayerDelegate>
 
@@ -94,7 +95,8 @@ SingleImplementation(Manager)
  Available file types are: public.aiff-audio, public.3gpp, public.aifc-audio, com.apple.m4v-video, com.apple.m4a-audio, com.apple.coreaudio-format, public.mpeg-4, com.microsoft.waveform-audio, com.apple.quicktime-movie, org.3gpp.adaptive-multi-rate-audio'
  ！！不支持mp3格式
  */
-- (void)convertToCaf:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
+#pragma mark 通过AVURLAsset、reader、writer转音频格式支持多种，但是不支持直接转mp3格式
+- (void)convertToCaf:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
@@ -123,11 +125,7 @@ SingleImplementation(Manager)
         return;
     }
     [assetReader addOutput: assetReaderOutput];
-    
-    NSString *exportPath = [CacheHelper getNewFilePathWithOriginFilePath:filePath newFolderPath:CachePath newFileName:nil pathExtension:@"caf"];
-    if ([CacheHelper checkFileExist:exportPath]) {
-        [CacheHelper deleteFileAtFilePath:exportPath];
-    }
+    NSString *exportPath = [LPMusicManager getFilePathWithOriginFilePath:filePath newFolderName:TempCachePath newFileName:newFileName pathExtension:@"caf"];
     NSURL *exportURL = [NSURL fileURLWithPath:exportPath];
     AVAssetWriter *assetWriter = [AVAssetWriter assetWriterWithURL:exportURL
                                                           fileType:AVFileTypeCoreAudioFormat
@@ -207,7 +205,8 @@ SingleImplementation(Manager)
  音频文件格式转换 通过 AVAssetExportSession 实现
  AVAssetExportSession 支持多种视频格式，但是音频格式的只支持.m4a(AVAssetExportPresetAppleM4A)
  */
-- (void)convertToM4a:(NSString *)filePath completionHandler:(CompletionHandler)completionHandler
+#pragma mark 通过AVAssetExportSession支持多种视频格式但转音频格式只支持.m4a，不支持直接转mp3格式
+- (void)convertToM4a:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
@@ -228,10 +227,7 @@ SingleImplementation(Manager)
     NSLog (@"exporter supportedFileTypes: %@", exporter.supportedFileTypes);
     
     exporter.outputFileType = AVFileTypeAppleM4A;
-    NSString *exportPath = [CacheHelper getNewFilePathWithOriginFilePath:filePath newFolderPath:CachePath newFileName:nil pathExtension:@"m4a"];
-    if ([CacheHelper checkFileExist:exportPath]) {
-        [CacheHelper deleteFileAtFilePath:exportPath];
-    }
+    NSString *exportPath = [LPMusicManager getFilePathWithOriginFilePath:filePath newFolderName:TempCachePath newFileName:newFileName pathExtension:@"m4a"];
     NSURL* exportURL = [NSURL fileURLWithPath:exportPath];
     exporter.outputURL = exportURL;
     // do the export
@@ -279,6 +275,25 @@ SingleImplementation(Manager)
          }
      }];
 }
+#pragma mark 支持多种音频格式转mp3格式，通过lame这个mp3音频转换库实现
+- (void)convertToMP3:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
+{
+    [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
+        if (success) {
+            NSData *data = [NSData dataWithContentsOfFile:outputPath];
+            !completionHandler ? : completionHandler(data, outputPath);
+        }
+    } inputFile:filePath outputFile:nil];
+}
+
+- (void)convertToM4aThanToMP3:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
+{
+    [self convertToM4a:filePath newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        [self convertToMP3:filePath newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+            !completionHandler ? : completionHandler(data, filePath);
+        }];
+    }];
+}
 
 #pragma mark - AVAudioPlayerDelegate
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
@@ -288,6 +303,22 @@ SingleImplementation(Manager)
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
 {
     NSLog(@"解码失败");
+}
+
+#pragma mark Tool
++ (NSString *)getFilePathWithOriginFilePath:(NSString *)originFilePath
+                              newFolderName:(NSString *)newFolderName
+                                newFileName:(NSString *)newFileName
+                              pathExtension:(NSString *)pathExtension
+{
+    if (!newFolderName) {
+        newFolderName = CachePath;
+    }
+    NSString *exportPath = [CacheHelper getNewFilePathWithOriginFilePath:originFilePath newFolderPath:newFolderName newFileName:newFileName pathExtension:pathExtension];
+    if ([CacheHelper checkFileExist:exportPath]) {
+        [CacheHelper deleteFileAtFilePath:exportPath];
+    }
+    return exportPath;
 }
 
 @end

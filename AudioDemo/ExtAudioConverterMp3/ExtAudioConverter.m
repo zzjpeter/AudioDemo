@@ -434,12 +434,14 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     return YES;
 }
 
-+ (void)convertDefault:(ConvertSuccess)convertSuccess inputFile:(NSString *)inputFile
++ (void)convertDefault:(ConvertSuccess)convertSuccess inputFile:(NSString *)inputFile outputFile:(NSString *)outputFile
 {
     if (!inputFile) {
         inputFile = [[NSBundle mainBundle] pathForResource:kAudioName ofType:nil];
     }
-    NSString *outputFile = pathdwf(@"output.mp3");
+    if (!outputFile) {
+        outputFile = pathdwf(@"output.mp3");
+    }
     [self convertWithInputFile:inputFile
                            outputFile:outputFile
                      outputSampleRate:8000

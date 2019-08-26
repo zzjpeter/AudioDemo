@@ -35,7 +35,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cw2-qj-I9I">
-                                <rect key="frame" x="157" y="532" width="102" height="30"/>
+                                <rect key="frame" x="165" y="289" width="102" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="ConvertToMp3"/>
                                 <connections>
@@ -43,11 +43,19 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hkl-Yv-pP8">
-                                <rect key="frame" x="141" y="592" width="130" height="30"/>
+                                <rect key="frame" x="151" y="433" width="129" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="PlayConvertToMp3"/>
+                                <state key="normal" title="PlayOriginalToMp3"/>
                                 <connections>
                                     <action selector="playOriginMusic:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="mtT-rr-u5f"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Dx-Ym-Yue">
+                                <rect key="frame" x="117" y="349" width="181" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="ConvertToM4aThanToMp3"/>
+                                <connections>
+                                    <action selector="convertToM4aThanToMp3:" destination="xxV-x5-ZQp" eventType="touchUpInside" id="wF9-yX-tUb"/>
                                 </connections>
                             </button>
                         </subviews>

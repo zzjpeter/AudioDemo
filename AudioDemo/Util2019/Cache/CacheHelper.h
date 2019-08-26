@@ -14,6 +14,8 @@
 
 #define CachePath    [DOCUMENTS_FOLDER stringByAppendingPathComponent:@"/CommonCache"]
 
+#define TempCachePath    [DOCUMENTS_FOLDER stringByAppendingPathComponent:@"/TempCommonCache"] //存放临时数据，可以清除的
+
 typedef NS_ENUM(NSUInteger, SourceType) {
     SourceTypeIMAGE_JPG = 1,
     SourceTypeIMAGE_PNG,

@@ -28,9 +28,13 @@
     NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
     LPMusicMsgModel *musicMsgModel = musicMsgModels.firstObject;
     NSString *filePath = musicMsgModel.musicPath;
-    [[LPMusicManager sharedManager] convertToCaf:filePath completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+    [[LPMusicManager sharedManager] convertToCaf:filePath newFolderName:nil newFileName:@"Caf" completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
         if (data) {
-            [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
+            NSLog(@"当前线程:%@",[NSThread currentThread]);
+            NSLog(@"destination assetPath:%@",filePath);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];;
+            });
         }
     }];
 }
@@ -39,31 +43,46 @@
     NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
     LPMusicMsgModel *musicMsgModel = musicMsgModels.firstObject;
     NSString *filePath = musicMsgModel.musicPath;
-    [[LPMusicManager sharedManager] convertToM4a:filePath completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+    [[LPMusicManager sharedManager] convertToM4a:filePath newFolderName:nil newFileName:@"M4a" completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
         if (data) {
-            //[[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];
-            [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
-                if (success) {
-                    NSLog(@"当前线程:%@###文件转换格式后路径:%@",[NSThread currentThread],outputPath);
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
-                    });
-                }
-            } inputFile:filePath];
+            NSLog(@"当前线程:%@",[NSThread currentThread]);
+            NSLog(@"destination assetPath:%@",filePath);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];;
+            });
         }
     }];
 }
 
 - (IBAction)convertToMp3:(id)sender {
-    [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
-        if (success) {
-            NSLog(@"当前线程:%@###文件转换格式后路径:%@",[NSThread currentThread],outputPath);
+    [[LPMusicManager sharedManager] convertToMP3:nil newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        if (data) {
+            NSLog(@"当前线程:%@",[NSThread currentThread]);
+            NSLog(@"destination assetPath:%@",filePath);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
+                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];;
             });
         }
-    } inputFile:nil];
+    }];
 }
+
+- (IBAction)convertToM4aThanToMp3:(id)sender {
+    
+    NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
+    LPMusicMsgModel *musicMsgModel = musicMsgModels.firstObject;
+    NSString *filePath = musicMsgModel.musicPath;
+    [[LPMusicManager sharedManager] convertToM4aThanToMP3:filePath newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        if (data) {
+            NSLog(@"当前线程:%@",[NSThread currentThread]);
+            NSLog(@"destination assetPath:%@",filePath);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];;
+            });
+        }
+    }];
+    
+}
+
 
 - (IBAction)playOriginMusic:(id)sender {
     NSString *outputPath = [[NSBundle mainBundle] pathForResource:kAudioName ofType:nil];

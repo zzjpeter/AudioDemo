@@ -94,6 +94,12 @@
     if (!newFileName) {
         newFileName = [self getNewFileNameWithOriginFilePath:originFilePath newFileName:nil pathExtension:pathExtension];
     }
+    if (pathExtension) {
+        if (![newFileName hasSuffix:pathExtension]) {
+            newFileName = [newFileName stringByDeletingPathExtension];
+            newFileName = [newFileName stringByAppendingPathExtension:pathExtension];
+        }
+    }
     if (!newFolderPath) {
         newFolderPath = CachePath;
     }
