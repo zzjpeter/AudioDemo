@@ -61,6 +61,8 @@
 		4778AF4622968F5D00CD72BC /* abc.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4778AF4522968F5D00CD72BC /* abc.pcm */; };
 		47B26A2C229649C800704B90 /* DecodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B26A2B229649C800704B90 /* DecodeAACManager.m */; };
 		47B26A2E229649D000704B90 /* abc.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47B26A2D229649D000704B90 /* abc.aac */; };
+		47E3EAF22329F145002A2C9A /* 忘不了曾经的你.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47E3EAF12329F145002A2C9A /* 忘不了曾经的你.mp3 */; };
+		47E3EAF42329F165002A2C9A /* 01 Always Be There.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 47E3EAF32329F165002A2C9A /* 01 Always Be There.m4a */; };
 		47E941FD227E7D9200D86EE1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E941FC227E7D9200D86EE1 /* AppDelegate.m */; };
 		47E94200227E7D9200D86EE1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E941FF227E7D9200D86EE1 /* ViewController.m */; };
 		47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47E94201227E7D9200D86EE1 /* Main.storyboard */; };
@@ -184,6 +186,7 @@
 		4709EB38229506E800185D92 /* ColorMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorMacro.h; sourceTree = "<group>"; };
 		4709EB3A229506E800185D92 /* SaveUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUtil.h; sourceTree = "<group>"; };
 		4709EB3B229506E800185D92 /* SaveUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUtil.m; sourceTree = "<group>"; };
+		471C2D96232A0DAC0028DFF6 /* Music.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
 		471C51CD22A7A81E00154424 /* LiveManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveManager.h; sourceTree = "<group>"; };
 		471C51CE22A7A81E00154424 /* LiveManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveManager.m; sourceTree = "<group>"; };
 		471C51D022A7AF2500154424 /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -211,6 +214,8 @@
 		47B26A2A229649C800704B90 /* DecodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecodeAACManager.h; sourceTree = "<group>"; };
 		47B26A2B229649C800704B90 /* DecodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DecodeAACManager.m; sourceTree = "<group>"; };
 		47B26A2D229649D000704B90 /* abc.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.aac; sourceTree = "<group>"; };
+		47E3EAF12329F145002A2C9A /* 忘不了曾经的你.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "忘不了曾经的你.mp3"; sourceTree = "<group>"; };
+		47E3EAF32329F165002A2C9A /* 01 Always Be There.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "01 Always Be There.m4a"; sourceTree = "<group>"; };
 		47E941F8227E7D9200D86EE1 /* AudioDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47E941FB227E7D9200D86EE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		47E941FC227E7D9200D86EE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -781,7 +786,6 @@
 				4709EAD9229506E800185D92 /* Util2019 */,
 				47E94218227EC93C00D86EE1 /* Audio */,
 				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
-				47EFE9BB231382CE00A186FA /* ExtAudioConverterMp3 */,
 				4729DEB9230EB1A600F7427C /* AudioPlayer */,
 				47E941FE227E7D9200D86EE1 /* ViewController.h */,
 				47E941FF227E7D9200D86EE1 /* ViewController.m */,
@@ -839,6 +843,7 @@
 		47EBF2D7230CF16F00E0DE7B /* AudioConvert */ = {
 			isa = PBXGroup;
 			children = (
+				471C2D96232A0DAC0028DFF6 /* Music.h */,
 				4729DE9B230E9A5300F7427C /* test123.mp3 */,
 				4729DEBD230EB3DA00F7427C /* test1234.m4a */,
 				47EBF2D9230CF2A100E0DE7B /* MusicTools */,
@@ -850,6 +855,8 @@
 		47EBF2D8230CF17F00E0DE7B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				47E3EAF12329F145002A2C9A /* 忘不了曾经的你.mp3 */,
+				47E3EAF32329F165002A2C9A /* 01 Always Be There.m4a */,
 				47EBF2D3230CEFBB00E0DE7B /* AudioConvertAndPlayController.h */,
 				47EBF2D4230CEFBB00E0DE7B /* AudioConvertAndPlayController.m */,
 			);
@@ -865,6 +872,7 @@
 				47EBF2DB230CF2A100E0DE7B /* LPMusicTool.m */,
 				47EBF2E0230CF3D300E0DE7B /* LPMusicManager.h */,
 				47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */,
+				47EFE9BB231382CE00A186FA /* ExtAudioConverterMp3 */,
 			);
 			path = MusicTools;
 			sourceTree = "<group>";
@@ -1284,6 +1292,7 @@
 				47EB4D1A2297EC36000801CE /* test.mov in Resources */,
 				47EB4D202297EC36000801CE /* ab.mp4 in Resources */,
 				47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */,
+				47E3EAF22329F145002A2C9A /* 忘不了曾经的你.mp3 in Resources */,
 				47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */,
 				4729DEBE230EB3DA00F7427C /* test1234.m4a in Resources */,
 				47EB4D1B2297EC36000801CE /* ab.m4a in Resources */,
@@ -1296,6 +1305,7 @@
 				47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */,
 				47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */,
 				4778AF4622968F5D00CD72BC /* abc.pcm in Resources */,
+				47E3EAF42329F165002A2C9A /* 01 Always Be There.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

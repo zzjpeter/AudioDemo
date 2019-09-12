@@ -7,15 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVHeader.h"
-
+#import "Music.h"
+#import "LPMusicTool.h"
 typedef void (^CompletionHandler)(NSData *_Nullable data, NSString *_Nullable filePath);
+
+#import <MediaPlayer/MediaPlayer.h>
+typedef void (^LPGeneralAuthorizationCompletion) (void);//授权回调
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LPMusicManager : NSObject
 
 SingleInterface(Manager)
+
++ (LPMusicMsgModel *)getMusicDetailMsgModelWithFilePath:(NSString *)filePath;
 
 //AVAudioPlayer play (音频播放)
 - (void)playByAVAudioPlayerWithPath:(NSString *_Nullable)filePath;
@@ -50,6 +55,16 @@ SingleInterface(Manager)
                 newFolderName:(NSString *_Nullable)newFolderName
                   newFileName:(NSString *_Nullable)newFileName
             completionHandler:(CompletionHandler)completionHandler;
+
+#pragma mark Tool
++ (NSString *)getFilePathWithOriginFilePath:(NSString *)originFilePath
+                              newFolderName:(NSString *)newFolderName
+                                newFileName:(NSString *)newFileName
+                              pathExtension:(NSString *)pathExtension;
+#pragma mark - Apple Music
+- (void)p_requestAppleMusicAccessWithAuthorizedHandler:(LPGeneralAuthorizationCompletion)authorizedHandler
+                                   unAuthorizedHandler:(LPGeneralAuthorizationCompletion)unAuthorizedHandler;
+
 @end
 
 NS_ASSUME_NONNULL_END

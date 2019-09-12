@@ -25,24 +25,24 @@
 @end
 
 @implementation LPMusicMsgModel
-
 -(instancetype)initWithDict:(NSMutableDictionary *)dict{
     self = [super initWithDict:dict];
     if (self) {
-        self.musicName = [NSString stringWithFormat:@"%@",dict[@"musicName"]];
-        self.musicDuration = [NSString stringWithFormat:@"%@",dict[@"musicDuration"]];
-        self.musicPath = [NSString stringWithFormat:@"%@",dict[@"musicPath"]];
-        self.musicArtist = [NSString stringWithFormat:@"%@",dict[@"musicArtist"]];
-        self.musicAlbum = [NSString stringWithFormat:@"%@",dict[@"musicAlbum"]];
-        self.musicArtwork = dict[@"musicArtist"];
-        self.musicSize = [NSString stringWithFormat:@"%@",dict[@"MusicSize"]];
+        self.musicName = [NSString stringWithFormat:@"%@",dict[keyForSongTitle]];
+        self.musicDuration = [NSString stringWithFormat:@"%@",dict[keyForSongDuration]];
+        self.musicDurationSeconds = [NSString stringWithFormat:@"%@",dict[keyForSongDurationSeconds]];
+        self.musicPath = [NSString stringWithFormat:@"%@",dict[keyForSongPath]];
+        self.musicArtist = [NSString stringWithFormat:@"%@",dict[keyForSongArtist]];
+        self.musicAlbum = [NSString stringWithFormat:@"%@",dict[keyForSongAlbum]];
+        self.musicSize = [NSString stringWithFormat:@"%@",dict[keyForSongSize]];
+        self.musicArtwork = dict[keyForSongPicture];
     }
     return self;
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@", self.musicPath];
+    return [NSString stringWithFormat:@"\n musicName:%@\n musicDuration:%@\n musicDurationSeconds:%@\n musicPath:%@\n musicArtist:%@\n musicAlbum:%@\n musicSize:%@\n ", self.musicName, self.musicDuration,  self.musicDurationSeconds, self.musicPath, self.musicArtist, self.musicAlbum, self.musicSize];
 }
 
 @end

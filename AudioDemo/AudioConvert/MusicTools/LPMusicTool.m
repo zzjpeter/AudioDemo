@@ -14,14 +14,6 @@
 
 @implementation LPMusicTool
 
-#define keyForSongTitle @"musicName"
-#define keyForSongDuration @"musicDuration"
-#define keyForSongPath @"musicPath"
-#define keyForSongArtist @"musicArtist"
-#define keyForSongAlbum @"musicAlbum"
-#define keyForSongSize @"MusicSize"
-#define keyForSongPicture @"musicPic"
-
 +(NSMutableArray<LPMusicMsgModel *> *)getLocalMusicListMsgModel
 {
     NSArray *localMusicList = [self getLocalMusicListMsg];
@@ -54,6 +46,7 @@
         //歌曲时长
         NSNumber * duration = [NSNumber numberWithDouble:[[song valueForProperty:MPMediaItemPropertyPlaybackDuration] doubleValue]];
         int second = [duration intValue];
+        NSString *songDurationSeconds = [NSString stringWithFormat:@"%d", second];
         NSString * songDuration = [NSString stringWithFormat:@"%d:%d",second/60,second%60];
         //获取歌曲大小属性，方法待确认
         
@@ -64,6 +57,7 @@
             NSLog(@"\n%@\n%@\n%@\n%@\n%@\n---------------------------",songTitle,songPath,songArtist,songAlbum,songDuration);
             NSDictionary * dict = @{keyForSongTitle:songTitle,
                                     keyForSongDuration:songDuration,
+                                    keyForSongDurationSeconds:songDurationSeconds,
                                     keyForSongPath:songUrl,
                                     keyForSongArtist:songArtist,
                                     keyForSongAlbum:songAlbum,
@@ -74,6 +68,7 @@
         }else{
             NSDictionary * dict = @{keyForSongTitle:songTitle,
                                     keyForSongDuration:songDuration,
+                                    keyForSongDurationSeconds:songDurationSeconds,
                                     keyForSongPath:songUrl,
                                     keyForSongArtist:songArtist,
                                     keyForSongAlbum:songAlbum,
@@ -112,7 +107,16 @@
     return arrResult;
 }
 
++(LPMusicMsgModel *)getMusicDetailMsgModelWithFilePath:(NSString *)filePath
+{
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSDictionary * dictMusicMsg = [self getMusicDetailMsgWithFilePath:filePath fileManager:fileManager];
+    LPMusicMsgModel * model = [[LPMusicMsgModel alloc] initWithDict:[dictMusicMsg mutableCopy]];
+    return model;
+}
+
 +(NSDictionary *)getMusicDetailMsgWithFilePath:(NSString *)filePath fileManager:(NSFileManager *)fileManager{
+    filePath = [filePath stringByURLEncode];
     //路径地址
     NSURL * musicURL = [NSURL fileURLWithPath:filePath];
     //根据路径地址获取AVURLAsset对象
@@ -125,7 +129,9 @@
     int minute = (int)musicDurationSeconds/60;
     int second = (int)musicDurationSeconds%60;
     NSString * musicDuration = [NSString stringWithFormat:@"%d:%d",minute,second];
+    NSString * musicDurationSecondsStr = [NSString stringWithFormat:@"%lf",musicDurationSeconds];
     [msgInfoDict setObject:musicDuration forKey:keyForSongDuration];
+    [msgInfoDict setObject:musicDurationSecondsStr forKey:keyForSongDurationSeconds];
     //--存储歌曲路径--
     [msgInfoDict setObject:filePath forKey:keyForSongPath];
     //获取文件中数据格式类型
@@ -156,13 +162,16 @@
             }
         }
     }
+    if (!fileManager) {
+        fileManager = [NSFileManager defaultManager];
+    }
     //文件其他信息
     NSDictionary * dictItems = [fileManager attributesOfItemAtPath:filePath error:nil];
     //歌曲大小，单位bytes
     NSString * fileSize = [NSString stringWithFormat:@"%@",dictItems[@"NSFileSize"]];
     float musicSize = [fileSize intValue];
-    //1G == 1000 M == 1000*1000 K == 1000*1000*1000 byte
-    musicSize = musicSize / (1000*1000);
+    //1G == 1024 M == 1024*1024 K == 1024*1024*1024 byte
+    musicSize = musicSize / (1024*1024);
     [msgInfoDict setObject:[NSString stringWithFormat:@"%.1f",musicSize] forKey:keyForSongSize];
     //返回歌曲详情字典
     return msgInfoDict;

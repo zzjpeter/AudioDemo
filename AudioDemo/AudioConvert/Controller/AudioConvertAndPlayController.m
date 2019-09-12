@@ -91,5 +91,14 @@
     });
 }
 
+- (IBAction)playMusicWithFileName
+{
+    NSString *outputPath = [[NSBundle mainBundle] pathForResource:@"忘不了曾经的你.mp3" ofType:nil];
+    LPMusicMsgModel *model = [LPMusicManager getMusicDetailMsgModelWithFilePath:outputPath];
+    NSLog(@"model:%@",model);
+    [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:outputPath];;
+}
+
+
 @end
 

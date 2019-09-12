@@ -28,6 +28,11 @@ SingleImplementation(Manager)
     return self;
 }
 
++ (LPMusicMsgModel *)getMusicDetailMsgModelWithFilePath:(NSString *)filePath
+{
+    return [LPMusicTool getMusicDetailMsgModelWithFilePath:filePath];
+}
+
 /*
  AVAudioPlayer是属于 AVFundation.framework 的一个类，它的功能类似于一个功能强大的播放器。
  AVAudioPlayer每次播放都需要将上一个player对象释放掉，然后重新创建一个player来进行播放,AVAudioPlayer 支持广泛的音频格式，主要是以下这些格式。
@@ -44,7 +49,7 @@ SingleImplementation(Manager)
 - (void)playByAVAudioPlayerWithPath:(NSString *)filePath {
     
     [self settingAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
-    
+    filePath = [filePath stringByURLEncode];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
@@ -98,6 +103,7 @@ SingleImplementation(Manager)
 #pragma mark 通过AVURLAsset、reader、writer转音频格式支持多种，但是不支持直接转mp3格式
 - (void)convertToCaf:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
+    filePath = [filePath stringByURLEncode];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
@@ -208,6 +214,7 @@ SingleImplementation(Manager)
 #pragma mark 通过AVAssetExportSession支持多种视频格式但转音频格式只支持.m4a，不支持直接转mp3格式
 - (void)convertToM4a:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
+    filePath = [filePath stringByURLEncode];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
@@ -278,19 +285,25 @@ SingleImplementation(Manager)
 #pragma mark 支持多种音频格式转mp3格式，通过lame这个mp3音频转换库实现
 - (void)convertToMP3:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
+    NSString *outputFile = [LPMusicManager getFilePathWithOriginFilePath:filePath newFolderName:TempCachePath newFileName:@"output" pathExtension:@"mp3"];
     [ExtAudioConverter convertDefault:^(BOOL success, NSString *outputPath) {
         if (success) {
             NSData *data = [NSData dataWithContentsOfFile:outputPath];
             !completionHandler ? : completionHandler(data, outputPath);
         }
-    } inputFile:filePath outputFile:nil];
+    } inputFile:filePath outputFile:outputFile];
 }
 
 - (void)convertToM4aThanToMP3:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
     [self convertToM4a:filePath newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
+        NSString *originFilePath = filePath;
         [self convertToMP3:filePath newFolderName:nil newFileName:nil completionHandler:^(NSData * _Nullable data, NSString * _Nullable filePath) {
             !completionHandler ? : completionHandler(data, filePath);
+            //删除原始数据（其实是中间导出的数据）
+            if ([CacheHelper checkFileExist:originFilePath]) {//区分filePath
+                [CacheHelper deleteFileAtFilePath:originFilePath];
+            }
         }];
     }];
 }
@@ -319,6 +332,33 @@ SingleImplementation(Manager)
         [CacheHelper deleteFileAtFilePath:exportPath];
     }
     return exportPath;
+}
+
+#pragma mark - Apple Music
+- (void)p_requestAppleMusicAccessWithAuthorizedHandler:(LPGeneralAuthorizationCompletion)authorizedHandler
+                                   unAuthorizedHandler:(LPGeneralAuthorizationCompletion)unAuthorizedHandler{
+    if (@available(iOS 9.3, *)) {
+        MPMediaLibraryAuthorizationStatus authStatus = [MPMediaLibrary authorizationStatus];
+        if (authStatus == MPMediaLibraryAuthorizationStatusNotDetermined) {
+            [MPMediaLibrary requestAuthorization:^(MPMediaLibraryAuthorizationStatus status) {
+                if (status == MPMediaLibraryAuthorizationStatusAuthorized) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        authorizedHandler ? authorizedHandler() : nil;
+                    });
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        unAuthorizedHandler ? unAuthorizedHandler() : nil;
+                    });
+                }
+            }];
+        }else if (authStatus == MPMediaLibraryAuthorizationStatusAuthorized){
+            authorizedHandler ? authorizedHandler() : nil;
+        }else{
+            unAuthorizedHandler ? unAuthorizedHandler() : nil;
+        }
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 @end

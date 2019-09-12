@@ -15,6 +15,5 @@
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 
-#define kAudioName @"test1234.m4a"
 
 #endif /* AVHeader_h */
