@@ -116,7 +116,7 @@
 }
 
 +(NSDictionary *)getMusicDetailMsgWithFilePath:(NSString *)filePath fileManager:(NSFileManager *)fileManager{
-    filePath = [filePath stringByURLEncode];
+    filePath = [NSString urlStrHandleUrl:filePath];
     //路径地址
     NSURL * musicURL = [NSURL fileURLWithPath:filePath];
     //根据路径地址获取AVURLAsset对象

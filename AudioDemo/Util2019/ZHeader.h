@@ -27,4 +27,7 @@
 //工具
 #import "UrlLabel.h"
 
+//常用字符串类别
+#import "NStringCommon.h"
+
 #endif /* ZHeader_h */

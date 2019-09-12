@@ -32,27 +32,33 @@
 }
 
 #pragma mark -高级使用 （自定义customRanges）
--(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(NSArray *)customRanges urlTapBlock:(void(^)(NSURL *url))urlBlock
+-(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(nullable NSArray *)customRanges urlTapBlock:(void(^)(NSURL *url))urlBlock
 {
     [self setText:string textColor:textColor font:font urlColor:urlColor textAligment:textAligment customRanges:customRanges customColor:CustomRanageColor  urlTapBlock:urlBlock];
 }
 
 #pragma mark -高级使用（自定义对齐方式 自定义customRanges 以及颜色）
 // 自定义对齐方式 自定义customRanges 以及颜色
--(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(NSArray *)customRanges customColor:(UIColor *)customColor urlTapBlock:(void(^)(NSURL *url))urlBlock
+-(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(nullable NSArray *)customRanges customColor:(nullable UIColor *)customColor urlTapBlock:(void(^)(NSURL *url))urlBlock
 {
     [self setText:string textColor:textColor font:font urlColor:urlColor textAligment:textAligment customRanges:customRanges customColor:customColor lineSpacing:CustomLineSpacing urlTapBlock:urlBlock];
 }
 
 // 自定义对齐方式 自定义customRanges 以及颜色 lineSpacing
--(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(NSArray *)customRanges customColor:(UIColor *)customColor lineSpacing:(CGFloat)lineSpacing urlTapBlock:(void(^)(NSURL *url))urlBlock
+-(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(nullable NSArray *)customRanges customColor:(nullable UIColor *)customColor lineSpacing:(CGFloat)lineSpacing urlTapBlock:(void(^)(NSURL *url))urlBlock
 {
     [self setText:string textColor:textColor font:font urlColor:urlColor textAligment:textAligment customRanges:customRanges customColor:customColor customFont:nil lineSpacing:lineSpacing urlTapBlock:urlBlock];
 }
 
 #pragma mark -高级使用（自定义对齐方式 自定义customRanges 以及颜色 lineSpacing）
 // 自定义对齐方式 自定义customRanges 以及颜色和字体大小 lineSpacing
--(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(NSArray *)customRanges customColor:(UIColor *)customColor customFont:(UIFont *)customFont lineSpacing:(CGFloat)lineSpacing urlTapBlock:(void(^)(NSURL *url))urlBlock
+-(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(nullable NSArray *)customRanges customColor:(nullable UIColor *)customColor customFont:(nullable UIFont *)customFont lineSpacing:(CGFloat)lineSpacing urlTapBlock:(void(^)(NSURL *url))urlBlock
+{
+    [self setText:string textColor:textColor font:font urlColor:urlColor textAligment:textAligment customRanges:customRanges customTapAction:nil customLongPressAction:nil customColor:customColor customFont:customFont lineSpacing:lineSpacing urlTapBlock:urlBlock];
+}
+#pragma mark -高级使用 （自定义对齐方式 自定义customRanges 以及颜色和字体大小 lineSpacing 自定义部分的点击和长按事件 返回text）
+// 自定义对齐方式 自定义customRanges 以及颜色和字体大小 lineSpacing 自定义部分的点击和长按事件 返回text
+-(void)setText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font urlColor:(UIColor *)urlColor textAligment:(NSTextAlignment)textAligment customRanges:(nullable NSArray *)customRanges customTapAction:(nullable TapAction)tapAction customLongPressAction:(nullable LongPressActions)longPressAction customColor:(nullable UIColor *)customColor customFont:(nullable UIFont *)customFont lineSpacing:(CGFloat)lineSpacing urlTapBlock:(void(^)(NSURL *url))urlBlock
 {
     self.numberOfLines = 0;
     //self.lineBreakMode = NSLineBreakByCharWrapping;
@@ -81,18 +87,30 @@
     }
     //解析customRanges
     if (customRanges.count == 1) {
-        NSRange range1 = NSRangeFromString(customRanges[0]);
-    
-        [text setColor:customColor range:range1];
+        NSRange range1 = NSRangeFromString(customRanges.firstObject);
+        
         [text setFont:customFont range:range1];
+        [text setTextHighlightRange:range1 color:customColor backgroundColor:[UIColor clearColor] userInfo:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !tapAction ? : tapAction(text, range, [text attributedSubstringFromRange:range]);
+        } longPressAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !longPressAction ? : longPressAction(text, range, [text attributedSubstringFromRange:range]);
+        }];
     }else if (customRanges.count == 2) {
-        NSRange range1 = NSRangeFromString(customRanges[0]);
+        NSRange range1 = NSRangeFromString(customRanges.firstObject);
         NSRange range2 = NSRangeFromString(customRanges[1]);
         
-        [text setColor:customColor range:range1];
-        [text setColor:customColor range:range2];
         [text setFont:customFont range:range1];
         [text setFont:customFont range:range2];
+        [text setTextHighlightRange:range1 color:customColor backgroundColor:[UIColor clearColor] userInfo:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !tapAction ? : tapAction(text, range, [text attributedSubstringFromRange:range]);
+        } longPressAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !longPressAction ? : longPressAction(text, range, [text attributedSubstringFromRange:range]);
+        }];
+        [text setTextHighlightRange:range2 color:customColor backgroundColor:[UIColor clearColor] userInfo:nil tapAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !tapAction ? : tapAction(text, range, [text attributedSubstringFromRange:range]);
+        } longPressAction:^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
+            !longPressAction ? : longPressAction(text, range, [text attributedSubstringFromRange:range]);
+        }];
     }
     
     NSError *error;
@@ -107,6 +125,7 @@
                         backgroundColor:[UIColor whiteColor]
                               tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect){
                                   NSLog(@"这里是点击事件");
+                                  !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
                               }];
         }
         else
@@ -118,7 +137,6 @@
     
     [self attachTapHandler];
 }
-
 
 #pragma mark -高级使用2 （带html基本标签解析功能，场景 一般用在解析html标识的富文本中）
 -(void)setHtmlText:(NSString *)string textColor:(UIColor *)textColor font:(UIFont *)font textAligment:(NSTextAlignment)textAligment urlColor:(UIColor *)urlColor urlTapBlock:(void(^)(NSURL *url))urlBlock
@@ -171,7 +189,8 @@
                                      color:urlColor
                            backgroundColor:[UIColor whiteColor]
                               tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect){
-                                  
+                                  NSLog(@"这里是点击事件");
+                                  !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
                               }];
         }
         else

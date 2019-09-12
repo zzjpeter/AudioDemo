@@ -44,10 +44,11 @@
 		4709EB5E229506E800185D92 /* ZCommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB30229506E800185D92 /* ZCommonUtils.m */; };
 		4709EB5F229506E800185D92 /* JumpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB33229506E800185D92 /* JumpManager.m */; };
 		4709EB60229506E800185D92 /* SaveUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4709EB3B229506E800185D92 /* SaveUtil.m */; };
+		471C2D9C232A15FA0028DFF6 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 471C2D9A232A15FA0028DFF6 /* libmp3lame.a */; };
 		471C51CF22A7A81E00154424 /* LiveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51CE22A7A81E00154424 /* LiveManager.m */; };
 		471C51D222A7AF2500154424 /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D122A7AF2500154424 /* LiveViewController.m */; };
 		471C51D822A7B47700154424 /* StreamClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 471C51D722A7B47700154424 /* StreamClientManager.m */; };
-		4729DE9C230E9A5300F7427C /* test123.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4729DE9B230E9A5300F7427C /* test123.mp3 */; };
+		4729DE9C230E9A5300F7427C /* audioName.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4729DE9B230E9A5300F7427C /* audioName.mp3 */; };
 		4729DEBC230EB1A600F7427C /* LPAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4729DEBB230EB1A600F7427C /* LPAudioPlayer.m */; };
 		4729DEBE230EB3DA00F7427C /* test1234.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4729DEBD230EB3DA00F7427C /* test1234.m4a */; };
 		47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC0229535CC00A9010D /* EncodeH264Manager.m */; };
@@ -81,7 +82,6 @@
 		47EBF2DE230CF2A100E0DE7B /* LPMusicTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2DB230CF2A100E0DE7B /* LPMusicTool.m */; };
 		47EBF2DF230CF2A100E0DE7B /* LPMusicMsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2DC230CF2A100E0DE7B /* LPMusicMsgModel.m */; };
 		47EBF2E2230CF3D300E0DE7B /* LPMusicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */; };
-		47EFE9C1231382CE00A186FA /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47EFE9BD231382CE00A186FA /* libmp3lame.a */; };
 		47EFE9C2231382CE00A186FA /* ExtAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 47EFE9C0231382CE00A186FA /* ExtAudioConverter.m */; };
 		47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FD22A608C8008519D3 /* AVAssetManager.m */; };
 		47F31A0122A60D35008519D3 /* AudioSampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F319FF22A60D35008519D3 /* AudioSampleManager.m */; };
@@ -187,13 +187,16 @@
 		4709EB3A229506E800185D92 /* SaveUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUtil.h; sourceTree = "<group>"; };
 		4709EB3B229506E800185D92 /* SaveUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUtil.m; sourceTree = "<group>"; };
 		471C2D96232A0DAC0028DFF6 /* Music.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Music.h; sourceTree = "<group>"; };
+		471C2D98232A14A90028DFF6 /* NStringCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NStringCommon.h; sourceTree = "<group>"; };
+		471C2D9A232A15FA0028DFF6 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
+		471C2D9B232A15FA0028DFF6 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
 		471C51CD22A7A81E00154424 /* LiveManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveManager.h; sourceTree = "<group>"; };
 		471C51CE22A7A81E00154424 /* LiveManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveManager.m; sourceTree = "<group>"; };
 		471C51D022A7AF2500154424 /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
 		471C51D122A7AF2500154424 /* LiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
 		471C51D622A7B47700154424 /* StreamClientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamClientManager.h; sourceTree = "<group>"; };
 		471C51D722A7B47700154424 /* StreamClientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StreamClientManager.m; sourceTree = "<group>"; };
-		4729DE9B230E9A5300F7427C /* test123.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test123.mp3; sourceTree = "<group>"; };
+		4729DE9B230E9A5300F7427C /* audioName.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = audioName.mp3; sourceTree = "<group>"; };
 		4729DEBA230EB1A600F7427C /* LPAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPAudioPlayer.h; sourceTree = "<group>"; };
 		4729DEBB230EB1A600F7427C /* LPAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPAudioPlayer.m; sourceTree = "<group>"; };
 		4729DEBD230EB3DA00F7427C /* test1234.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = test1234.m4a; sourceTree = "<group>"; };
@@ -243,8 +246,6 @@
 		47EBF2DD230CF2A100E0DE7B /* LPMusicTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPMusicTool.h; sourceTree = "<group>"; };
 		47EBF2E0230CF3D300E0DE7B /* LPMusicManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPMusicManager.h; sourceTree = "<group>"; };
 		47EBF2E1230CF3D300E0DE7B /* LPMusicManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LPMusicManager.m; sourceTree = "<group>"; };
-		47EFE9BD231382CE00A186FA /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
-		47EFE9BE231382CE00A186FA /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
 		47EFE9BF231382CE00A186FA /* ExtAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtAudioConverter.h; sourceTree = "<group>"; };
 		47EFE9C0231382CE00A186FA /* ExtAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtAudioConverter.m; sourceTree = "<group>"; };
 		47F319FC22A608C8008519D3 /* AVAssetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVAssetManager.h; sourceTree = "<group>"; };
@@ -406,7 +407,7 @@
 				47F31B3422A663CA008519D3 /* libiconv.2.4.0.tbd in Frameworks */,
 				47F31BC722A66429008519D3 /* libswresample.a in Frameworks */,
 				47F31B3222A663C0008519D3 /* libbz2.1.0.5.tbd in Frameworks */,
-				47EFE9C1231382CE00A186FA /* libmp3lame.a in Frameworks */,
+				471C2D9C232A15FA0028DFF6 /* libmp3lame.a in Frameworks */,
 				47F31BC422A66429008519D3 /* libavcodec.a in Frameworks */,
 				F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */,
 			);
@@ -512,6 +513,7 @@
 		4709EAF5229506E800185D92 /* NSString */ = {
 			isa = PBXGroup;
 			children = (
+				471C2D98232A14A90028DFF6 /* NStringCommon.h */,
 				4709EAF6229506E800185D92 /* NSString+URL.m */,
 				4709EAF7229506E800185D92 /* NSString+Money.h */,
 				4709EAF8229506E800185D92 /* NSString+Find.h */,
@@ -645,6 +647,15 @@
 				4709EB3B229506E800185D92 /* SaveUtil.m */,
 			);
 			path = SaveUtil;
+			sourceTree = "<group>";
+		};
+		471C2D99232A15FA0028DFF6 /* Lame */ = {
+			isa = PBXGroup;
+			children = (
+				471C2D9A232A15FA0028DFF6 /* libmp3lame.a */,
+				471C2D9B232A15FA0028DFF6 /* lame.h */,
+			);
+			path = Lame;
 			sourceTree = "<group>";
 		};
 		471C51CC22A7A64700154424 /* LFLive */ = {
@@ -844,7 +855,7 @@
 			isa = PBXGroup;
 			children = (
 				471C2D96232A0DAC0028DFF6 /* Music.h */,
-				4729DE9B230E9A5300F7427C /* test123.mp3 */,
+				4729DE9B230E9A5300F7427C /* audioName.mp3 */,
 				4729DEBD230EB3DA00F7427C /* test1234.m4a */,
 				47EBF2D9230CF2A100E0DE7B /* MusicTools */,
 				47EBF2D8230CF17F00E0DE7B /* Controller */,
@@ -880,20 +891,11 @@
 		47EFE9BB231382CE00A186FA /* ExtAudioConverterMp3 */ = {
 			isa = PBXGroup;
 			children = (
-				47EFE9BC231382CE00A186FA /* Lame */,
+				471C2D99232A15FA0028DFF6 /* Lame */,
 				47EFE9BF231382CE00A186FA /* ExtAudioConverter.h */,
 				47EFE9C0231382CE00A186FA /* ExtAudioConverter.m */,
 			);
 			path = ExtAudioConverterMp3;
-			sourceTree = "<group>";
-		};
-		47EFE9BC231382CE00A186FA /* Lame */ = {
-			isa = PBXGroup;
-			children = (
-				47EFE9BD231382CE00A186FA /* libmp3lame.a */,
-				47EFE9BE231382CE00A186FA /* lame.h */,
-			);
-			path = Lame;
 			sourceTree = "<group>";
 		};
 		47F319FB22A608A0008519D3 /* AVAssetPlay */ = {
@@ -1296,7 +1298,7 @@
 				47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */,
 				4729DEBE230EB3DA00F7427C /* test1234.m4a in Resources */,
 				47EB4D1B2297EC36000801CE /* ab.m4a in Resources */,
-				4729DE9C230E9A5300F7427C /* test123.mp3 in Resources */,
+				4729DE9C230E9A5300F7427C /* audioName.mp3 in Resources */,
 				47357DCA2295502200A9010D /* Shader.vsh in Resources */,
 				4709EB5B229506E800185D92 /* README.md in Resources */,
 				47EB4D1E2297EC36000801CE /* ab.pcm in Resources */,
@@ -1564,6 +1566,7 @@
 					"$(PROJECT_DIR)/AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverter/Lame",
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
+					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.AudioDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1596,6 +1599,7 @@
 					"$(PROJECT_DIR)/AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib",
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverter/Lame",
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
+					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.AudioDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

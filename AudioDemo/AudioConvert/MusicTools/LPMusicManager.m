@@ -49,7 +49,7 @@ SingleImplementation(Manager)
 - (void)playByAVAudioPlayerWithPath:(NSString *)filePath {
     
     [self settingAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
-    filePath = [filePath stringByURLEncode];
+    filePath = [NSString urlStrHandleUrl:filePath];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
@@ -103,7 +103,7 @@ SingleImplementation(Manager)
 #pragma mark 通过AVURLAsset、reader、writer转音频格式支持多种，但是不支持直接转mp3格式
 - (void)convertToCaf:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
-    filePath = [filePath stringByURLEncode];
+    filePath = [NSString urlStrHandleUrl:filePath];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {
@@ -214,7 +214,7 @@ SingleImplementation(Manager)
 #pragma mark 通过AVAssetExportSession支持多种视频格式但转音频格式只支持.m4a，不支持直接转mp3格式
 - (void)convertToM4a:(NSString *)filePath newFolderName:(NSString *)newFolderName newFileName:(NSString *)newFileName completionHandler:(CompletionHandler)completionHandler
 {
-    filePath = [filePath stringByURLEncode];
+    filePath = [NSString urlStrHandleUrl:filePath];
     NSURL *assetURL = [NSURL URLWithString:filePath];
     NSLog(@"assetPath:%@", assetURL.absoluteString);
     if (!assetURL) {

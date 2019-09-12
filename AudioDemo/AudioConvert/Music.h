@@ -11,6 +11,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "AVHeader.h"
 //for test
-#define kAudioName @"audioName"
+#define kAudioName @"audioName.mp3"
 
 #endif /* Music_h */
