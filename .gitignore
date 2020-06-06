@@ -55,3 +55,10 @@ fastlane/screenshots
 
 # AppCode
 .idea/
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libavcodec.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libavdevice.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libavfilter.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libavformat.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libavutil.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libswresample.a
+AudioDemo/Audio/AVAssetPlay/FFMPeg/FFmpeg-iOS/lib/libswscale.a

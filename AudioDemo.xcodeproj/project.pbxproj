@@ -792,9 +792,9 @@
 		47E941FA227E7D9200D86EE1 /* AudioDemo */ = {
 			isa = PBXGroup;
 			children = (
+				4709EAD9229506E800185D92 /* Util2019 */,
 				47E941FB227E7D9200D86EE1 /* AppDelegate.h */,
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
-				4709EAD9229506E800185D92 /* Util2019 */,
 				47E94218227EC93C00D86EE1 /* Audio */,
 				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
 				4729DEB9230EB1A600F7427C /* AudioPlayer */,
@@ -1568,7 +1568,7 @@
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
 					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.AudioDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1601,7 +1601,7 @@
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
 					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.AudioDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
