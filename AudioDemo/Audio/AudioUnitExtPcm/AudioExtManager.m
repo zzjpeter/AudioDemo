@@ -108,7 +108,7 @@ SingleImplementation(manager)
     //2.Audio Unit具体设置
     [self initAudioUnit];
     
-    //3.数据 设备输入 和 输出到设备
+    //3.从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
     [self enableIOForRecordingAndPlay];
     
     //4 Describe format //获取 或者 设置输入描述格式
@@ -180,7 +180,7 @@ SingleImplementation(manager)
     status = AudioComponentInstanceNew(inputComponent, &_audioUnit);
     checkStatus(status, "AudioComponentInstanceNew");
 }
-#pragma mark 3.数据 设备输入 和 输出到设备
+#pragma mark 3.从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
 //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
 - (void)enableIOForRecordingAndPlay
 {

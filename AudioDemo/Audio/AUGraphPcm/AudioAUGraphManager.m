@@ -121,7 +121,7 @@ SingleImplementation(manager)
     //5.数据 I/OUnit输出到应用application 和 应用application输入到I/OUnit
     [self enableStreamIOUnitAndApplication];
     
-    //3.数据 设备输入 和 输出到设备
+    //3.从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
     [self enableIOForRecordingAndPlay];
     
     [self setupMixUnit];
@@ -199,7 +199,7 @@ SingleImplementation(manager)
     // connect
     checkStatus(AUGraphConnectNodeInput(auGraph, mixNode, MIX_UNIT_OUTPUT_BUS, outputNode, kOutputBus), "connect fail"); //从字面看是把mixNode的输出作为outputNode的输入。但是在bus的参数设置上，为什么Remote I/O Unit的bus不是inputBus？因为Remote I/O Unit有输入域有两个Bus，inputBus对应的是麦克风的输入，outputBus对应的是app发送给Remote I/O Unit的数据。这里Mixer Unit是把人声和伴奏混合后，输出给Remote I/O Unit，相当于app发送数据给Remote I/O Unit，所以这里应该填outputBus。
 }
-#pragma mark 3.数据 设备输入 和 输出到设备
+#pragma mark 3.从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
 //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
 - (void)enableIOForRecordingAndPlay
 {

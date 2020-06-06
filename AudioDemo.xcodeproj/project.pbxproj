@@ -22,7 +22,7 @@
 		47357DD0229552B800A9010D /* abc.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 47357DCF229552B800A9010D /* abc.h264 */; };
 		47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47612C36229BC8CF0006854D /* AudioExtManager.m */; };
 		47612C3B229BEF060006854D /* AudioAUGraphManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47612C39229BEF060006854D /* AudioAUGraphManager.m */; };
-		4778AF4622968F5D00CD72BC /* abc.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4778AF4522968F5D00CD72BC /* abc.pcm */; };
+		4778AF4622968F5D00CD72BC /* AudioManager.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4778AF4522968F5D00CD72BC /* AudioManager.pcm */; };
 		47B26A2C229649C800704B90 /* DecodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B26A2B229649C800704B90 /* DecodeAACManager.m */; };
 		47B26A2E229649D000704B90 /* abc.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47B26A2D229649D000704B90 /* abc.aac */; };
 		47E3EAF22329F145002A2C9A /* 忘不了曾经的你.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47E3EAF12329F145002A2C9A /* 忘不了曾经的你.mp3 */; };
@@ -135,7 +135,7 @@
 		47612C36229BC8CF0006854D /* AudioExtManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioExtManager.m; sourceTree = "<group>"; };
 		47612C39229BEF060006854D /* AudioAUGraphManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAUGraphManager.m; sourceTree = "<group>"; };
 		47612C3A229BEF060006854D /* AudioAUGraphManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAUGraphManager.h; sourceTree = "<group>"; };
-		4778AF4522968F5D00CD72BC /* abc.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.pcm; sourceTree = "<group>"; };
+		4778AF4522968F5D00CD72BC /* AudioManager.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = AudioManager.pcm; sourceTree = "<group>"; };
 		47B26A2A229649C800704B90 /* DecodeAACManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecodeAACManager.h; sourceTree = "<group>"; };
 		47B26A2B229649C800704B90 /* DecodeAACManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DecodeAACManager.m; sourceTree = "<group>"; };
 		47B26A2D229649D000704B90 /* abc.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.aac; sourceTree = "<group>"; };
@@ -527,7 +527,7 @@
 		4778AF4422968F4C00CD72BC /* AudioUnitPcm */ = {
 			isa = PBXGroup;
 			children = (
-				4778AF4522968F5D00CD72BC /* abc.pcm */,
+				4778AF4522968F5D00CD72BC /* AudioManager.pcm */,
 				47E94215227E854D00D86EE1 /* AudioManager.h */,
 				47E94216227E854D00D86EE1 /* AudioManager.m */,
 			);
@@ -1340,7 +1340,7 @@
 				47357DCB2295502200A9010D /* Shader.fsh in Resources */,
 				47F53B3622A0C6CD00F1017E /* Shaderr.vsh in Resources */,
 				47E94203227E7D9200D86EE1 /* Main.storyboard in Resources */,
-				4778AF4622968F5D00CD72BC /* abc.pcm in Resources */,
+				4778AF4622968F5D00CD72BC /* AudioManager.pcm in Resources */,
 				47E3EAF42329F165002A2C9A /* 01 Always Be There.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -76,10 +76,19 @@
 }
 
 - (IBAction)AUPCMPlayStart:(id)sender {
-    //[[AudioManager sharedmanager] start];
-    [AudioManager sharedmanager].file = [CacheHelper pathForCommonFile:@"abcd.pcm" withType:0];
-    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    //注意：测试过其他播放其他音频格式的音频文件（如.aac,.m4a,.mp3 可以转码成功播放，但是播放效果完全不对，不知道是不是什么参数设置不对）
+    NSString *file = AudioManager.sharedmanager.writeFile;
+    //file = [NSBundle.mainBundle pathForResource:@"AudioManager.pcm" ofType:nil];
+    AudioManager.sharedmanager.file = file;
+    if (![CacheHelper checkFileExist:AudioManager.sharedmanager.writeFile]) {
+        NSLog(@"开始录制");
+        [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
+        return;
+    }
+    NSLog(@"开始播放");
+    [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
 }
+
 - (IBAction)AUPCMPlayStop:(id)sender {
     [[AudioManager sharedmanager] stop];
 }

@@ -16,11 +16,11 @@
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 #define NO_MORE_DATA (-12306)
 
-const uint32_t CONST_BUFFER_SIZES = 0x10000;
+const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4
 
 @interface AudioManager ()
 {
-    OSStatus status;
+    OSStatus status;//状态
     NSInputStream *inputSteam;//从文件中读取音频数据播放
     AudioStreamBasicDescription audioOutputFormat;//Describe format // 描述格式
     NSFileHandle *fileWriteHandle;//写入录制的音频数据
@@ -71,6 +71,15 @@ SingleImplementation(manager)
 
     BOOL isPlay = NO;//是否播放
     AVAudioSessionCategory audioSessionCategory = self.audioSessionCategory;//类型本质是字符串
+    
+    if (audioSessionCategory == AVAudioSessionCategoryPlayAndRecord ||
+        audioSessionCategory == AVAudioSessionCategoryPlayback) {
+        if (![CacheHelper checkFileExist:self.file]) {
+            NSLog(@"播放文件不存在");
+            return;
+        }
+    }
+    
     if (audioSessionCategory == AVAudioSessionCategoryPlayAndRecord) {
         isPlay = YES;
         [self initReadFileHandle];
@@ -83,8 +92,9 @@ SingleImplementation(manager)
     }
     
     NSLog(@"file:%@",self.file);
+    NSLog(@"writeFile:%@",self.writeFile);
     NSLog(@"ConvertFile:%@",self.convertFile);
-    
+        
     [self setupAudioUnitBase];
 }
 
@@ -112,7 +122,7 @@ SingleImplementation(manager)
     //2.Audio Unit具体设置
     [self initAudioUnit];
     
-    //3.数据 设备输入 和 输出到设备
+    //3.数据 从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
     [self enableIOForRecordingAndPlay];
     
     //4 Describe format //获取 或者 设置输入描述格式
@@ -135,7 +145,7 @@ SingleImplementation(manager)
     
     // Initialise // 初始化
     //是初始化AudioUnit，需要在设置好absd之后调用；初始化是一个耗时的操作，需要分配buffer、申请系统资源等；
-    status = AudioUnitInitialize(_audioUnit);
+    status = AudioUnitInitialize(self.audioUnit);
     checkStatus(status, "AudioUnitInitialize");
     
     // Initialise也可以用以下代码
@@ -148,6 +158,7 @@ SingleImplementation(manager)
     //    status = AudioUnitInitialize(audioUnit);
     //    checkStatus(status);
 }
+
 #pragma mark 1.settingAVAudioSessionCategory
 - (BOOL)settingAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory
 {
@@ -184,7 +195,7 @@ SingleImplementation(manager)
     status = AudioComponentInstanceNew(inputComponent, &_audioUnit);
     checkStatus(status, "AudioComponentInstanceNew");
 }
-#pragma mark 3.数据 设备输入 和 输出到设备
+#pragma mark 3.从设备(麦克风)输入到应用 和 从应用输出到设备(扬声器)
 //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
 - (void)enableIOForRecordingAndPlay
 {
@@ -192,7 +203,7 @@ SingleImplementation(manager)
     //Enable IO for recording // 为录制打开 IO
     //1.设备（麦克风）输入数据到I/O Unit 和 4.I/O Unit输出数据到设备（扬声器）的数据格式
     UInt32 flag = 1;
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioOutputUnitProperty_EnableIO,
                                   kAudioUnitScope_Input,
                                   kInputBus,
@@ -202,7 +213,7 @@ SingleImplementation(manager)
     
     //Enable IO for playback // 为播放打开 IO
     //4.I/O Unit输出数据到设备（扬声器）的数据格式
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioOutputUnitProperty_EnableIO,
                                   kAudioUnitScope_Output,
                                   kOutputBus,
@@ -240,7 +251,7 @@ SingleImplementation(manager)
     
     [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
     if (audioInputFormat.mFormatID) {
-        _isReadNeedConvert = YES;
+        self.isReadNeedConvert = YES;
         NSLog(@"非pcm格式的音频数据，需要音频转码");
     }
 }
@@ -266,7 +277,7 @@ SingleImplementation(manager)
 {
     //Application format // 设置应用处理音频的格式
     //2.I/O Unit输出数据到应用appliction 和 3.应用application输出数据到I/O Unit
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Output,
                                   kInputBus,
@@ -274,7 +285,7 @@ SingleImplementation(manager)
                                   sizeof(audioOutputFormat));
     checkStatus(status, "AudioUnitSetProperty kAudioUnitScope_Output kInputBus");
     //3.应用application输出数据到I/O Unit
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioUnitProperty_StreamFormat,
                                   kAudioUnitScope_Input,
                                   kOutputBus,
@@ -290,7 +301,7 @@ SingleImplementation(manager)
     AURenderCallbackStruct callbackStruct;
     callbackStruct.inputProc = recordingCallback;
     callbackStruct.inputProcRefCon = (__bridge void * _Nullable)self;
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioOutputUnitProperty_SetInputCallback,//用来设置回调
                                   kAudioUnitScope_Global,
                                   kInputBus,
@@ -301,7 +312,7 @@ SingleImplementation(manager)
     //set output callback // 设置声音输出回调函数。当speaker需要数据时就会调用回调函数去获取数据。它是 "拉" 数据的概念。
     callbackStruct.inputProc = playbackCallback;
     callbackStruct.inputProcRefCon = (__bridge void * _Nullable)self;
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioUnitProperty_SetRenderCallback,//用来设置回调
                                   kAudioUnitScope_Global,
                                   kOutputBus,
@@ -314,7 +325,7 @@ SingleImplementation(manager)
 {
     //Disable buffer allocation for the recorder (optional - do this if we want to pass in our own) // 关闭为录制分配的缓冲区（我们想使用我们自己分配的）
     UInt32 flag = 0;
-    status = AudioUnitSetProperty(_audioUnit,
+    status = AudioUnitSetProperty(self.audioUnit,
                                   kAudioUnitProperty_ShouldAllocateBuffer,
                                   kAudioUnitScope_Output,
                                   kInputBus,
@@ -334,14 +345,14 @@ SingleImplementation(manager)
     bufferList->mBuffers[0].mData = malloc(bufferSize);
     bufferList->mBuffers[0].mDataByteSize = bufferSize;
     bufferList->mBuffers[0].mNumberChannels = 1;
-    _bufferList = bufferList;
+    self.bufferList = bufferList;
     
     AudioBufferList *playBufferList = (AudioBufferList*)malloc(sizeof(AudioBufferList));
     playBufferList->mNumberBuffers = numberBuffers;
     playBufferList->mBuffers[0].mData = malloc(bufferSize);
     playBufferList->mBuffers[0].mDataByteSize = bufferSize;
     playBufferList->mBuffers[0].mNumberChannels = 1;
-    _playBufferList = playBufferList;
+    self.playBufferList = playBufferList;
 }
 #pragma mark 8.通过设置输入输出格式创建音频转码器
 - (void)createAudioConverter:(AudioStreamBasicDescription)audioInputFormat audioOutputFormat:(AudioStreamBasicDescription)audioOutputFormat
@@ -362,7 +373,7 @@ static void checkStatus(OSStatus status, const char *operation){
 #pragma mark 处理 录制文件写入fileHandle
 - (void)initWriteFileHandle
 {
-    NSString *file = self.file;
+    NSString *file = self.writeFile;
     [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
     [[NSFileManager defaultManager] createFileAtPath:file contents:nil attributes:nil];
     fileWriteHandle = [NSFileHandle fileHandleForWritingAtPath:file];
@@ -385,8 +396,7 @@ static void checkStatus(OSStatus status, const char *operation){
         else {
             [inputSteam open];
         }
-    }else
-    {//需要读取后 进行转码后 才能播放
+    }else {//需要读取后 进行转码后 才能播放
         NSString *convertFile = self.convertFile;
         [[NSFileManager defaultManager] removeItemAtPath:convertFile error:nil];
         [[NSFileManager defaultManager] createFileAtPath:convertFile contents:nil attributes:nil];
@@ -465,34 +475,58 @@ static void checkStatus(OSStatus status, const char *operation){
     
     [self closeReadFileHandle];
     
-    //[self writeFile:_pcmData];
-    _pcmData = [NSMutableData new];//reset
+    //[self writeFile:self.pcmData];
+    self.pcmData = [NSMutableData new];//reset
     [self closeWriteFileHandle];
 }
 #pragma mark fileUrl 文件路径处理
 - (NSString *)file
 {
     if (!_file) {
-        NSString *file = [CacheHelper pathForCommonFile:@"abc.pcm" withType:0];
-        if (![CacheHelper checkFileExist:file]) {
-            file = [[NSBundle mainBundle] pathForResource:@"abc.pcm" ofType:nil];
-        }
+        NSString *file = [CacheHelper pathForCommonFile:[self fileName:0] withType:0];
         _file = file;
     }
     return _file;
 }
+
+- (NSString *)writeFile {
+    if (!_writeFile) {
+        NSString *file = [CacheHelper pathForCommonFile:[self fileName:1] withType:0];
+        _writeFile = file;
+    }
+    return _writeFile;
+}
+
 - (NSString *)convertFile
 {
     if (!_convertFile) {
-        NSString *file = [CacheHelper pathForCommonFile:@"abcd.pcm" withType:0];
-        if (![CacheHelper checkFileExist:file]) {
-            file = [[NSBundle mainBundle] pathForResource:@"abcd.pcm" ofType:nil];
-        }
+        NSString *file = [CacheHelper pathForCommonFile:[self fileName:2] withType:0];
         _convertFile = file;
     }
     return _convertFile;
 }
-#pragma mark 录制和播放回调
+
+-(NSString *)fileName:(NSInteger)type {
+    NSMutableString *strM = [NSMutableString stringWithFormat:@"%@",NSStringFromClass(AudioManager.class)];
+    switch (type) {
+        case 1:
+        {
+            [strM appendString:@"_write"];
+            break;
+        }
+        case 2:
+        {
+            [strM appendString:@"_convert"];
+            break;
+        }
+        default:
+            break;
+    }
+    [strM appendString:@".pcm"];
+    return strM;
+}
+
+#pragma mark 录制和播放回调 delegate
 #pragma mark Recording Callback 录制回调
 static OSStatus recordingCallback(void *inRefCon,
                                   AudioUnitRenderActionFlags *ioActionFlags,
