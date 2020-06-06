@@ -138,5 +138,9 @@ typedef void(^returnState)(NSInteger);
 #pragma mark -********************
 
 #pragma mark ----- 获取当前控制器
+//获取topLevelWindow (可能第三方UI定制window导致捕获到第三方定制的非全屏window)
++ (UIWindow *)topLevelWindow;
+//获取topLevelWindow 比较严格 (无论是否第三方UI定制Window，严格要求全屏window)
++ (UIWindow *)topLevelAllScreenWindow;
 
 @end

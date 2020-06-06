@@ -10,26 +10,26 @@
 
 @implementation NSString (TTAdd)
 
-+(BOOL)isEmptyString:(NSString *)str
-{
-    if (!str) {
-        return YES;
-    }
-    
-    if ([str isKindOfClass:[NSNull class]]) {
-        return YES;
-    }
-    
-    if (str.length == 0) {
-        return YES;
-    }
-    
-    if ([str isEqualToString:@""]) {
-        return YES;
-    }
-    
-    return NO;
-}
+//+(BOOL)isEmptyString:(NSString *)str
+//{
+//    if (!str) {
+//        return YES;
+//    }
+//    
+//    if ([str isKindOfClass:[NSNull class]]) {
+//        return YES;
+//    }
+//    
+//    if (str.length == 0) {
+//        return YES;
+//    }
+//    
+//    if ([str isEqualToString:@""]) {
+//        return YES;
+//    }
+//    
+//    return NO;
+//}
 
 //获取多语言大写首字母
 -(NSString *)firstCharactor

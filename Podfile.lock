@@ -5,11 +5,11 @@ PODS:
   - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
-  - LFLiveKit (~> 2.6)
-  - YYKit (~> 1.0.9)
+  - LFLiveKit (= 2.6)
+  - YYKit (= 1.0.9)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - LFLiveKit
     - YYKit
 
@@ -17,6 +17,6 @@ SPEC CHECKSUMS:
   LFLiveKit: 2219563721f8aa0f188effc3395a06e2d53b23f2
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 4beae7d8994472390c12abbe2781c787c6f2bd91
+PODFILE CHECKSUM: 5ed897d0b44183a621abb944e41362b69a90b372
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.8.4

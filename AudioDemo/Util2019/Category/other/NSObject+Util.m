@@ -18,7 +18,7 @@
     return [self qn_cast:any warnOnFailure:warnOnFailure filepath:NULL line:-1];
 }
 
-+ (instancetype)qn_cast:(id)any warnOnFailure:(BOOL)warnOnFailure filepath:(const char *)filepath line:(int)line {
++ (instancetype)qn_cast:(id)any warnOnFailure:(BOOL)warnOnFailure filepath:(const char * _Nullable)filepath line:(int)line {
     if (any) {
         if ([any isKindOfClass:[self class]]) {
             return any;
@@ -27,6 +27,12 @@
         }
     }
     return nil;
+}
+
+//生成唯一ID
++ (NSString *)uniqueUUID
+{
+    return [[NSUUID UUID] UUIDString];
 }
 
 @end

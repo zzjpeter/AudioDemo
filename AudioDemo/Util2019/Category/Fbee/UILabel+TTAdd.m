@@ -7,7 +7,7 @@
 //
 
 #import "UILabel+TTAdd.h"
-#import "UIView+FrameExtension.h"
+#import "YYKit.h"
 @implementation UILabel(TTAdd)
 
 +(UILabel *)makeLabel:(void (^)(TTLabelExtend *))ttExtend

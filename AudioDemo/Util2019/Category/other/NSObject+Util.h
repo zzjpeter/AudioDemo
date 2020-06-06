@@ -14,7 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (Class)qn_class;
 + (instancetype)qn_cast:(id)any warnOnFailure:(BOOL)warnOnFailure;
-+ (instancetype)qn_cast:(id)any warnOnFailure:(BOOL)warnOnFailure filepath:(const char *)filepath line:(int)line;
++ (instancetype)qn_cast:(id)any warnOnFailure:(BOOL)warnOnFailure filepath:(const char * _Nullable)filepath line:(int)line;
+
++ (NSString *)uniqueUUID;//生成唯一ID
+
 @end
 
 NS_ASSUME_NONNULL_END

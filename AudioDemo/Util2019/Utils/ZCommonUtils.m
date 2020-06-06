@@ -859,4 +859,43 @@
 //    
 //    return NO;
 //}
+
+#pragma mark 获取topLevelWindow
+//获取topLevelWindow (可能第三方UI定制window导致捕获到第三方定制的非全屏window)
++ (UIWindow *)topLevelWindow
+{
+    UIWindow *topView = [UIApplication sharedApplication].keyWindow;
+    for (UIWindow *win in [[UIApplication sharedApplication].windows  reverseObjectEnumerator])
+    {
+        if ([win isEqual: topView])
+        {
+            continue;
+        }
+        if (win.windowLevel > topView.windowLevel && win.hidden != YES)
+        {
+            topView =win;
+        }
+    }
+    return topView;
+}
+//获取topLevelWindow (无论是否第三方UI定制Window，严格要求全屏window)
++ (UIWindow *)topLevelAllScreenWindow
+{
+    UIWindow *topView = [UIApplication sharedApplication].keyWindow;
+    for (UIWindow *win in [[UIApplication sharedApplication].windows  reverseObjectEnumerator])
+    {
+        if ([win isEqual: topView])
+        {
+            continue;
+        }
+        if (win.windowLevel > topView.windowLevel
+            && win.hidden != YES
+            && CGRectEqualToRect(win.bounds, [UIScreen mainScreen].bounds))
+        {
+            topView =win;
+        }
+    }
+    return topView;
+}
+
 @end

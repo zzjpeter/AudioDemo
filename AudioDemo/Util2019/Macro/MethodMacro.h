@@ -113,4 +113,16 @@ Strong(self)
 #define IS(clz, value) ([value isKindOfClass:CLASS(clz)])
 #define IS_NOT(clz, value) (![value isKindOfClass:CLASS(clz)])
 
+#import "NSArray+Safe.h"
+
+//yykit
+#import "YYKit.h"
+
+#import "NSString+EncodeUrl.h"
+#import "AppDelegate+SafeArea.h"
+
+#import "ZSingleton.h"
+#import "CacheManager.h"
+#import "JumpManager.h"
+
 #endif /* MethodMacro_h */

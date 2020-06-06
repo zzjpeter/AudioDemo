@@ -283,7 +283,13 @@
     NSString *mailStr = [NSString stringWithFormat:@"mailto:%@",emailAddr];
     //跳转到系统邮件App发送邮件
     NSString *emailPath = [mailStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:emailPath]];
+        
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+    [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath] options:@{} completionHandler:nil];
+#elif
+    [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath]];
+#endif
+    
     
 //    //创建可变的地址字符串对象
 //    NSMutableString *mailUrl = [[NSMutableString alloc] init];

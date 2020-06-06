@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "YYKit.h"
 
 @interface NSString (EncodeUrl)
 
@@ -31,20 +32,20 @@
 /**
  Returns an NSString for base64 encoded.
  */
-- (NSString *)base64EncodedString;
+//- (NSString *)base64EncodedString;
 
 /**
  Returns an NSString from base64 encoded string.
  @param base64EncodedString The encoded string.
  */
-+ (NSString *)stringWithBase64EncodedString:(NSString *)base64EncodedString;
+//+ (NSString *)stringWithBase64EncodedString:(NSString *)base64EncodedString;
 
 #pragma mark -会对整个字符串进行编码，@":#[]@"，@"!$&'()*+,;="，特殊字符有这些都编码了
 /**
  URL encode a string in utf-8.
  @return the encoded string.
  */
-- (NSString *)stringByURLEncode;
+//- (NSString *)stringByURLEncode;
 
 #pragma mark -会对指定字符串进行编码@"%<>[\]^`{|}" 去除 @"#"
 - (NSString *)stringByURLEncodeWithAllowedCharacterSet;
@@ -53,12 +54,12 @@
  URL decode a string in utf-8.
  @return the decoded string.
  */
-- (NSString *)stringByURLDecode;
+//- (NSString *)stringByURLDecode;
 
 /**
  Escape common HTML to Entity.
  Example: "a < b" will be escape to "a&lt;b".
  */
-- (NSString *)stringByEscapingHTML;
+//- (NSString *)stringByEscapingHTML;
 
 @end

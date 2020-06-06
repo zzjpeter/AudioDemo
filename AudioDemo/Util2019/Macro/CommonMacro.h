@@ -243,8 +243,8 @@ return sharedInstance;
 /**
  测试方法调用时间
  
- @param ^block     code to profile
- @param ^complete  code time cost (ms)
+ @param block     code to profile
+ @param complete  code time cost (ms)
  */
 static inline void ProfileTime(void (^block)(void), void (^complete)(double ms)) {
     struct timeval t0, t1;
@@ -338,7 +338,7 @@ static inline bool dispatch_is_main_queuee() {
 /**
  Submits a block for asynchronous execution on a main queue and returns immediately.
  */
-static inline void dispatch_async_on_main_queuee(void (^block)()) {
+static inline void dispatch_async_on_main_queuee(void (^block)(void)) {
     if (pthread_main_np()) {
         block();
     } else {
@@ -349,7 +349,7 @@ static inline void dispatch_async_on_main_queuee(void (^block)()) {
 /**
  Submits a block for execution on a main queue and waits until the block completes.
  */
-static inline void dispatch_sync_on_main_queuee(void (^block)()) {
+static inline void dispatch_sync_on_main_queuee(void (^block)(void)) {
     if (pthread_main_np()) {
         block();
     } else {

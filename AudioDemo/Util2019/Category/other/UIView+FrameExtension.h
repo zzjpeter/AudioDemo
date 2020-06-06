@@ -9,24 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIView (FrameExtension)
-@property (nonatomic, assign) CGFloat  x;
-@property (nonatomic, assign) CGFloat  y;
-@property (nonatomic, assign) CGFloat  width;
-@property (nonatomic, assign) CGFloat  height;
-@property (nonatomic, assign, readonly) CGFloat  maxX;
-@property (nonatomic, assign, readonly) CGFloat  maxY;
 
-@property (nonatomic) CGFloat left;
-@property (nonatomic) CGFloat top;
-@property (nonatomic) CGFloat right;
-@property (nonatomic) CGFloat bottom;
-
-
-@property (nonatomic) CGFloat centerX;
-@property (nonatomic) CGFloat centerY;
-
-@property (nonatomic) CGPoint origin;
-@property (nonatomic) CGSize size;
 
 // Move via offset  移动view 通过设置偏移量offset
 - (void) moveBy: (CGPoint) delta;

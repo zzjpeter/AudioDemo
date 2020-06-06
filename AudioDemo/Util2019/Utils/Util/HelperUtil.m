@@ -149,7 +149,7 @@
 {
     
 //    NSString *pattern = @"^[A-Za-z0-9]{6,20}+$";
-    NSString *pattern = @"^([\u4e00-\u9fa5]+|([a-zA-Z]+\s?)+)$";
+    NSString *pattern = @"^([\u4e00-\u9fa5]+|([a-zA-Z]+\\s?)+)$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
     BOOL isMatch = [pred evaluateWithObject:userName];
     return isMatch;
