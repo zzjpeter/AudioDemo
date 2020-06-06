@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Fpl-EN-Hnv">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Fpl-EN-Hnv">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -83,26 +81,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yfi-rb-eun">
-                                <rect key="frame" x="53" y="379" width="136" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUPCMRecordStart"/>
-                                <connections>
-                                    <action selector="recordAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bws-uc-ROl"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Xh-4n-MlE">
-                                <rect key="frame" x="218" y="379" width="134" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUPCMRecordStop"/>
-                                <connections>
-                                    <action selector="stopAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8WP-PP-9I3"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="klq-bh-xMD">
-                                <rect key="frame" x="49" y="91" width="127" height="29"/>
+                                <rect key="frame" x="0.0" y="494" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeH264Start"/>
@@ -111,7 +91,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCI-ng-755">
-                                <rect key="frame" x="219" y="91" width="127" height="29"/>
+                                <rect key="frame" x="287" y="494" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeH264Stop"/>
@@ -120,7 +100,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sv5-HO-YWx">
-                                <rect key="frame" x="51" y="145" width="127" height="29"/>
+                                <rect key="frame" x="-2" y="564" width="127" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeH264Start"/>
@@ -129,7 +109,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ehy-wZ-cMD">
-                                <rect key="frame" x="219" y="145" width="127" height="29"/>
+                                <rect key="frame" x="287" y="562" width="127" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeH264Stop"/>
@@ -138,7 +118,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="33G-3N-qIR">
-                                <rect key="frame" x="53" y="207" width="127" height="30"/>
+                                <rect key="frame" x="-2" y="336" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeAACStart"/>
@@ -147,7 +127,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="whw-W0-8wz">
-                                <rect key="frame" x="220" y="206" width="127" height="30"/>
+                                <rect key="frame" x="287" y="336" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="EncodeAACStop"/>
@@ -156,7 +136,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZ7-Bl-bc4">
-                                <rect key="frame" x="219" y="271" width="127" height="30"/>
+                                <rect key="frame" x="287" y="397" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeAACStop"/>
@@ -165,7 +145,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mVf-pe-aS8">
-                                <rect key="frame" x="53" y="321" width="138" height="30"/>
+                                <rect key="frame" x="-8" y="433" width="138" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="系统音效播放短音乐"/>
@@ -174,7 +154,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhv-OJ-xxx">
-                                <rect key="frame" x="53" y="271" width="127" height="30"/>
+                                <rect key="frame" x="-2" y="389" width="127" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="DecodeAACStart"/>
@@ -183,7 +163,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X20-Xj-Jhd">
-                                <rect key="frame" x="53" y="433" width="138" height="30"/>
+                                <rect key="frame" x="0.0" y="109" width="138" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUPCMPlayStart"/>
@@ -192,7 +172,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ibe-cD-JJ9">
-                                <rect key="frame" x="214" y="433" width="133" height="30"/>
+                                <rect key="frame" x="281" y="109" width="133" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUPCMPlayStop"/>
@@ -201,7 +181,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERp-pC-Fjg">
-                                <rect key="frame" x="53" y="489" width="155" height="30"/>
+                                <rect key="frame" x="0.0" y="167" width="155" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUCommonRPlayStart"/>
@@ -210,7 +190,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aCG-Vu-aRB">
-                                <rect key="frame" x="232" y="489" width="153" height="30"/>
+                                <rect key="frame" x="261" y="159" width="153" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUCommonRPlayStop"/>
@@ -219,7 +199,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NQu-kg-KbB">
-                                <rect key="frame" x="49" y="537" width="176" height="30"/>
+                                <rect key="frame" x="0.0" y="220" width="176" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUExtCommonRPlayStart"/>
@@ -228,7 +208,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eSl-zW-CuG">
-                                <rect key="frame" x="55" y="585" width="125" height="30"/>
+                                <rect key="frame" x="0.0" y="276" width="125" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUGraphPlayStart"/>
@@ -237,7 +217,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TkO-CY-tLz">
-                                <rect key="frame" x="232" y="585" width="124" height="30"/>
+                                <rect key="frame" x="290" y="276" width="124" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUGraphPlayStop"/>
@@ -246,7 +226,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2vp-NL-dvT">
-                                <rect key="frame" x="232" y="537" width="180" height="30"/>
+                                <rect key="frame" x="234" y="220" width="180" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUExtCommonRPlayStop"/>
@@ -255,7 +235,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aWR-Lf-SoH">
-                                <rect key="frame" x="232" y="632" width="91" height="30"/>
+                                <rect key="frame" x="323" y="638" width="91" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUAssetStop"/>
@@ -264,7 +244,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfP-SR-kbh">
-                                <rect key="frame" x="55" y="632" width="90" height="30"/>
+                                <rect key="frame" x="0.0" y="632" width="90" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AVAssetStart"/>
@@ -273,7 +253,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDf-hW-UoJ">
-                                <rect key="frame" x="62" y="684" width="77" height="30"/>
+                                <rect key="frame" x="0.0" y="700" width="77" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="进入直播页"/>
@@ -282,7 +262,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d1f-gb-YsF">
-                                <rect key="frame" x="62" y="738" width="184" height="30"/>
+                                <rect key="frame" x="0.0" y="776" width="184" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="进入音频转码和简单播放页"/>

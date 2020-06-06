@@ -33,60 +33,25 @@
     // Do any additional setup after loading the view.
 }
 
-- (IBAction)encodeH264Start:(id)sender {
-    [self.view addSubview:self.playView];
-    [self.view sendSubviewToBack:self.playView];
-    [EncodeH264Manager sharedmanager].playView = self.playView;
-    [[EncodeH264Manager sharedmanager] start];
-}
-- (IBAction)encodeH264Stop:(id)sender {
-    [[EncodeH264Manager sharedmanager] stop];
-}
-- (IBAction)decodeH264Start:(id)sender {
-    [self.view addSubview:self.playOpenGLView];
-    [self.view sendSubviewToBack:self.playOpenGLView];
-    [DecoderH246Manager sharedmanager].playView = self.playOpenGLView;
-    [[DecoderH246Manager sharedmanager] start];
-}
-- (IBAction)decodeH264Stop:(id)sender {
-    [[DecoderH246Manager sharedmanager] stop];
-}
-
-- (IBAction)encodeAACStart:(id)sender {
-    [[EncodeAACManager sharedmanager] start];
-}
-- (IBAction)encodeAACStop:(id)sender {
-    [[EncodeAACManager sharedmanager] stop];
-}
-- (IBAction)decodeAACStart:(id)sender {
-    [[DecodeAACManager sharedmanager] start];
-}
-- (IBAction)decodeAACStop:(id)sender {
-    [[DecodeAACManager sharedmanager] stop];
-}
-
-- (IBAction)recordAction:(id)sender {
-    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
-}
-- (IBAction)stopAction:(id)sender {
-    [[AudioManager sharedmanager] stop];
-}
-- (IBAction)systemSoundPlay:(id)sender {
-     [[DecodeAACManager sharedmanager] play];
-}
-
 - (IBAction)AUPCMPlayStart:(id)sender {
     //注意：测试过其他播放其他音频格式的音频文件（如.aac,.m4a,.mp3 可以转码成功播放，但是播放效果完全不对，不知道是不是什么参数设置不对）
     NSString *file = AudioManager.sharedmanager.writeFile;
-    //file = [NSBundle.mainBundle pathForResource:@"AudioManager.pcm" ofType:nil];
+    file = [NSBundle.mainBundle pathForResource:@"AudioManager.pcm" ofType:nil];
     AudioManager.sharedmanager.file = file;
     if (![CacheHelper checkFileExist:AudioManager.sharedmanager.writeFile]) {
         NSLog(@"开始录制");
         [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryRecord];
         return;
     }
-    NSLog(@"开始播放");
-    [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    
+    BOOL onlyPlayback = YES;
+    if (onlyPlayback) {
+        NSLog(@"开始播放");
+        [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    }else {
+        NSLog(@"测试播放伴奏+耳返");
+        [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayAndRecord];
+    }
 }
 
 - (IBAction)AUPCMPlayStop:(id)sender {
@@ -119,6 +84,42 @@
     [[AudioAUGraphManager sharedmanager] stop];
 }
 
+
+- (IBAction)encodeH264Start:(id)sender {
+    [self.view addSubview:self.playView];
+    [self.view sendSubviewToBack:self.playView];
+    [EncodeH264Manager sharedmanager].playView = self.playView;
+    [[EncodeH264Manager sharedmanager] start];
+}
+- (IBAction)encodeH264Stop:(id)sender {
+    [[EncodeH264Manager sharedmanager] stop];
+}
+- (IBAction)decodeH264Start:(id)sender {
+    [self.view addSubview:self.playOpenGLView];
+    [self.view sendSubviewToBack:self.playOpenGLView];
+    [DecoderH246Manager sharedmanager].playView = self.playOpenGLView;
+    [[DecoderH246Manager sharedmanager] start];
+}
+- (IBAction)decodeH264Stop:(id)sender {
+    [[DecoderH246Manager sharedmanager] stop];
+}
+
+- (IBAction)encodeAACStart:(id)sender {
+    [[EncodeAACManager sharedmanager] start];
+}
+- (IBAction)encodeAACStop:(id)sender {
+    [[EncodeAACManager sharedmanager] stop];
+}
+- (IBAction)decodeAACStart:(id)sender {
+    [[DecodeAACManager sharedmanager] start];
+}
+- (IBAction)decodeAACStop:(id)sender {
+    [[DecodeAACManager sharedmanager] stop];
+}
+
+- (IBAction)systemSoundPlay:(id)sender {
+     [[DecodeAACManager sharedmanager] play];
+}
 
 - (IBAction)AVAssetStart:(id)sender {
     [self.view addSubview:self.mOpenGLView];

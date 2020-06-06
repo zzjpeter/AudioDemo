@@ -16,7 +16,7 @@
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 #define NO_MORE_DATA (-12306)
 
-const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4
+const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4 = (2^4)^4
 
 @interface AudioManager ()
 {
@@ -166,7 +166,7 @@ SingleImplementation(manager)
     //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:audioSessionCategory error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
-    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.022 error:&error];
+    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.1 error:&error];//默认值0.022 但是0.022太小会导致对于播放需要转码的音频格式数据时处理回调不够一帧数据的读取时间，导致播放效果异常。我也是猜的哈哈！！！
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
         return NO;
