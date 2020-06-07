@@ -572,8 +572,6 @@
 				47E941FC227E7D9200D86EE1 /* AppDelegate.m */,
 				47E94218227EC93C00D86EE1 /* Audio */,
 				F1585E28248B741100AB04EA /* Video */,
-				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
-				4729DEB9230EB1A600F7427C /* AudioPlayer */,
 				47E941FE227E7D9200D86EE1 /* ViewController.h */,
 				47E941FF227E7D9200D86EE1 /* ViewController.m */,
 				47E94201227E7D9200D86EE1 /* Main.storyboard */,
@@ -594,6 +592,8 @@
 				47612C38229BEE9C0006854D /* AUGraphPcm */,
 				47FDA9C122962DC30020A5F0 /* EncodeAAC */,
 				47B26A292296499100704B90 /* DecodeAAC */,
+				4729DEB9230EB1A600F7427C /* AudioPlayer */,
+				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
