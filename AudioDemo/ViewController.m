@@ -8,11 +8,11 @@
 
 #import "ViewController.h"
 #import "AudioManager.h"
+#import "AudioCommonManager.h"
 #import "EncodeH264Manager.h"
 #import "DecoderH246Manager.h"
 #import "EncodeAACManager.h"
 #import "DecodeAACManager.h"
-#import "AudioAUGraphManager.h"
 #import "AVAssetManager.h"
 
 @interface ViewController ()
@@ -61,12 +61,13 @@
 
 
 - (IBAction)AUGraphStart:(id)sender {
-    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.pcm" ofType:nil];
-    [AudioAUGraphManager sharedmanager].file = file;
-    [[AudioAUGraphManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"AudioManager.pcm" ofType:nil];
+    AudioCommonManager.sharedmanager.audioCommonManagerType = AudioCommonManagerAUGraphType;
+    AudioCommonManager.sharedmanager.file = file;
+    [AudioCommonManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayAndRecord];//必须有录制类型否则崩溃【因为有mixUnit混音，没有录制就没有混音的源，会导致数据处理异常崩溃】
 }
 - (IBAction)AUGraphStop:(id)sender {
-    [[AudioAUGraphManager sharedmanager] stop];
+    [AudioCommonManager.sharedmanager stop];
 }
 
 

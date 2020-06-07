@@ -173,8 +173,15 @@ SingleImplementation(manager)
     //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:audioSessionCategory error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
-    //默认值0.022,但是0.022对于自建的转码器（似乎不太友善会导致播放效果异常。），但对于ExtendedAudioFile内置的转码器却是ok的，所以个人认为是某些参数设置不对导致的。
-    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.1 error:&error];
+    /*默认值0.022
+     1.但是0.022对于自建的转码器（似乎不太友善会导致播放效果异常。），但对于ExtendedAudioFile内置的转码器却是ok的，所以个人认为是某些参数设置不对导致的。
+     2.但是0.022对于AUGraph非常友好，如果设置为0.1,会报kAudioUnitErr_TooManyFramesToProcess错误（也即回调太慢导致数据积累过多，会导致音频播放异常）
+     */
+    CGFloat duration = 0.022;
+    if (self.isReadNeedConvert) {
+        duration = 0.1;
+    }
+    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:duration error:&error];
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
         return NO;
@@ -672,7 +679,7 @@ static OSStatus playbackCallback(void *inRefCon,
     return noErr;
 }
 
-OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
+static OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberDataPackets, AudioBufferList *ioData, AudioStreamPacketDescription **outDataPacketDescription, void *inUserData)
 {
     AudioManager *self = (__bridge AudioManager *)(inUserData);
     
