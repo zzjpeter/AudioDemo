@@ -180,58 +180,13 @@
                                     <action selector="AUPCMPlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pZz-AY-6Yp"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERp-pC-Fjg">
-                                <rect key="frame" x="0.0" y="167" width="155" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUCommonRPlayStart"/>
-                                <connections>
-                                    <action selector="AUCommonResourcePlayStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DlG-Qx-7Zr"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aCG-Vu-aRB">
-                                <rect key="frame" x="261" y="159" width="153" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUCommonRPlayStop"/>
-                                <connections>
-                                    <action selector="AUCommonResourcePlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JQc-FR-oIk"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NQu-kg-KbB">
-                                <rect key="frame" x="0.0" y="220" width="176" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUExtCommonRPlayStart"/>
-                                <connections>
-                                    <action selector="AUExtCommonResourcePlayStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A8N-iY-iqZ"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eSl-zW-CuG">
-                                <rect key="frame" x="0.0" y="276" width="125" height="30"/>
+                                <rect key="frame" x="-1" y="188" width="125" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="AUGraphPlayStart"/>
                                 <connections>
                                     <action selector="AUGraphStart:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bvp-qg-YWg"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TkO-CY-tLz">
-                                <rect key="frame" x="290" y="276" width="124" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUGraphPlayStop"/>
-                                <connections>
-                                    <action selector="AUGraphStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6vU-Cm-lbJ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2vp-NL-dvT">
-                                <rect key="frame" x="234" y="220" width="180" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="AUExtCommonRPlayStop"/>
-                                <connections>
-                                    <action selector="AUExtCommonResourcePlayStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bVA-dj-2S8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aWR-Lf-SoH">
@@ -268,6 +223,15 @@
                                 <state key="normal" title="进入音频转码和简单播放页"/>
                                 <connections>
                                     <segue destination="xxV-x5-ZQp" kind="show" id="LuI-xb-sW5"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TkO-CY-tLz">
+                                <rect key="frame" x="285" y="176" width="124" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.6588235294" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="AUGraphPlayStop"/>
+                                <connections>
+                                    <action selector="AUGraphStop:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6vU-Cm-lbJ"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -20,7 +20,6 @@
 		47357DCB2295502200A9010D /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 47357DC92295502200A9010D /* Shader.fsh */; };
 		47357DCE2295503000A9010D /* LYOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DCD2295503000A9010D /* LYOpenGLView.m */; };
 		47357DD0229552B800A9010D /* abc.h264 in Resources */ = {isa = PBXBuildFile; fileRef = 47357DCF229552B800A9010D /* abc.h264 */; };
-		47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47612C36229BC8CF0006854D /* AudioExtManager.m */; };
 		47612C3B229BEF060006854D /* AudioAUGraphManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47612C39229BEF060006854D /* AudioAUGraphManager.m */; };
 		4778AF4622968F5D00CD72BC /* AudioManager.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 4778AF4522968F5D00CD72BC /* AudioManager.pcm */; };
 		47B26A2C229649C800704B90 /* DecodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B26A2B229649C800704B90 /* DecodeAACManager.m */; };
@@ -37,7 +36,6 @@
 		47EB4D1A2297EC36000801CE /* test.mov in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D132297EC36000801CE /* test.mov */; };
 		47EB4D1B2297EC36000801CE /* ab.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D142297EC36000801CE /* ab.m4a */; };
 		47EB4D1C2297EC36000801CE /* ab.aac in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D152297EC36000801CE /* ab.aac */; };
-		47EB4D1D2297EC36000801CE /* test.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D162297EC36000801CE /* test.pcm */; };
 		47EB4D1E2297EC36000801CE /* ab.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D172297EC36000801CE /* ab.pcm */; };
 		47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D182297EC36000801CE /* ab.mp3 */; };
 		47EB4D202297EC36000801CE /* ab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 47EB4D192297EC36000801CE /* ab.mp4 */; };
@@ -108,6 +106,7 @@
 		F1585EBB248B755400AB04EA /* ZCommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1585E8A248B755400AB04EA /* ZCommonUtils.m */; };
 		F1585EBC248B755400AB04EA /* JumpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1585E8D248B755400AB04EA /* JumpManager.m */; };
 		F1585EBD248B755400AB04EA /* SaveUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1585E95248B755400AB04EA /* SaveUtil.m */; };
+		F1C707B4248C88F100E71410 /* test.pcm in Resources */ = {isa = PBXBuildFile; fileRef = F1C707B3248C88F100E71410 /* test.pcm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,8 +133,6 @@
 		47357DCC2295503000A9010D /* LYOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYOpenGLView.h; sourceTree = "<group>"; };
 		47357DCD2295503000A9010D /* LYOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYOpenGLView.m; sourceTree = "<group>"; };
 		47357DCF229552B800A9010D /* abc.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = abc.h264; sourceTree = "<group>"; };
-		47612C35229BC8CF0006854D /* AudioExtManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioExtManager.h; sourceTree = "<group>"; };
-		47612C36229BC8CF0006854D /* AudioExtManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioExtManager.m; sourceTree = "<group>"; };
 		47612C39229BEF060006854D /* AudioAUGraphManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioAUGraphManager.m; sourceTree = "<group>"; };
 		47612C3A229BEF060006854D /* AudioAUGraphManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioAUGraphManager.h; sourceTree = "<group>"; };
 		4778AF4522968F5D00CD72BC /* AudioManager.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = AudioManager.pcm; sourceTree = "<group>"; };
@@ -159,7 +156,6 @@
 		47EB4D132297EC36000801CE /* test.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test.mov; sourceTree = "<group>"; };
 		47EB4D142297EC36000801CE /* ab.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.m4a; sourceTree = "<group>"; };
 		47EB4D152297EC36000801CE /* ab.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.aac; sourceTree = "<group>"; };
-		47EB4D162297EC36000801CE /* test.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.pcm; sourceTree = "<group>"; };
 		47EB4D172297EC36000801CE /* ab.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.pcm; sourceTree = "<group>"; };
 		47EB4D182297EC36000801CE /* ab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ab.mp3; sourceTree = "<group>"; };
 		47EB4D192297EC36000801CE /* ab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ab.mp4; sourceTree = "<group>"; };
@@ -403,6 +399,7 @@
 		F1585E92248B755400AB04EA /* ColorMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorMacro.h; sourceTree = "<group>"; };
 		F1585E94248B755400AB04EA /* SaveUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveUtil.h; sourceTree = "<group>"; };
 		F1585E95248B755400AB04EA /* SaveUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveUtil.m; sourceTree = "<group>"; };
+		F1C707B3248C88F100E71410 /* test.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.pcm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,15 +509,6 @@
 			path = draw;
 			sourceTree = "<group>";
 		};
-		47612C34229BC8620006854D /* AudioUnitExtPcm */ = {
-			isa = PBXGroup;
-			children = (
-				47612C35229BC8CF0006854D /* AudioExtManager.h */,
-				47612C36229BC8CF0006854D /* AudioExtManager.m */,
-			);
-			path = AudioUnitExtPcm;
-			sourceTree = "<group>";
-		};
 		47612C38229BEE9C0006854D /* AUGraphPcm */ = {
 			isa = PBXGroup;
 			children = (
@@ -599,7 +587,6 @@
 				47EB4D122297EC36000801CE /* CommonResource */,
 				4778AF4422968F4C00CD72BC /* AudioUnitPcm */,
 				47612C38229BEE9C0006854D /* AUGraphPcm */,
-				47612C34229BC8620006854D /* AudioUnitExtPcm */,
 				47FDA9C122962DC30020A5F0 /* EncodeAAC */,
 				47B26A292296499100704B90 /* DecodeAAC */,
 			);
@@ -609,10 +596,10 @@
 		47EB4D122297EC36000801CE /* CommonResource */ = {
 			isa = PBXGroup;
 			children = (
+				F1C707B3248C88F100E71410 /* test.pcm */,
 				47EB4D132297EC36000801CE /* test.mov */,
 				47EB4D142297EC36000801CE /* ab.m4a */,
 				47EB4D152297EC36000801CE /* ab.aac */,
-				47EB4D162297EC36000801CE /* test.pcm */,
 				47EB4D172297EC36000801CE /* ab.pcm */,
 				47EB4D182297EC36000801CE /* ab.mp3 */,
 				47EB4D192297EC36000801CE /* ab.mp4 */,
@@ -1331,12 +1318,12 @@
 				F109CC42248BF15C00BB5641 /* AudioManager.aac in Resources */,
 				47EB4D1C2297EC36000801CE /* ab.aac in Resources */,
 				47357DD0229552B800A9010D /* abc.h264 in Resources */,
-				47EB4D1D2297EC36000801CE /* test.pcm in Resources */,
 				47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */,
 				47B26A2E229649D000704B90 /* abc.aac in Resources */,
 				47EB4D1A2297EC36000801CE /* test.mov in Resources */,
 				47EB4D202297EC36000801CE /* ab.mp4 in Resources */,
 				47EB4D1F2297EC36000801CE /* ab.mp3 in Resources */,
+				F1C707B4248C88F100E71410 /* test.pcm in Resources */,
 				F1585EB8248B755400AB04EA /* README.md in Resources */,
 				47E3EAF22329F145002A2C9A /* 忘不了曾经的你.mp3 in Resources */,
 				47F53B3422A0C6BD00F1017E /* Shaderr.fsh in Resources */,
@@ -1424,7 +1411,6 @@
 				47B26A2C229649C800704B90 /* DecodeAACManager.m in Sources */,
 				F1585EB2248B755400AB04EA /* UIButton+EventInterval.m in Sources */,
 				F1585E99248B755400AB04EA /* CacheManager.m in Sources */,
-				47612C37229BC8CF0006854D /* AudioExtManager.m in Sources */,
 				47F319FE22A608C8008519D3 /* AVAssetManager.m in Sources */,
 				47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */,
 				F1585E97248B755400AB04EA /* FileModel.m in Sources */,

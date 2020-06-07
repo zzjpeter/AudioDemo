@@ -16,7 +16,7 @@
 #define kInputBus 1 //代表Element1  input数据  （Element0：数据 输入设备（麦克风）到 应用（application））【左边输入域 右边输出域】 （1:input)
 #define NO_MORE_DATA (-12306)
 
-const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4 = (2^4)^4
+static const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4 = (2^4)^4
 
 @interface AudioManager ()
 {
@@ -35,6 +35,11 @@ const uint32_t CONST_BUFFER_SIZES = 0x10000;//65536 = 16^4 = (2^4)^4
     UInt64 packetNumsInBuffer; // buffer中最多的buffer数量
     Byte *convertBuffer;
     AudioConverterRef audioConverter;
+    
+    //auido decoder 通过 ExtAudioFileRef实现
+    ExtAudioFileRef exAudioFile;
+    SInt64 readedFrame; // 已读的frame数量
+    UInt64 totalFrame; // 总的Frame数量
 }
 @property (nonatomic,assign) AudioUnit audioUnit;//AudioComponentInstanceNew 中初始化
 @property (nonatomic,assign) AudioBufferList *bufferList;//设置录制缓冲区大小
@@ -68,7 +73,7 @@ SingleImplementation(manager)
 - (void)setupAudioUnit{
     
     status = noErr;
-
+    
     BOOL isPlay = NO;//是否播放
     AVAudioSessionCategory audioSessionCategory = self.audioSessionCategory;//类型本质是字符串
     
@@ -94,7 +99,9 @@ SingleImplementation(manager)
     NSLog(@"file:%@",self.file);
     NSLog(@"writeFile:%@",self.writeFile);
     NSLog(@"ConvertFile:%@",self.convertFile);
-        
+    
+    [self printType];
+    
     [self setupAudioUnitBase];
 }
 
@@ -139,7 +146,7 @@ SingleImplementation(manager)
     
     //7.处理数据缓冲区
     [self handleBufferList];
-
+    
     //8.通过设置输入输出格式创建音频转码器
     [self createAudioConverter:audioInputFormat audioOutputFormat:audioOutputFormat];
     
@@ -166,7 +173,8 @@ SingleImplementation(manager)
     //1、设置AVAudioSession 设置其功能(录制、回调、或者录制和回调)
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:audioSessionCategory error:&error];//AVAudioSessionCategory 根据不同的值，来设置走不同的回调1.Record 只走录制回调 2.playback 只走播放回调 3.playAndRecord 录制和播放回调同时都走。
-    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.1 error:&error];//默认值0.022 但是0.022太小会导致对于播放需要转码的音频格式数据时处理回调不够一帧数据的读取时间，导致播放效果异常。我也是猜的哈哈！！！
+    //默认值0.022,但是0.022对于自建的转码器（似乎不太友善会导致播放效果异常。），但对于ExtendedAudioFile内置的转码器却是ok的，所以个人认为是某些参数设置不对导致的。
+    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.1 error:&error];
     if (error) {
         NSLog(@"audiosession error is %@",error.localizedDescription);
         return NO;
@@ -224,7 +232,27 @@ SingleImplementation(manager)
 #pragma mark 4.初始化音频文件数据的输入格式（一般是解码获取或者指定）
 - (void)initOrGetAudioInputFormat
 {
+    //该方法里面的设置对非pcm音频文件有效，对于pcm音频文件根本不需要该设置【因为获取audioInputFormat是为了创建音频格式转码器的】
     NSURL *url = [NSURL URLWithString:self.file];
+    
+    if (self.isEnableExtendedService) {
+        
+        // Extend Audio File
+        status = ExtAudioFileOpenURL((__bridge CFURLRef)url, &exAudioFile);
+        checkStatus(status, "ExtAudioFileOpenURL");
+        
+        UInt32 size = sizeof(AudioStreamBasicDescription);
+        status = ExtAudioFileGetProperty(exAudioFile, kExtAudioFileProperty_FileDataFormat, &size, &audioInputFormat);// 读取文件格式
+        checkStatus(status, "ExtAudioFileGetProperty audioInputFormat");
+        
+        [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
+        if (audioInputFormat.mFormatID) {
+            self.isReadNeedConvert = YES;
+            NSLog(@"非pcm格式的音频数据，需要音频转码（转码通过ExtendedAudioFile内置的转码器实现）");
+        }
+        
+        return;
+    }
     
     status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
     checkStatus(status,"AudioFileOpenURL");
@@ -252,7 +280,7 @@ SingleImplementation(manager)
     [self printAudioStreamBasicDescription:audioInputFormat isOutput:NO];
     if (audioInputFormat.mFormatID) {
         self.isReadNeedConvert = YES;
-        NSLog(@"非pcm格式的音频数据，需要音频转码");
+        NSLog(@"非pcm格式的音频数据，需要音频转码（转码通过创建的AudioConverterRef转码器实现）");
     }
 }
 
@@ -357,6 +385,24 @@ SingleImplementation(manager)
 #pragma mark 8.通过设置输入输出格式创建音频转码器
 - (void)createAudioConverter:(AudioStreamBasicDescription)audioInputFormat audioOutputFormat:(AudioStreamBasicDescription)audioOutputFormat
 {
+    if (self.isEnableExtendedService) {
+        
+        uint32_t size = sizeof(AudioStreamBasicDescription);
+        status = ExtAudioFileSetProperty(exAudioFile, kExtAudioFileProperty_ClientDataFormat, size, &audioOutputFormat);
+        checkStatus(status, "ExtAudioFileSetProperty outputFormat");
+        
+        // 初始化不能太前，如果未设置好输入输出格式，获取的总frame数不准确
+        size = sizeof(totalFrame);
+        status = ExtAudioFileGetProperty(exAudioFile,
+                                         kExtAudioFileProperty_FileLengthFrames,
+                                         &size,
+                                         &totalFrame);
+        checkStatus(status, "ExtAudioFileGetProperty totalFrame");
+        readedFrame = 0;
+        
+        return;
+    }
+    
     audioConverter = NULL;
     convertBuffer = malloc(CONST_BUFFER_SIZES);
     OSStatus status = AudioConverterNew(&audioInputFormat, &audioOutputFormat, &audioConverter);
@@ -436,7 +482,7 @@ static void checkStatus(OSStatus status, const char *operation){
     [self closeBufferList];
     
     [self finished];//销毁
-
+    
     [self onStop];
 }
 //1.释放数据缓冲区
@@ -468,7 +514,7 @@ static void checkStatus(OSStatus status, const char *operation){
 }
 //3.结束文件处理
 - (void)onStop{
-
+    
     if ([self.delegate respondsToSelector:@selector(onPlayToEnd:)]) {
         [self.delegate onPlayToEnd:self];
     }
@@ -585,17 +631,36 @@ static OSStatus playbackCallback(void *inRefCon,
     {
         //2.读取音频数据转码后播放
         AudioBufferList *bufferList = self.playBufferList;
-        OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, bufferList, NULL);
-        if (status) {
-            NSLog(@"转换格式失败:%ld", (long)status);
+        
+        if (self.isEnableExtendedService) {
+            
+            bufferList->mBuffers[0].mDataByteSize = CONST_BUFFER_SIZES;
+            OSStatus status = ExtAudioFileRead(self->exAudioFile, &inNumberFrames, bufferList);
+            if (status) {
+                NSLog(@"转换格式失败:%ld", (long)status);
+            }
+            
+            if (self->audioOutputFormat.mBytesPerFrame != 0) {
+                self->readedFrame += bufferList->mBuffers[0].mDataByteSize / self->audioOutputFormat.mBytesPerFrame;//Bytes per Frame = 2，所以是每2bytes一帧
+            }
+            
+        }else {
+            
+            OSStatus status = AudioConverterFillComplexBuffer(self->audioConverter, lyInInputDataProc, inRefCon, &inNumberFrames, bufferList, NULL);
+            if (status) {
+                NSLog(@"转换格式失败:%ld", (long)status);
+            }
+            
+            
         }
+        
         memcpy(ioData->mBuffers[0].mData, bufferList->mBuffers[0].mData, bufferList->mBuffers[0].mDataByteSize);
         ioData->mBuffers[0].mDataByteSize = bufferList->mBuffers[0].mDataByteSize;
         
         NSData *aPcmData = [NSData dataWithBytes:bufferList->mBuffers[0].mData length:bufferList->mBuffers[0].mDataByteSize];
         [self writeConvertData:aPcmData];//2.直接追加到fileHandle指定的文件中
     }
-
+    
     NSLog(@"playbackCallback:size:%ld",(long)ioData->mBuffers[0].mDataByteSize);
     
     if (ioData->mBuffers[0].mDataByteSize <= 0) {
@@ -658,9 +723,9 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
     bcopy (&mFormatID, formatID, 4);
     formatID[4] = '\0';
     if (isOutput) {
-      printf("流输出格式\n");
+        printf("流输出格式\n");
     }else{
-      printf("流输入格式\n");
+        printf("流输入格式\n");
     }
     printf("Sample Rate:         %10.0f\n",  asbd.mSampleRate);
     printf("Format ID:           %10s\n",    formatID);
@@ -670,12 +735,28 @@ OSStatus lyInInputDataProc(AudioConverterRef inAudioConverter, UInt32 *ioNumberD
     printf("Bits per Channel:    %10d\n",    (unsigned int)asbd.mBitsPerChannel);
     printf("Bytes per Frame:     %10d\n",    (unsigned int)asbd.mBytesPerFrame);
     printf("Bytes per Packet:    %10d\n",    (unsigned int)asbd.mBytesPerPacket);
-
+    
     printf("\n");
 }
+
+- (void)printType {
+    NSString *type = @"audioUnit";
+    if(self.isEnableExtendedService) {
+        type = @"ExtendedAudioFile";
+    }
+    NSLog(@"音频录制播放功能通过%@实现",type);
+}
+
 #pragma mark getCurrentTime
 - (double)getCurrentTime {
+    
+    if (self.isEnableExtendedService) {
+        Float64 timeInterval = (readedFrame * 1.0) / totalFrame;
+        return timeInterval;
+    }
+    
     Float64 timeInterval = (readedPacket * 1.0) / packetNums;
     return timeInterval;
+    
 }
 @end

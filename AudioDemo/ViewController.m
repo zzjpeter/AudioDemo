@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "AudioManager.h"
-#import "AudioExtManager.h"
 #import "EncodeH264Manager.h"
 #import "DecoderH246Manager.h"
 #import "EncodeAACManager.h"
@@ -34,9 +33,11 @@
 }
 
 - (IBAction)AUPCMPlayStart:(id)sender {
-    //注意：测试过其他播放其他音频格式的音频文件（如.aac,.m4a,.mp3 可以转码成功播放，但是播放效果完全不对，不知道是不是什么参数设置不对）
+        
+    AudioManager.sharedmanager.isEnableExtendedService = NO;
+    
     NSString *file = AudioManager.sharedmanager.writeFile;
-    file = [NSBundle.mainBundle pathForResource:@"AudioManager.pcm" ofType:nil];
+    file = [NSBundle.mainBundle pathForResource:@"AudioManager.aac" ofType:nil];
     AudioManager.sharedmanager.file = file;
     if (![CacheHelper checkFileExist:AudioManager.sharedmanager.writeFile]) {
         NSLog(@"开始录制");
@@ -49,7 +50,7 @@
         NSLog(@"开始播放");
         [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
     }else {
-        NSLog(@"测试播放伴奏+耳返");
+        NSLog(@"测试播放+录制");
         [AudioManager.sharedmanager startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayAndRecord];
     }
 }
@@ -58,23 +59,7 @@
     [[AudioManager sharedmanager] stop];
 }
 
-- (IBAction)AUCommonResourcePlayStart:(id)sender {
-    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];//abc.pcm ab.mp4
-    [AudioManager sharedmanager].file = file;
-    [[AudioManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
-}
-- (IBAction)AUCommonResourcePlayStop:(id)sender {
-    [[AudioManager sharedmanager] stop];
-}
 
-- (IBAction)AUExtCommonResourcePlayStart:(id)sender {
-    NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.mp4" ofType:nil];//abc.pcm ab.mp4 (abcd.pcm转换后存储的原始音频数据)
-    [AudioExtManager sharedmanager].file = file;
-    [[AudioExtManager sharedmanager] startWithAVAudioSessionCategory:AVAudioSessionCategoryPlayback];
-}
-- (IBAction)AUExtCommonResourcePlayStop:(id)sender {
-    [[AudioExtManager sharedmanager] stop];
-}
 - (IBAction)AUGraphStart:(id)sender {
     NSString *file = [[NSBundle mainBundle] pathForResource:@"ab.pcm" ofType:nil];
     [AudioAUGraphManager sharedmanager].file = file;
