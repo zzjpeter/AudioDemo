@@ -111,11 +111,11 @@ SingleInterface(manager)
 
 @property (nonatomic,copy)NSString *file;//读取文件的路径
 @property (nonatomic,copy)NSString *writeFile;//写入文件的路径
+@property (nonatomic,copy)NSString *convertFile;//读取的音频文件数据 转换格式后 写入的路径 自定义的。
 
 //音频格式转换相关
 @property (nonatomic,assign)BOOL isReadNeedConvert;//音频播放是否需要格式转换（注意：audio unit 默认是只支持pcm数据音频文件，需要播放其他格式数据文件如.mp3的就需要 转码数据格式convert 到pcm）
 @property (nonatomic, assign) BOOL isEnableExtendedService;//Extended Audio File Services（Extended Audio File Services是high-level的API，提供音频文件的读/写，是Audio File Services 和 Audio Converter Services 的结合，在AudioFile和AudioConvert的基础上提供统一的接口进行读写操作。）
-@property (nonatomic,copy)NSString *convertFile;//读取的音频文件数据 转换格式后 写入的路径 自定义的。
 
 //录制和播放 通过audioSessionCategory 参数设置
 - (void)startWithAVAudioSessionCategory:(AVAudioSessionCategory)audioSessionCategory;

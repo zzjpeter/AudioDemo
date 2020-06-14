@@ -124,9 +124,9 @@
                                   color:urlColor
                         backgroundColor:[UIColor whiteColor]
                               tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect){
-                                  NSLog(@"这里是点击事件");
-                                  !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
-                              }];
+                NSLog(@"这里是点击事件");
+                !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
+            }];
         }
         else
         {
@@ -151,25 +151,25 @@
     text.font = font;
     NSRange range = NSMakeRange(0, text.length);
     text.color =textColor;
-//    // 设置颜色
-//    [text addAttribute:NSForegroundColorAttributeName value:FBEE_COLOR_INFO range:range];
-
+    //    // 设置颜色
+    //    [text addAttribute:NSForegroundColorAttributeName value:FBEE_COLOR_INFO range:range];
+    
     //枚举通过颜色查找进行修改
     [text enumerateAttributesInRange:range
                              options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired
                           usingBlock:^(NSDictionary *dictionary, NSRange range, BOOL *stop){
-                              //FbeeLog(@"dictionary:%@",dictionary);
-                              UIColor *foregroundColor = [dictionary objectForKey:NSForegroundColorAttributeName];
-                              const CGFloat *components = CGColorGetComponents(foregroundColor.CGColor);
-                              //FbeeLog(@"Red: %f", components[0]);
-                              //FbeeLog(@"Green: %f", components[1]);
-                              //FbeeLog(@"Blue: %f", components[2]);
-                              if (components[0] == 0
-                                  &&components[1] == 0
-                                  &&components[1] == 0) {
-                                  [text addAttribute:NSForegroundColorAttributeName value:textColor range:range];
-                              }
-                          }];
+        //FbeeLog(@"dictionary:%@",dictionary);
+        UIColor *foregroundColor = [dictionary objectForKey:NSForegroundColorAttributeName];
+        const CGFloat *components = CGColorGetComponents(foregroundColor.CGColor);
+        //FbeeLog(@"Red: %f", components[0]);
+        //FbeeLog(@"Green: %f", components[1]);
+        //FbeeLog(@"Blue: %f", components[2]);
+        if (components[0] == 0
+            &&components[1] == 0
+            &&components[1] == 0) {
+            [text addAttribute:NSForegroundColorAttributeName value:textColor range:range];
+        }
+    }];
     
     //注意！！！
     string = text.string;//string值 发生了改变
@@ -186,12 +186,12 @@
     for (NSTextCheckingResult *match in arrayOfAllMatches) {
         if (self.labelType != UNCLICK_LABEL) {
             [text setTextHighlightRange:match.range//设置点击的位置
-                                     color:urlColor
-                           backgroundColor:[UIColor whiteColor]
+                                  color:urlColor
+                        backgroundColor:[UIColor whiteColor]
                               tapAction:^(UIView *containerView, NSAttributedString *text, NSRange range, CGRect rect){
-                                  NSLog(@"这里是点击事件");
-                                  !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
-                              }];
+                NSLog(@"这里是点击事件");
+                !urlBlock ? : urlBlock([NSURL URLWithString:text.string]);
+            }];
         }
         else
         {
@@ -283,32 +283,31 @@
     NSString *mailStr = [NSString stringWithFormat:@"mailto:%@",emailAddr];
     //跳转到系统邮件App发送邮件
     NSString *emailPath = [mailStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-        
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-    [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath] options:@{} completionHandler:nil];
-#elif
-    [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath]];
-#endif
     
+    if (@available(iOS 10, *)) {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath] options:@{} completionHandler:nil];
+    } else {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:emailPath]];
+    }
     
-//    //创建可变的地址字符串对象
-//    NSMutableString *mailUrl = [[NSMutableString alloc] init];
-//    //添加收件人,如有多个收件人，可以使用componentsJoinedByString方法连接，连接符为","
-//    NSString *recipients = @"sparkle_ds@163.com";
-//    [mailUrl appendFormat:@"mailto:%@?", recipients];
-//    //添加抄送人
-//    NSString *ccRecipients = @"1622849369@qq.com";
-//    [mailUrl appendFormat:@"&cc=%@", ccRecipients];
-//    //添加密送人
-//    NSString *bccRecipients = @"15690725786@163.com";
-//    [mailUrl appendFormat:@"&bcc=%@", bccRecipients];
-//    //添加邮件主题
-//    [mailUrl appendFormat:@"&subject=%@",@"设置邮件主题"];
-//    //添加邮件内容
-//    [mailUrl appendString:@"&body=<b>Hello</b> World!"];
-//    //跳转到系统邮件App发送邮件
-//    NSString *emailPath = [mailUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-//    [[UIApplication sharedApplication]openURL:[NSURL URLWithString:emailPath] options:@{} completionHandler:nil];
+    //    //创建可变的地址字符串对象
+    //    NSMutableString *mailUrl = [[NSMutableString alloc] init];
+    //    //添加收件人,如有多个收件人，可以使用componentsJoinedByString方法连接，连接符为","
+    //    NSString *recipients = @"sparkle_ds@163.com";
+    //    [mailUrl appendFormat:@"mailto:%@?", recipients];
+    //    //添加抄送人
+    //    NSString *ccRecipients = @"1622849369@qq.com";
+    //    [mailUrl appendFormat:@"&cc=%@", ccRecipients];
+    //    //添加密送人
+    //    NSString *bccRecipients = @"15690725786@163.com";
+    //    [mailUrl appendFormat:@"&bcc=%@", bccRecipients];
+    //    //添加邮件主题
+    //    [mailUrl appendFormat:@"&subject=%@",@"设置邮件主题"];
+    //    //添加邮件内容
+    //    [mailUrl appendString:@"&body=<b>Hello</b> World!"];
+    //    //跳转到系统邮件App发送邮件
+    //    NSString *emailPath = [mailUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    //    [[UIApplication sharedApplication]openURL:[NSURL URLWithString:emailPath] options:@{} completionHandler:nil];
     
 }
 

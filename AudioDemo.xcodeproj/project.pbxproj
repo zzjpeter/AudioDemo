@@ -61,6 +61,7 @@
 		47FDA9C422962F6E0020A5F0 /* EncodeAACManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9C322962F6E0020A5F0 /* EncodeAACManager.m */; };
 		47FDA9CB229633570020A5F0 /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FDA9CA229633570020A5F0 /* AACEncoder.m */; };
 		F03B854FB6946A8C939F824E /* libPods-AudioDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DC3E1196EBB56BD9D89AFF4 /* libPods-AudioDemo.a */; };
+		F1048F18249530F8006630CC /* CommonVideoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = F1048F17249530F8006630CC /* CommonVideoConfiguration.m */; };
 		F109CC42248BF15C00BB5641 /* AudioManager.aac in Resources */ = {isa = PBXBuildFile; fileRef = F109CC3F248BF15B00BB5641 /* AudioManager.aac */; };
 		F109CC43248BF15C00BB5641 /* AudioManager.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F109CC40248BF15B00BB5641 /* AudioManager.mp3 */; };
 		F109CC44248BF15C00BB5641 /* AudioManager.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F109CC41248BF15C00BB5641 /* AudioManager.m4a */; };
@@ -309,6 +310,8 @@
 		47FDA9CA229633570020A5F0 /* AACEncoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AACEncoder.m; sourceTree = "<group>"; };
 		4BD4E98CE0A924759C3C7DA8 /* Pods-AudioDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AudioDemo/Pods-AudioDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		64350976258E2F7BCA5B4CD1 /* Pods-AudioDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-AudioDemo/Pods-AudioDemo.release.xcconfig"; sourceTree = "<group>"; };
+		F1048F16249530F8006630CC /* CommonVideoConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonVideoConfiguration.h; sourceTree = "<group>"; };
+		F1048F17249530F8006630CC /* CommonVideoConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonVideoConfiguration.m; sourceTree = "<group>"; };
 		F109CC3F248BF15B00BB5641 /* AudioManager.aac */ = {isa = PBXFileReference; lastKnownFileType = file; path = AudioManager.aac; sourceTree = "<group>"; };
 		F109CC40248BF15B00BB5641 /* AudioManager.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = AudioManager.mp3; sourceTree = "<group>"; };
 		F109CC41248BF15C00BB5641 /* AudioManager.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = AudioManager.m4a; sourceTree = "<group>"; };
@@ -592,8 +595,8 @@
 				47612C38229BEE9C0006854D /* AUGraphPcm */,
 				47FDA9C122962DC30020A5F0 /* EncodeAAC */,
 				47B26A292296499100704B90 /* DecodeAAC */,
-				4729DEB9230EB1A600F7427C /* AudioPlayer */,
 				47EBF2D7230CF16F00E0DE7B /* AudioConvert */,
+				4729DEB9230EB1A600F7427C /* AudioPlayer */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1009,6 +1012,8 @@
 		F1585E28248B741100AB04EA /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				F1048F16249530F8006630CC /* CommonVideoConfiguration.h */,
+				F1048F17249530F8006630CC /* CommonVideoConfiguration.m */,
 				47357DC222954F0900A9010D /* EncodeH264 */,
 				47357DC322954F1700A9010D /* DecodeH264 */,
 				471C51D322A7B43400154424 /* Stream */,
@@ -1438,6 +1443,7 @@
 				F1585E9C248B755400AB04EA /* CLLocation+Sino.m in Sources */,
 				F1585E96248B755400AB04EA /* UrlLabel.m in Sources */,
 				F1585EB1248B755400AB04EA /* UILabel+TTAdd.m in Sources */,
+				F1048F18249530F8006630CC /* CommonVideoConfiguration.m in Sources */,
 				47EBF2E2230CF3D300E0DE7B /* LPMusicManager.m in Sources */,
 				F1585EB6248B755400AB04EA /* NSObject+RMArchivable.m in Sources */,
 				47F31BCB22A6648C008519D3 /* FFmpegMovieManager.m in Sources */,
@@ -1614,9 +1620,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverter/Lame",
-					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
-					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 					"\"$(SRCROOT)/AudioDemo/Video/AVAssetPlay/FFMPeg/FFmpeg-iOS\"/**",
+					"\"$(SRCROOT)/AudioDemo/Audio/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1646,10 +1651,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverter/Lame",
-					"$(PROJECT_DIR)/AudioDemo/ExtAudioConverterMp3/Lame",
-					"$(PROJECT_DIR)/AudioDemo/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame",
 					"\"$(SRCROOT)/AudioDemo/Video/AVAssetPlay/FFMPeg/FFmpeg-iOS\"/**",
+					"\"$(SRCROOT)/AudioDemo/Audio/AudioConvert/MusicTools/ExtAudioConverterMp3/Lame\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zzj.test3;
 				PRODUCT_NAME = "$(TARGET_NAME)";

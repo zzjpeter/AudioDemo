@@ -74,8 +74,11 @@
 - (IBAction)encodeH264Start:(id)sender {
     [self.view addSubview:self.playView];
     [self.view sendSubviewToBack:self.playView];
-    [EncodeH264Manager sharedmanager].playView = self.playView;
-    [[EncodeH264Manager sharedmanager] start];
+    
+    CommonVideoConfiguration *configuration = [CommonVideoConfiguration defaultConfiguration];
+    configuration.preview = self.playView;
+    [[EncodeH264Manager sharedmanager] startWithConfiguration:configuration];
+    
 }
 - (IBAction)encodeH264Stop:(id)sender {
     [[EncodeH264Manager sharedmanager] stop];
