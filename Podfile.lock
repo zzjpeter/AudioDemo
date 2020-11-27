@@ -1,22 +1,26 @@
 PODS:
   - LFLiveKit (2.6)
+  - LookinServer (1.0.0)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - LFLiveKit (= 2.6)
+  - LookinServer (~> 1.0.0)
   - YYKit (= 1.0.9)
 
 SPEC REPOS:
   trunk:
     - LFLiveKit
+    - LookinServer
     - YYKit
 
 SPEC CHECKSUMS:
   LFLiveKit: 2219563721f8aa0f188effc3395a06e2d53b23f2
+  LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 5ed897d0b44183a621abb944e41362b69a90b372
+PODFILE CHECKSUM: 8e134d8c54a72180d00c0cd5712256b4411cf17a
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.0

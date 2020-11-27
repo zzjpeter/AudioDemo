@@ -34,6 +34,8 @@ typedef void(^ConvertSuccess)(BOOL success, NSString *filePath);
 @property(nonatomic,assign)AudioFileTypeID outputFileType;//Default kAudioFileCAFType
 //TODO:add bit rate parameter
 
++ (BOOL)convertToMp3:(NSString *)inputFile outputFile:(NSString *)outputFile convertSuccess:(ConvertSuccess)convertSuccess;
+
 -(BOOL)convert:(ConvertSuccess)convertSuccess;
 
 #pragma mark API

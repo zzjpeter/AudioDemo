@@ -12,5 +12,6 @@
 #import "AVHeader.h"
 //for test
 #define kAudioName @"audioName.mp3"
+#define kAudioPcmName @"test.pcm"
 
 #endif /* Music_h */

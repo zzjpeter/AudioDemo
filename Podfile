@@ -11,4 +11,6 @@ target 'AudioDemo' do
   #pod 'RMMapper', '~> 1.1.5'
   pod 'YYKit', '1.0.9'
   pod 'LFLiveKit', '2.6'
+  #  测试
+  pod 'LookinServer','~> 1.0.0', :configurations => ['Debug'],:inhibit_warnings => true
 end

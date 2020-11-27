@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		4729DE9C230E9A5300F7427C /* audioName.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4729DE9B230E9A5300F7427C /* audioName.mp3 */; };
 		4729DEBC230EB1A600F7427C /* LPAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4729DEBB230EB1A600F7427C /* LPAudioPlayer.m */; };
 		4729DEBE230EB3DA00F7427C /* test1234.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4729DEBD230EB3DA00F7427C /* test1234.m4a */; };
+		47345A042570AFA10083B7BB /* in.pcm in Resources */ = {isa = PBXBuildFile; fileRef = 47345A032570AFA10083B7BB /* in.pcm */; };
 		47357DC1229535CC00A9010D /* EncodeH264Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC0229535CC00A9010D /* EncodeH264Manager.m */; };
 		47357DC622954F7D00A9010D /* DecoderH246Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 47357DC522954F7D00A9010D /* DecoderH246Manager.m */; };
 		47357DCA2295502200A9010D /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 47357DC82295502200A9010D /* Shader.vsh */; };
@@ -127,6 +128,7 @@
 		4729DEBA230EB1A600F7427C /* LPAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPAudioPlayer.h; sourceTree = "<group>"; };
 		4729DEBB230EB1A600F7427C /* LPAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPAudioPlayer.m; sourceTree = "<group>"; };
 		4729DEBD230EB3DA00F7427C /* test1234.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = test1234.m4a; sourceTree = "<group>"; };
+		47345A032570AFA10083B7BB /* in.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = in.pcm; sourceTree = "<group>"; };
 		47357DBF229535CC00A9010D /* EncodeH264Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncodeH264Manager.h; sourceTree = "<group>"; };
 		47357DC0229535CC00A9010D /* EncodeH264Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncodeH264Manager.m; sourceTree = "<group>"; };
 		47357DC422954F7D00A9010D /* DecoderH246Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DecoderH246Manager.h; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 		47EB4D122297EC36000801CE /* CommonResource */ = {
 			isa = PBXGroup;
 			children = (
+				47345A032570AFA10083B7BB /* in.pcm */,
 				F10A40C5248CE9E4001286E5 /* test.pcm */,
 				47EB4D132297EC36000801CE /* test.mov */,
 				47EB4D142297EC36000801CE /* ab.m4a */,
@@ -1287,6 +1290,7 @@
 				47E941F4227E7D9200D86EE1 /* Sources */,
 				47E941F5227E7D9200D86EE1 /* Frameworks */,
 				47E941F6227E7D9200D86EE1 /* Resources */,
+				EB55D9E562336C81D37A1E57 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1339,6 +1343,7 @@
 				F10A40C6248CE9E4001286E5 /* test.pcm in Resources */,
 				47EB4D1C2297EC36000801CE /* ab.aac in Resources */,
 				47357DD0229552B800A9010D /* abc.h264 in Resources */,
+				47345A042570AFA10083B7BB /* in.pcm in Resources */,
 				47E94208227E7D9400D86EE1 /* LaunchScreen.storyboard in Resources */,
 				47B26A2E229649D000704B90 /* abc.aac in Resources */,
 				47EB4D1A2297EC36000801CE /* test.mov in Resources */,
@@ -1388,6 +1393,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB55D9E562336C81D37A1E57 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioDemo/Pods-AudioDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioDemo/Pods-AudioDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioDemo/Pods-AudioDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

@@ -66,6 +66,17 @@
     }];
 }
 
+- (IBAction)covertPcmToMp3:(id)sender {
+    NSString *filePath = [NSBundle.mainBundle pathForResource:@"in.pcm" ofType:nil];
+    [ExtAudioConverter convertToMp3:filePath outputFile:nil convertSuccess:^(BOOL success, NSString *filePath) {
+        NSLog(@"当前线程:%@",[NSThread currentThread]);
+        NSLog(@"destination assetPath:%@",filePath);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[LPMusicManager sharedManager] playByAVAudioPlayerWithPath:filePath];;
+        });
+    }];
+}
+
 - (IBAction)convertToM4aThanToMp3:(id)sender {
     
     NSArray<LPMusicMsgModel *> *musicMsgModels = [LPMusicTool getLocalMusicListMsgModel];
