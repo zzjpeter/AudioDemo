@@ -7,10 +7,14 @@
 //
 
 #import "ExtAudioConverter.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "lame.h"
+
 
 typedef struct ExtAudioConverterSettings{
     AudioStreamBasicDescription   inputPCMFormat;
+    AudioStreamBasicDescription   inputFormat;
     AudioStreamBasicDescription   outputFormat;
     
     ExtAudioFileRef               inputFile;
@@ -136,241 +140,17 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
 
 @implementation ExtAudioConverter
 
-#pragma mark FILE读文件【支持pcm】
-+ (BOOL)convertToMp3:(NSString *)inputFile outputFile:(NSString *)outputFile convertSuccess:(ConvertSuccess)convertSuccess
-{
-    if (!inputFile) {
-        inputFile = [[NSBundle mainBundle] pathForResource:kAudioPcmName ofType:nil];
-    }
-    if (!outputFile) {
-        outputFile = pathdwf(@"outputPcmToMp3.mp3");
-    }
-    @try {
-        int read,write;
-        //只读方式打开被转换音频文件
-        FILE *pcm = fopen([inputFile cStringUsingEncoding:1], "rb");
-        fseek(pcm, 4 * 1024, SEEK_CUR);//删除头，否则在前一秒钟会有杂音
-        //只写方式打开生成的MP3文件
-        FILE *mp3 = fopen([outputFile cStringUsingEncoding:1], "wb");
-        
-        const int PCM_SIZE = 8192;
-        const int MP3_SIZE = 8192;
-        short int pcm_buffer[PCM_SIZE * 2];
-        unsigned char mp3_buffer[MP3_SIZE];
-        //这里要注意，lame的配置要跟AVAudioRecorder的配置一致，否则会造成转换不成功
-        lame_t lame = lame_init();
-        lame_set_in_samplerate(lame, 44100.0);//采样率
-        lame_set_num_channels(lame, 2);
-        lame_set_VBR(lame, vbr_default);
-        lame_init_params(lame);
-        
-        do {
-            //以二进制形式读取文件中的数据
-            read = (int)fread(pcm_buffer, 2 * sizeof(short int), PCM_SIZE, pcm);
-            if (read == 0)
-                write = lame_encode_flush(lame, mp3_buffer, MP3_SIZE);
-            else
-                write = lame_encode_buffer_interleaved(lame, pcm_buffer, read, mp3_buffer, MP3_SIZE);
-            
-            //二进制形式写数据到文件中  mp3_buffer：数据输出到文件的缓冲区首地址  write：一个数据块的字节数  1:指定一次输出数据块的个数   mp3:文件指针
-            fwrite(mp3_buffer, write, 1, mp3);
-            
-        } while (read != 0);
-        
-        lame_close(lame);
-        fclose(mp3);
-        fclose(pcm);
-
-    } @catch (NSException *exception) {
-        NSLog(@"%@",[exception description]);
-    } @finally {
-        NSLog(@"MP3生成成功!!!");
-        convertSuccess(YES, outputFile);
-    }
-    return YES;
-}
-
-
 @synthesize inputFile;
 @synthesize outputFile;
 @synthesize outputSampleRate;
 @synthesize outputNumberChannels;
 @synthesize outputBitDepth;
 
-//Check if the input combination is valid
--(BOOL)validateInput:(ExtAudioConverterSettings*)settigs{
-    //Set default output format
-    if (self.outputSampleRate==0) {
-        self.outputSampleRate = 44100;
-    }
-    
-    if (self.outputNumberChannels==0) {
-        self.outputNumberChannels = 2;
-    }
-    
-    if (self.outputBitDepth==0) {
-        self.outputBitDepth = 16;
-    }
-    
-    if (self.outputFormatID==0) {
-        self.outputFormatID = kAudioFormatLinearPCM;
-    }
-    
-    if (self.outputFileType==0) {
-        //caf type is the most powerful file format
-        self.outputFileType = kAudioFileCAFType;
-    }
-    
-    BOOL valid = YES;
-    //The file format and data format match documentatin is at: https://developer.apple.com/library/ios/documentation/MusicAudio/Conceptual/CoreAudioOverview/SupportedAudioFormatsMacOSX/SupportedAudioFormatsMacOSX.html
-    switch (self.outputFileType) {
-        case kAudioFileWAVEType:{//for wave file format
-            //WAVE file type only support PCM, alaw and ulaw
-            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatALaw || self.outputFormatID==kAudioFormatULaw;
-            break;
-        }
-        case kAudioFileAIFFType:{
-            //AIFF only support PCM format
-            valid = self.outputFormatID==kAudioFormatLinearPCM;
-            break;
-        }
-        case kAudioFileAAC_ADTSType:{
-            //aac only support aac data format
-            valid = self.outputFormatID==kAudioFormatMPEG4AAC;
-            break;
-        }
-        case kAudioFileAC3Type:{
-            //convert from PCM to ac3 format is not supported
-            valid = NO;
-            break;
-        }
-        case kAudioFileAIFCType:{
-            //TODO:kAudioFileAIFCType together with kAudioFormatMACE3/kAudioFormatMACE6/kAudioFormatQDesign2/kAudioFormatQUALCOMM pair failed
-            //Since MACE3:1/MACE6:1 is obsolete, they're not supported yet
-            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatULaw || self.outputFormatID==kAudioFormatALaw || self.outputFormatID==kAudioFormatAppleIMA4 || self.outputFormatID==kAudioFormatQDesign2 || self.outputFormatID==kAudioFormatQUALCOMM;
-            break;
-        }
-        case kAudioFileCAFType:{
-            //caf file type support almost all data format
-            //TODO:not all foramt are supported, check them out
-            valid = YES;
-            break;
-        }
-        case kAudioFileMP3Type:{
-            //TODO:support mp3 type
-            valid = self.outputFormatID==kAudioFormatMPEGLayer3;
-            break;
-        }
-        case kAudioFileMPEG4Type:{
-            valid = self.outputFormatID==kAudioFormatMPEG4AAC;
-            break;
-        }
-        case kAudioFileM4AType:{
-            valid = self.outputFormatID==kAudioFormatMPEG4AAC || self.outputFormatID==kAudioFormatAppleLossless;
-            break;
-        }
-        case kAudioFileNextType:{
-            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatULaw;
-            break;
-        }
-        case kAudioFileSoundDesigner2Type:{
-            valid = self.outputFormatID==kAudioFormatLinearPCM;
-            break;
-        }
-            //TODO:check iLBC format
-        default:
-            break;
-    }
-    
-    if (!valid) {
-        NSLog(@"the file format and data format pair is not valid");
-    }
-    
-    return valid;
-}
-
--(NSString*)descriptionForAudioFormat:(AudioStreamBasicDescription) audioFormat
-{
-    NSMutableString *description = [NSMutableString new];
-    
-    // From https://developer.apple.com/library/ios/documentation/MusicAudio/Conceptual/AudioUnitHostingGuide_iOS/ConstructingAudioUnitApps/ConstructingAudioUnitApps.html (Listing 2-8)
-    char formatIDString[5];
-    UInt32 formatID = CFSwapInt32HostToBig (audioFormat.mFormatID);
-    bcopy (&formatID, formatIDString, 4);
-    formatIDString[4] = '\0';
-    
-    [description appendString:@"\n"];
-    [description appendFormat:@"Sample Rate:         %10.0f \n",  audioFormat.mSampleRate];
-    [description appendFormat:@"Format ID:           %10s \n",    formatIDString];
-    [description appendFormat:@"Format Flags:        %10d \n",    (unsigned int)audioFormat.mFormatFlags];
-    [description appendFormat:@"Bytes per Packet:    %10d \n",    (unsigned int)audioFormat.mBytesPerPacket];
-    [description appendFormat:@"Frames per Packet:   %10d \n",    (unsigned int)audioFormat.mFramesPerPacket];
-    [description appendFormat:@"Bytes per Frame:     %10d \n",    (unsigned int)audioFormat.mBytesPerFrame];
-    [description appendFormat:@"Channels per Frame:  %10d \n",    (unsigned int)audioFormat.mChannelsPerFrame];
-    [description appendFormat:@"Bits per Channel:    %10d \n",    (unsigned int)audioFormat.mBitsPerChannel];
-    
-    // Add flags (supposing standard flags).
-    [description appendString:[self descriptionForStandardFlags:audioFormat.mFormatFlags]];
-    
-    return [NSString stringWithString:description];
-}
-
--(NSString*)descriptionForStandardFlags:(UInt32) mFormatFlags
-{
-    NSMutableString *description = [NSMutableString new];
-    
-    if (mFormatFlags & kAudioFormatFlagIsFloat)
-    { [description appendString:@"kAudioFormatFlagIsFloat \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsBigEndian)
-    { [description appendString:@"kAudioFormatFlagIsBigEndian \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsSignedInteger)
-    { [description appendString:@"kAudioFormatFlagIsSignedInteger \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsPacked)
-    { [description appendString:@"kAudioFormatFlagIsPacked \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsAlignedHigh)
-    { [description appendString:@"kAudioFormatFlagIsAlignedHigh \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsNonInterleaved)
-    { [description appendString:@"kAudioFormatFlagIsNonInterleaved \n"]; }
-    if (mFormatFlags & kAudioFormatFlagIsNonMixable)
-    { [description appendString:@"kAudioFormatFlagIsNonMixable \n"]; }
-    if (mFormatFlags & kAudioFormatFlagsAreAllClear)
-    { [description appendString:@"kAudioFormatFlagsAreAllClear \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsFloat)
-    { [description appendString:@"kLinearPCMFormatFlagIsFloat \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsBigEndian)
-    { [description appendString:@"kLinearPCMFormatFlagIsBigEndian \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsSignedInteger)
-    { [description appendString:@"kLinearPCMFormatFlagIsSignedInteger \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsPacked)
-    { [description appendString:@"kLinearPCMFormatFlagIsPacked \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsAlignedHigh)
-    { [description appendString:@"kLinearPCMFormatFlagIsAlignedHigh \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsNonInterleaved)
-    { [description appendString:@"kLinearPCMFormatFlagIsNonInterleaved \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagIsNonMixable)
-    { [description appendString:@"kLinearPCMFormatFlagIsNonMixable \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagsSampleFractionShift)
-    { [description appendString:@"kLinearPCMFormatFlagsSampleFractionShift \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagsSampleFractionMask)
-    { [description appendString:@"kLinearPCMFormatFlagsSampleFractionMask \n"]; }
-    if (mFormatFlags & kLinearPCMFormatFlagsAreAllClear)
-    { [description appendString:@"kLinearPCMFormatFlagsAreAllClear \n"]; }
-    if (mFormatFlags & kAppleLosslessFormatFlag_16BitSourceData)
-    { [description appendString:@"kAppleLosslessFormatFlag_16BitSourceData \n"]; }
-    if (mFormatFlags & kAppleLosslessFormatFlag_20BitSourceData)
-    { [description appendString:@"kAppleLosslessFormatFlag_20BitSourceData \n"]; }
-    if (mFormatFlags & kAppleLosslessFormatFlag_24BitSourceData)
-    { [description appendString:@"kAppleLosslessFormatFlag_24BitSourceData \n"]; }
-    if (mFormatFlags & kAppleLosslessFormatFlag_32BitSourceData)
-    { [description appendString:@"kAppleLosslessFormatFlag_32BitSourceData \n"]; }
-    
-    return [NSString stringWithString:description];
-}
-
-
 #pragma mark API
 -(BOOL)convert:(ConvertSuccess)convertSuccess{
     ExtAudioConverterSettings settings = {0};
+    
+    [self initOrGetAudioInputFormat:&settings];
     
     //Check if source file or output file is null
     if (self.inputFile==NULL) {
@@ -501,7 +281,7 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
     }
     [self convertWithInputFile:inputFile
                            outputFile:outputFile
-                     outputSampleRate:8000
+                     outputSampleRate:44100
                  outputNumberChannels:2
                        outputBitDepth:BitDepth_16
                        outputFormatID:kAudioFormatMPEGLayer3
@@ -530,5 +310,256 @@ void startConvertMP3(ExtAudioConverterSettings* settings){
          [converter convert:convertSuccess];
     });
 }
+
+#pragma mark 工具方法 检验和打印
+//Check if the input combination is valid
+-(BOOL)validateInput:(ExtAudioConverterSettings*)settigs{
+    //Set default output format
+    if (self.outputSampleRate==0) {
+        self.outputSampleRate = 44100;
+    }
+    
+    if (self.outputNumberChannels==0) {
+        self.outputNumberChannels = 2;
+    }
+    
+    if (self.outputBitDepth==0) {
+        self.outputBitDepth = 16;
+    }
+    
+    if (self.outputFormatID==0) {
+        self.outputFormatID = kAudioFormatLinearPCM;
+    }
+    
+    if (self.outputFileType==0) {
+        //caf type is the most powerful file format
+        self.outputFileType = kAudioFileCAFType;
+    }
+    
+    BOOL valid = YES;
+    //The file format and data format match documentatin is at: https://developer.apple.com/library/ios/documentation/MusicAudio/Conceptual/CoreAudioOverview/SupportedAudioFormatsMacOSX/SupportedAudioFormatsMacOSX.html
+    switch (self.outputFileType) {
+        case kAudioFileWAVEType:{//for wave file format
+            //WAVE file type only support PCM, alaw and ulaw
+            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatALaw || self.outputFormatID==kAudioFormatULaw;
+            break;
+        }
+        case kAudioFileAIFFType:{
+            //AIFF only support PCM format
+            valid = self.outputFormatID==kAudioFormatLinearPCM;
+            break;
+        }
+        case kAudioFileAAC_ADTSType:{
+            //aac only support aac data format
+            valid = self.outputFormatID==kAudioFormatMPEG4AAC;
+            break;
+        }
+        case kAudioFileAC3Type:{
+            //convert from PCM to ac3 format is not supported
+            valid = NO;
+            break;
+        }
+        case kAudioFileAIFCType:{
+            //TODO:kAudioFileAIFCType together with kAudioFormatMACE3/kAudioFormatMACE6/kAudioFormatQDesign2/kAudioFormatQUALCOMM pair failed
+            //Since MACE3:1/MACE6:1 is obsolete, they're not supported yet
+            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatULaw || self.outputFormatID==kAudioFormatALaw || self.outputFormatID==kAudioFormatAppleIMA4 || self.outputFormatID==kAudioFormatQDesign2 || self.outputFormatID==kAudioFormatQUALCOMM;
+            break;
+        }
+        case kAudioFileCAFType:{
+            //caf file type support almost all data format
+            //TODO:not all foramt are supported, check them out
+            valid = YES;
+            break;
+        }
+        case kAudioFileMP3Type:{
+            //TODO:support mp3 type
+            valid = self.outputFormatID==kAudioFormatMPEGLayer3;
+            break;
+        }
+        case kAudioFileMPEG4Type:{
+            valid = self.outputFormatID==kAudioFormatMPEG4AAC;
+            break;
+        }
+        case kAudioFileM4AType:{
+            valid = self.outputFormatID==kAudioFormatMPEG4AAC || self.outputFormatID==kAudioFormatAppleLossless;
+            break;
+        }
+        case kAudioFileNextType:{
+            valid = self.outputFormatID==kAudioFormatLinearPCM || self.outputFormatID==kAudioFormatULaw;
+            break;
+        }
+        case kAudioFileSoundDesigner2Type:{
+            valid = self.outputFormatID==kAudioFormatLinearPCM;
+            break;
+        }
+            //TODO:check iLBC format
+        default:
+            break;
+    }
+    if (!valid) {
+        NSLog(@"the file format and data format pair is not valid(即AudioFileTypeID AudioFormatID 是否匹配)");
+    }
+    
+    return valid;
+}
+
+-(NSString*)descriptionForAudioFormat:(AudioStreamBasicDescription) audioFormat
+{
+    NSMutableString *description = [NSMutableString new];
+    
+    // From https://developer.apple.com/library/ios/documentation/MusicAudio/Conceptual/AudioUnitHostingGuide_iOS/ConstructingAudioUnitApps/ConstructingAudioUnitApps.html (Listing 2-8)
+    char formatIDString[5];
+    UInt32 formatID = CFSwapInt32HostToBig (audioFormat.mFormatID);
+    bcopy (&formatID, formatIDString, 4);
+    formatIDString[4] = '\0';
+    
+    [description appendString:@"\n"];
+    [description appendFormat:@"Sample Rate:         %10.0f \n",  audioFormat.mSampleRate];
+    [description appendFormat:@"Format ID:           %10s \n",    formatIDString];
+    [description appendFormat:@"Format Flags:        %10d \n",    (unsigned int)audioFormat.mFormatFlags];
+    [description appendFormat:@"Bytes per Packet:    %10d \n",    (unsigned int)audioFormat.mBytesPerPacket];
+    [description appendFormat:@"Frames per Packet:   %10d \n",    (unsigned int)audioFormat.mFramesPerPacket];
+    [description appendFormat:@"Bytes per Frame:     %10d \n",    (unsigned int)audioFormat.mBytesPerFrame];
+    [description appendFormat:@"Channels per Frame:  %10d \n",    (unsigned int)audioFormat.mChannelsPerFrame];
+    [description appendFormat:@"Bits per Channel:    %10d \n",    (unsigned int)audioFormat.mBitsPerChannel];
+    
+    // Add flags (supposing standard flags).
+    [description appendString:[self descriptionForStandardFlags:audioFormat.mFormatFlags]];
+    
+    return [NSString stringWithString:description];
+}
+
+-(NSString*)descriptionForStandardFlags:(UInt32) mFormatFlags
+{
+    NSMutableString *description = [NSMutableString new];
+    
+    if (mFormatFlags & kAudioFormatFlagIsFloat)
+    { [description appendString:@"kAudioFormatFlagIsFloat \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsBigEndian)
+    { [description appendString:@"kAudioFormatFlagIsBigEndian \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsSignedInteger)
+    { [description appendString:@"kAudioFormatFlagIsSignedInteger \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsPacked)
+    { [description appendString:@"kAudioFormatFlagIsPacked \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsAlignedHigh)
+    { [description appendString:@"kAudioFormatFlagIsAlignedHigh \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsNonInterleaved)
+    { [description appendString:@"kAudioFormatFlagIsNonInterleaved \n"]; }
+    if (mFormatFlags & kAudioFormatFlagIsNonMixable)
+    { [description appendString:@"kAudioFormatFlagIsNonMixable \n"]; }
+    if (mFormatFlags & kAudioFormatFlagsAreAllClear)
+    { [description appendString:@"kAudioFormatFlagsAreAllClear \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsFloat)
+    { [description appendString:@"kLinearPCMFormatFlagIsFloat \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsBigEndian)
+    { [description appendString:@"kLinearPCMFormatFlagIsBigEndian \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsSignedInteger)
+    { [description appendString:@"kLinearPCMFormatFlagIsSignedInteger \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsPacked)
+    { [description appendString:@"kLinearPCMFormatFlagIsPacked \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsAlignedHigh)
+    { [description appendString:@"kLinearPCMFormatFlagIsAlignedHigh \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsNonInterleaved)
+    { [description appendString:@"kLinearPCMFormatFlagIsNonInterleaved \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagIsNonMixable)
+    { [description appendString:@"kLinearPCMFormatFlagIsNonMixable \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagsSampleFractionShift)
+    { [description appendString:@"kLinearPCMFormatFlagsSampleFractionShift \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagsSampleFractionMask)
+    { [description appendString:@"kLinearPCMFormatFlagsSampleFractionMask \n"]; }
+    if (mFormatFlags & kLinearPCMFormatFlagsAreAllClear)
+    { [description appendString:@"kLinearPCMFormatFlagsAreAllClear \n"]; }
+    if (mFormatFlags & kAppleLosslessFormatFlag_16BitSourceData)
+    { [description appendString:@"kAppleLosslessFormatFlag_16BitSourceData \n"]; }
+    if (mFormatFlags & kAppleLosslessFormatFlag_20BitSourceData)
+    { [description appendString:@"kAppleLosslessFormatFlag_20BitSourceData \n"]; }
+    if (mFormatFlags & kAppleLosslessFormatFlag_24BitSourceData)
+    { [description appendString:@"kAppleLosslessFormatFlag_24BitSourceData \n"]; }
+    if (mFormatFlags & kAppleLosslessFormatFlag_32BitSourceData)
+    { [description appendString:@"kAppleLosslessFormatFlag_32BitSourceData \n"]; }
+    
+    return [NSString stringWithString:description];
+}
+
+#pragma mark 初始化音频文件数据的输入格式（一般是解码获取或者指定）
+- (void)initOrGetAudioInputFormat:(ExtAudioConverterSettings *)settings
+{
+    NSURL *url = [NSURL URLWithString:self.inputFile];
+
+    AudioFileID audioFileID;
+    OSStatus status = AudioFileOpenURL((__bridge CFURLRef)url, kAudioFileReadPermission, 0, &audioFileID);
+    checkStatus(status,"AudioFileOpenURL");
+
+    UInt32 size = sizeof(AudioStreamBasicDescription);
+    status = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &size, &settings->inputFormat);// 读取文件格式
+
+    NSLog(@"input format:%@",[self descriptionForAudioFormat:settings->inputFormat]);
+    [self descriptionForAudioFormat:settings->inputFormat];
+    if (settings->inputFormat.mFormatID) {
+        NSLog(@"非pcm格式的音频数据，需要音频转码");
+    }
+}
+// 检测状态
+static void checkStatus(OSStatus status, const char *operation){
+    if (status != noErr) {
+        printf("Error: %ld: %s\n",(long)status, operation);
+        //exit(1);
+    }
+}
+
+#pragma mark FILE读文件【支持pcm】 就是一简单demo参数配置挺随意的
++ (BOOL)convertToMp3:(NSString *)inputFile outputFile:(NSString *)outputFile convertSuccess:(ConvertSuccess)convertSuccess
+{
+    if (!inputFile) {
+        inputFile = [[NSBundle mainBundle] pathForResource:kAudioPcmName ofType:nil];
+    }
+    if (!outputFile) {
+        outputFile = pathdwf(@"outputPcmToMp3.mp3");
+    }
+    @try {
+        int read,write;
+        //只读方式打开被转换音频文件
+        FILE *pcm = fopen([inputFile cStringUsingEncoding:1], "rb");
+        fseek(pcm, 4 * 1024, SEEK_CUR);//删除头，否则在前一秒钟会有杂音
+        //只写方式打开生成的MP3文件
+        FILE *mp3 = fopen([outputFile cStringUsingEncoding:1], "wb");
+        
+        const int PCM_SIZE = 8192;
+        const int MP3_SIZE = 8192;
+        short int pcm_buffer[PCM_SIZE * 2];
+        unsigned char mp3_buffer[MP3_SIZE];
+        //这里要注意，lame的配置要跟AVAudioRecorder的配置一致，否则会造成转换不成功
+        lame_t lame = lame_init();
+        lame_set_in_samplerate(lame, 44100.0);//采样率
+        lame_set_num_channels(lame, 2);
+        lame_set_VBR(lame, vbr_default);
+        lame_init_params(lame);
+        
+        do {
+            //以二进制形式读取文件中的数据
+            read = (int)fread(pcm_buffer, 2 * sizeof(short int), PCM_SIZE, pcm);
+            if (read == 0)
+                write = lame_encode_flush(lame, mp3_buffer, MP3_SIZE);
+            else
+                write = lame_encode_buffer_interleaved(lame, pcm_buffer, read, mp3_buffer, MP3_SIZE);
+            
+            //二进制形式写数据到文件中  mp3_buffer：数据输出到文件的缓冲区首地址  write：一个数据块的字节数  1:指定一次输出数据块的个数   mp3:文件指针
+            fwrite(mp3_buffer, write, 1, mp3);
+            
+        } while (read != 0);
+        
+        lame_close(lame);
+        fclose(mp3);
+        fclose(pcm);
+
+    } @catch (NSException *exception) {
+        NSLog(@"%@",[exception description]);
+    } @finally {
+        NSLog(@"MP3生成成功!!!");
+        convertSuccess(YES, outputFile);
+    }
+    return YES;
+}
+
 
 @end

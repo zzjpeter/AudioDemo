@@ -50,7 +50,7 @@ SingleInterface(Manager)
        newFolderName:(NSString *_Nullable)newFolderName
          newFileName:(NSString *_Nullable)newFileName
    completionHandler:(CompletionHandler)completionHandler;
-//先转.mp4再转.mp3
+//先转.m4a再转.mp3
 - (void)convertToM4aThanToMP3:(NSString *_Nullable)filePath
                 newFolderName:(NSString *_Nullable)newFolderName
                   newFileName:(NSString *_Nullable)newFileName
