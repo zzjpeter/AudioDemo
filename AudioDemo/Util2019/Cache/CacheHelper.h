@@ -85,6 +85,8 @@ typedef NS_ENUM(NSUInteger, ReSourceType) {
 + (long long)fileSizeAtPath:(NSString*) filePath;
 //计算整个目录大小
 + (float)folderSizeAtPath:(NSString *)folderPath;
+//计算文件length大小显示M、K、B
++ (NSString *)getBytesFromDataLength:(NSInteger)dataLength;
 //文件路径 （支持单级或者多级文件路径拼接）
 +(NSString*)getFullFilePathByRelativePathAT:(NSString *)relativeFilePath, ...;
 //获得指定路径下的所有子文件夹
@@ -98,11 +100,13 @@ typedef NS_ENUM(NSUInteger, ReSourceType) {
 #pragma mark - -z再封装
 #pragma mark -存本地数据
 + (void)saveCacheData:(id)data folderPath:(NSString *)folderPath fileName:(NSString *)fileName;
++ (void)saveCacheData:(id)data filePath:(NSString *)filePath;
 //当前线程存储 默认一般主线程中处理
 + (BOOL)saveCacheDataOnCurThread:(id)data folderPath:(NSString *)folderPath fileName:(NSString *)fileName;
++ (BOOL)saveCacheDataOnCurThread:(id)data filePath:(NSString *)filePath;
 #pragma mark -取本地数据
 + (id)getCacheDataByFolderPath:(NSString *)folderPath fileName:(NSString *)fileName;
-
++ (id)getCacheDataByFilePath:(NSString *)filePath;
 #pragma mark C方式 获取app常用文件路径 Document、Cache、Temp
 
 /**
@@ -136,5 +140,7 @@ void runDispatchGetGlobalQueue(void (^block)(void));
 #pragma mark 文件通用存储位置
 //所有基础文件的保存路径
 +(NSString*)pathForCommonFile:(NSString *)fileName withType:(NSInteger)fileType;
+
+
 
 @end

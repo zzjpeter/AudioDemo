@@ -23,7 +23,10 @@
 
 #pragma mark -存取数据 自定义文件夹路径 通过fileName(完整文件名，带后缀)
 - (void)saveData:(id )data folderPath:(NSString *)folderPath fileName:(NSString *)fileName;
+- (void)saveData:(id )data filePath:(NSString *)filePath;
 - (BOOL)saveCacheDataOnCurThread:(id )data folderPath:(NSString *)folderPath fileName:(NSString *)fileName;
+- (BOOL)saveCacheDataOnCurThread:(id )data filePath:(NSString *)filePath;
 - (id )getDataFolderPath:(NSString *)folderPath fileName:(NSString *)fileName;
+- (id )getDataFilePath:(NSString *)filePath;
 
 @end

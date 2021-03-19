@@ -15,5 +15,6 @@
 #import "NSString+EncodeUrl.h"
 #import "NSString+Empty.h"
 #import "NSString+STRegex.h"
+#import "NSString+Length.h"
 
 #endif /* NStringCommon_h */

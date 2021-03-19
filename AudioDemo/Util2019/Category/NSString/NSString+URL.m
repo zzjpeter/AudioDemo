@@ -206,8 +206,8 @@
         //解析文件路径
         NSString *preStr = [urlStr substringToIndex:range.location + range.length - 1];
         
-        if (preStr) {
-            
+        if (preStr && [urlStr containsString:@"//"]) {//是否存在url 存在解析文件路径 [处理“//”不存在数据异常导致的崩溃]
+                        
             NSRange range1 = [preStr rangeOfString:@"//"];
             
             NSString *pathDir = [preStr substringFromIndex:range1.location + range1.length];
@@ -218,13 +218,15 @@
             //剔除"空串"
             NSMutableArray *tempPathComponents = [NSMutableArray arrayWithArray:pathComponents];
             [tempPathComponents enumerateObjectsUsingBlock:^(NSString *dir, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([NSString isEmptyString:dir]) {
+                if (IsEmptyOrNull(dir)) {
                     [tempPathComponents removeObject:dir];
                 }
             }];
             
             //剔除 第一个 域名
-            [tempPathComponents removeObjectAtIndex:0];
+            if (tempPathComponents.count > 0) {
+                [tempPathComponents removeObjectAtIndex:0];
+            }
             
             [urlDict setObject:[tempPathComponents copy] forKey:@"pathDir"];
         }else{
@@ -280,13 +282,15 @@
                 //剔除"空串"
                 NSMutableArray *tempPathComponents = [NSMutableArray arrayWithArray:pathComponents];
                 [tempPathComponents enumerateObjectsUsingBlock:^(NSString *dir, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([NSString isEmptyString:dir]) {
+                    if (IsEmptyOrNull(dir)) {
                         [tempPathComponents removeObject:dir];
                     }
                 }];
                 
                 //剔除 第一个 域名
-                [tempPathComponents removeObjectAtIndex:0];
+                if (tempPathComponents.count > 0) {
+                    [tempPathComponents removeObjectAtIndex:0];
+                }
                 
                 [urlDict setObject:[tempPathComponents copy] forKey:@"pathDir"];
             }else{

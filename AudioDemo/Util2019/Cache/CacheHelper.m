@@ -181,13 +181,13 @@
 #pragma mark - 删除
 
 +(BOOL)deleteFolderAtFolderPath:(NSString*)folderPath{
-	
-	NSError *dataError = nil;
-	NSFileManager *fm = [NSFileManager defaultManager];
-	BOOL delete=[fm removeItemAtPath:folderPath error:&dataError];
-	if(!delete)
-		NSLog(@"delete Error: %@",dataError);
-	return delete;
+    
+    NSError *dataError = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL delete=[fm removeItemAtPath:folderPath error:&dataError];
+    if(!delete)
+        NSLog(@"delete Error: %@",dataError);
+    return delete;
 }
 
 +(BOOL)deleteFileAtFilePath:(NSString*)filePath{
@@ -202,9 +202,9 @@
 #pragma mark 删除文件（指定路径下的所有文件）
 //删除过期文件
 +(void)deleteOverDueAppFolder:(void(^)(void))complete{
-	
+    
     //此处可以GCD
-	[NSThread detachNewThreadSelector:@selector(deleteAppFolder) toTarget:[CacheHelper class] withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(deleteAppFolder) toTarget:[CacheHelper class] withObject:nil];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         // 处理耗时操作的代码块...
@@ -225,13 +225,13 @@
 }
 
 +(void)deleteAppFolder{
-	NSString* rootFolderPath =[CacheHelper getFullFilePathByRelativePathAT:rootFolder,@"time/my",@"hello",nil];
-	NSArray *dataFiles = [CacheHelper getSubDirectories:rootFolderPath];
-	for (int i=0; i<[dataFiles count]; i++)
-	{
-		NSString* appFolder=[dataFiles objectAtIndex:i];
-		[CacheHelper deleteFolderAtFolderPath:appFolder];
-	}
+    NSString* rootFolderPath =[CacheHelper getFullFilePathByRelativePathAT:rootFolder,@"time/my",@"hello",nil];
+    NSArray *dataFiles = [CacheHelper getSubDirectories:rootFolderPath];
+    for (int i=0; i<[dataFiles count]; i++)
+    {
+        NSString* appFolder=[dataFiles objectAtIndex:i];
+        [CacheHelper deleteFolderAtFolderPath:appFolder];
+    }
     //清除webView的缓存
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
@@ -376,14 +376,28 @@
     return folderSize/(1024.0*1024.0);
 }
 
+//计算文件length大小显示M、K、B
++ (NSString *)getBytesFromDataLength:(NSInteger)dataLength {
+    NSString *bytes;
+    if (dataLength >= 0.1 * (1024 * 1024)) {
+        bytes = [NSString stringWithFormat:@"%0.1fM",dataLength/1024/1024.0];
+    } else if (dataLength >= 1024) {
+        bytes = [NSString stringWithFormat:@"%0.0fK",dataLength/1024.0];
+    } else {
+        bytes = [NSString stringWithFormat:@"%zdB",dataLength];
+    }
+    return bytes;
+}
+
 #pragma mark - -z再封装 统一nsdata，nsarray，nsdictionary的存储
 #pragma mark -存本地数据
 //没有数据返回nil，有数据返回相应的数据【也即数组返回数组，字典返回字典，其他数据类型统一返回nsdata】。（ 由[NSData dataWithContentsOfFile:filePath]; 导致的）
 + (id)getCacheDataByFolderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
-    id data = nil;
     NSString *filePath = [CacheHelper getFilePathWithFolderPath:folderPath fileName:fileName];
-
+    return [self getCacheDataByFilePath:filePath];
+}
++ (id)getCacheDataByFilePath:(NSString *)filePath {
+    id data = nil;
     //依次判断数据的类型并返回(注意：没有数据返回nil，有数据返回相应的数据【也即数组返回数组，字典返回字典，其他数据类型统一返回nsdata】。)
     data = [CacheHelper getArrayByFilePath:filePath];
     if (data) {
@@ -401,8 +415,11 @@
 }
 #pragma mark -取本地数据
 + (void)saveCacheData:(id)data folderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
     NSString *filePath = [CacheHelper getFilePathWithFolderPath:folderPath fileName:fileName];
+    [self saveCacheData:data filePath:filePath];
+}
+
++ (void)saveCacheData:(id)data filePath:(NSString *)filePath {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL isSuccess = NO;
         if ([data isKindOfClass:[NSData class]]) {
@@ -415,28 +432,30 @@
             isSuccess = [CacheHelper saveCacheDictionary:data path:filePath];
         }
         if (!isSuccess) {
-            NSLog(@"write failed:%@",fileName);
+            NSLog(@"write failed:%@",filePath);
         }
     });
-
 }
 
 + (BOOL)saveCacheDataOnCurThread:(id)data folderPath:(NSString *)folderPath fileName:(NSString *)fileName{
-    
     NSString *filePath = [CacheHelper getFilePathWithFolderPath:folderPath fileName:fileName];
-        BOOL isSuccess = NO;
-        if ([data isKindOfClass:[NSData class]]) {
-            isSuccess = [CacheHelper saveCacheData:data path:filePath];
-        }
-        if ([data isKindOfClass:[NSArray class]]) {
-            isSuccess = [CacheHelper saveCacheArray:data path:filePath];
-        }
-        if ([data isKindOfClass:[NSDictionary class]]) {
-            isSuccess = [CacheHelper saveCacheDictionary:data path:filePath];
-        }
-        if (!isSuccess) {
-            NSLog(@"write failed:%@",fileName);
-        }
+    return [self saveCacheDataOnCurThread:data filePath:filePath];
+}
+
++ (BOOL)saveCacheDataOnCurThread:(id)data filePath:(NSString *)filePath {
+    BOOL isSuccess = NO;
+    if ([data isKindOfClass:[NSData class]]) {
+        isSuccess = [CacheHelper saveCacheData:data path:filePath];
+    }
+    if ([data isKindOfClass:[NSArray class]]) {
+        isSuccess = [CacheHelper saveCacheArray:data path:filePath];
+    }
+    if ([data isKindOfClass:[NSDictionary class]]) {
+        isSuccess = [CacheHelper saveCacheDictionary:data path:filePath];
+    }
+    if (!isSuccess) {
+        NSLog(@"write failed:%@",filePath);
+    }
     return isSuccess;
 }
 

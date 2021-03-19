@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "YYKit.h"
+//#import "YYKit.h"
 
 @interface NSString (EncodeUrl)
 
@@ -54,7 +54,7 @@
  URL decode a string in utf-8.
  @return the decoded string.
  */
-//- (NSString *)stringByURLDecode;
+- (NSString *)stringByURLDecode;
 
 /**
  Escape common HTML to Entity.

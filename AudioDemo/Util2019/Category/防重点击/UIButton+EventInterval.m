@@ -46,18 +46,16 @@
 - (void)mySendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
 {
     if ([NSStringFromClass(self.class) isEqualToString:@"UIButton"]) {
-        
-        self.timeInterval =self.timeInterval ==0 ?defaultInterval:self.timeInterval;
-        if (self.isIgnoreEvent){
-            return;
-        }else if (self.timeInterval > 0){
+        if (self.isIgnoreEvent && self.timeInterval > 0){
             [self performSelector:@selector(resetState) withObject:nil afterDelay:self.timeInterval];
+            return;
         }
     }
     //此处 methodA和methodB方法IMP互换了，实际上执行 sendAction；所以不会死循环
     self.isIgnoreEvent = YES;
+    
     [self mySendAction:action to:target forEvent:event];
-    NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    //NSLog(@"%@##%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
 }
 //runtime 动态绑定 属性
 - (void)setIsIgnoreEvent:(BOOL)isIgnoreEvent{
@@ -71,4 +69,5 @@
 - (void)resetState{
     [self setIsIgnoreEvent:NO];
 }
+
 @end

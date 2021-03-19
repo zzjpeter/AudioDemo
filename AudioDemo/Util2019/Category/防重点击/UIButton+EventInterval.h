@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#define defaultInterval .1  //默认时间间隔 可以设置为0.5 有间隔效果哦
 
 @interface UIButton (EventInterval)
-/**设置点击时间间隔*/
+
+/**设置点击时间间隔 可以自定义时间间隔一般用0.1 或者 0.5 */
 @property (nonatomic, assign) NSTimeInterval timeInterval;
+
 @end

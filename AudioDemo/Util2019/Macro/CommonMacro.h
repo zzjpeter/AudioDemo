@@ -356,6 +356,21 @@ static inline void dispatch_sync_on_main_queuee(void (^block)(void)) {
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+
+static inline NSString * printLogC(NSString *format,...) {
+    NSString *message = @"";
+    va_list args;
+    if (format) {
+        va_start(args, format);
+        message = [[NSString alloc] initWithFormat:format arguments:args];
+        va_end(args);
+        va_start(args, format);
+        va_end(args);
+    }
+    NSLog(@"%@", message);
+    return message;
+}
+
 LF_EXTERN_C_END
 
 #endif /* CommonMacro_h */

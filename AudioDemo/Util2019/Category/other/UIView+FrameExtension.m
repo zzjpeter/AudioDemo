@@ -7,7 +7,6 @@
 //
 
 #import "UIView+FrameExtension.h"
-#import "YYKit.h"
 
 ////获取 中心点
 //CGPoint CGRectGetCenter(CGRect rect)
@@ -82,7 +81,9 @@
     transition.x = newOrigin.x - oldOrigin.x;
     transition.y = newOrigin.y - oldOrigin.y;
     
-    view.center = CGPointMake (view.center.x - transition.x, view.center.y - transition.y);
+    view.center = CGPointMake(view.center.x - transition.x, view.center.y - transition.y);
+    //等价于
+    //view.layer.position = CGPointMake(view.layer.position.x - transition.x, view.layer.position.y - transition.y);
     return self.layer.anchorPoint;
 }
 
@@ -99,8 +100,8 @@
             // 当触摸开始时，获取两个触摸点
             CGPoint point1 = [gr locationOfTouch:0 inView:gr.view];
             CGPoint point2 = [gr locationOfTouch:1 inView:gr.view];
-            anchorPoint.x = (point1.x + point2.x) / 2 / gr.view.width;
-            anchorPoint.y = (point1.y + point2.y) / 2 / gr.view.height;
+            anchorPoint.x = (point1.x + point2.x) / 2 / gr.view.frame.size.width;
+            anchorPoint.y = (point1.y + point2.y) / 2 / gr.view.frame.size.height;
         }
     } else if ([gr isKindOfClass:[UITapGestureRecognizer class]]) { // 点击手势
         // 获取触摸点
@@ -108,12 +109,12 @@
         
         CGFloat angle = acosf(gr.view.transform.a);
         if (ABS(asinf(gr.view.transform.b) + M_PI_2) < 0.01) angle += M_PI;
-        CGFloat width = gr.view.width;
-        CGFloat height = gr.view.height;
+        CGFloat width = gr.view.frame.size.width;
+        CGFloat height = gr.view.frame.size.height;
         if (ABS(angle - M_PI_2) <= 0.01 || ABS(angle - M_PI_2 * 3) <= 0.01) { // 旋转角为90°
             // width 和 height 对换
-            width = gr.view.height;
-            height = gr.view.width;
+            width = gr.view.frame.size.height;
+            height = gr.view.frame.size.width;
         }
         // 如果旋转了
         anchorPoint.x = point.x / width;

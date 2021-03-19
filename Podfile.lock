@@ -1,26 +1,74 @@
 PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
   - LFLiveKit (2.6)
   - LookinServer (1.0.0)
+  - Masonry (1.1.0)
+  - MJRefresh (3.4.3)
+  - ReactiveCocoa (11.1.0):
+    - ReactiveSwift (~> 6.2)
+  - ReactiveObjC (3.1.1)
+  - ReactiveObjCBridge (6.0.0):
+    - ReactiveObjC (~> 3.1)
+    - ReactiveSwift (~> 6.1)
+  - ReactiveSwift (6.5.0)
+  - UITextView-WZB (1.1.1)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
+  - AFNetworking (= 4.0.1)
   - LFLiveKit (= 2.6)
   - LookinServer (~> 1.0.0)
+  - Masonry (= 1.1.0)
+  - MJRefresh (= 3.4.3)
+  - ReactiveCocoa
+  - ReactiveObjC
+  - ReactiveObjCBridge
+  - UITextView-WZB (= 1.1.1)
   - YYKit (= 1.0.9)
 
 SPEC REPOS:
   trunk:
+    - AFNetworking
     - LFLiveKit
     - LookinServer
+    - Masonry
+    - MJRefresh
+    - ReactiveCocoa
+    - ReactiveObjC
+    - ReactiveObjCBridge
+    - ReactiveSwift
+    - UITextView-WZB
     - YYKit
 
 SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   LFLiveKit: 2219563721f8aa0f188effc3395a06e2d53b23f2
   LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
+  ReactiveCocoa: 7bc87ad2d361b9de141278b1950edd7fe91b15b1
+  ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
+  ReactiveObjCBridge: 5502e3da1f092d39953ac27816f3441e01eb875a
+  ReactiveSwift: 8d159904084e908856cde90b2e28823f3c7e485f
+  UITextView-WZB: aa7306ec35ad35d325f8e608366ecd5ac8c8eed9
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 8e134d8c54a72180d00c0cd5712256b4411cf17a
+PODFILE CHECKSUM: 188ddc72adf2f6361711bdf324ee4b91a6e7c4f5
 
 COCOAPODS: 1.10.0
