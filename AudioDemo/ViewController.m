@@ -14,6 +14,7 @@
 #import "EncodeAACManager.h"
 #import "DecodeAACManager.h"
 #import "AVAssetManager.h"
+#import "AVAudioRecorderVC.h"
 
 @interface ViewController ()
 
@@ -160,6 +161,12 @@
     }
     return _mOpenGLView;
 }
+
+- (IBAction)jumpToAVAudioRecoderDemo:(id)sender {
+    AVAudioRecorderVC *vc = [AVAudioRecorderVC new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 
 
 @end
